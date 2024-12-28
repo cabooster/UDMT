@@ -1,6 +1,6 @@
 # UDMT: **Unsupervised multi-animal tracking for** quantitative ethology
 
-<center><img src="https://github.com/cabooster/UDMT/blob/page/images/logo.png?raw=true" width="700" align="middle" /></center>
+<center><img src="images/logo.png" width="700" align="middle" /></center>
 
 ### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
 
@@ -9,7 +9,7 @@
 - [Overview](#overview)
 - [Directory structure](#directory-structure)
 - [Pytorch code](#pytorch-code)
-- [Matlab GUI](#matlab-gui)
+- [GUI](#gui)
 - [Results](#results)
 - [License](./LICENSE)
 - [Citation](#citation)
@@ -73,19 +73,6 @@ DeepCAD-RT
 
 
 ## Pytorch code
-### Updates
-<details>
-  <summary>:triangular_flag_on_post:2022/06/14: Enhanced data augmentation. </summary>
-
-We replaced 12-fold data augmentation with 16-fold data augmentation for better performance. 
-
-Denoising performance (SNR) with the increase of training epochs on simulated calcium imaging data:
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/main/images/16aug.png?raw=true" width="600" align="middle" /></center>
-
-  <summary>:triangular_flag_on_post:2023/07/26: Simplified testing pipeline: Only the model of the last training epoch will be tested by default. </summary>
-  <summary>:triangular_flag_on_post:2024/10/21: Optimized result data type: Make the result keep the same data type as the input. </summary>
-</details>
-
 ### Our environment 
 
 * Ubuntu 16.04 
@@ -165,7 +152,7 @@ We also provide a cloud-based notebook implemented with Google Colab. You can ru
 
 <center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/deepcad7.png?raw=true" width="800" align="middle"></center> 
 
-## Matlab GUI
+## GUI
 
 To achieve real-time denoising, DeepCAD-RT was optimally deployed on GPU using TensorRT (Nvidia) for further acceleration and memory reduction. We also designed a sophisticated time schedule for multi-thread processing. Based on a two-photon microscope, real-time denoising has been achieved with our Matlab GUI of DeepCAD-RT (tested on a Windows desktop with Intel i9 CPU and 128 GB RAM).  **Tutorials** on installing and using the GUI has been moved to [**this page**](https://github.com/cabooster/DeepCAD-RT/tree/main/DeepCAD_RT_GUI).  
 
@@ -175,11 +162,11 @@ To achieve real-time denoising, DeepCAD-RT was optimally deployed on GPU using T
 
 ### 1. DeepCAD-RT massively improves the imaging SNR of neuronal population recordings in the zebrafish brain.
 
-[![IMAGE ALT TEXT](images/sv3_video.png)]( https://www.youtube.com/embed/GN0IO7bGoGg "Video Title")
+[![IMAGE ALT TEXT](images/sv1_video.png)](https://youtu.be/yFT3AdmNVg8 "Video Title")
 
 ### 2. Denoising performance of DeepCAD-RT of neutrophils in the mouse brain in vivo.
 
-[![IMAGE ALT TEXT](images/sv8_video.png)]( https://www.youtube.com/embed/eyLPVRcEGHs "Video Title")
+[![IMAGE ALT TEXT](images/sv5_video.png)]( https://www.youtube.com/embed/eyLPVRcEGHs "Video Title")
 
 ### 3. DeepCAD-RT reveals the ATP (Adenosine 5’-triphosphate) dynamics of astrocytes in 3D after laser-induced brain injury.
 
@@ -193,7 +180,6 @@ If you use this code, please cite the companion paper where the original method 
 
 - Xinyang Li, Yixin Li, Yiliang Zhou, et al. Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit. Nat. Biotechnol. (2022). [https://doi.org/10.1038/s41587-022-01450-8](https://www.nature.com/articles/s41587-022-01450-8)
 
-- Xinyang Li, Guoxun Zhang, Jiamin Wu, et al. Reinforcing neuron extraction and spike inference in calcium imaging using deep self-supervised denoising. Nat. Methods 18, 1395–1400 (2021). [https://doi.org/10.1038/s41592-021-01225-0](https://www.nature.com/articles/s41592-021-01225-0) 
 
 
 ```
@@ -202,16 +188,6 @@ If you use this code, please cite the companion paper where the original method 
   author = {Li, Xinyang and Li, Yixin and Zhou, Yiliang and Wu, Jiamin and Zhao, Zhifeng and Fan, Jiaqi and Deng, Fei and Wu, Zhaofa and Xiao, Guihua and He, Jing and Zhang, Yuanlong and Zhang, Guoxun and Hu, Xiaowan and Chen, Xingye and Zhang, Yi and Qiao, Hui and Xie, Hao and Li, Yulong and Wang, Haoqian and Fang, Lu and Dai, Qionghai},
   journal={Nature Biotechnology},
   year={2022},
-  publisher={Nature Publishing Group}
-}
-@article{li2021reinforcing,
-  title={Reinforcing neuron extraction and spike inference in calcium imaging using deep self-supervised denoising},
-  author={Li, Xinyang and Zhang, Guoxun and Wu, Jiamin and Zhang, Yuanlong and Zhao, Zhifeng and Lin, Xing and Qiao, Hui and Xie, Hao and Wang, Haoqian and Fang, Lu and others},
-  journal={Nature Methods},
-  volume={18},
-  number={11},
-  pages={1395--1400},
-  year={2021},
   publisher={Nature Publishing Group}
 }
 ```
