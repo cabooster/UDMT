@@ -13,8 +13,8 @@ All behavioral recordings used in this study have been archived and made publicl
     border-collapse: collapse;
     text-align: center;
     vertical-align: middle;
-    width: 100%;
-    font-size: 14px; /* 设置表格中内容的字体大小 */
+    width: 80%;
+    font-size: 17px; /* 设置表格中内容的字体大小 */
   }
   td, th {
     padding: 8px;
