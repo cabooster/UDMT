@@ -266,7 +266,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td>
-      <p>18b</p>
+      <p>18<sup>b</sup></p>
     </td>
     <td>
       <p>2'10''</p>
