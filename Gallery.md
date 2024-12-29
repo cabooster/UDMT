@@ -4,7 +4,7 @@ title: Gallery
 ---
 
 
-<center><h2>1. Tracking the movement of 10 mice simultaneously with UDMT. </h2></center><br>
+<center><h2>1. Tracking the movement of 10 mice simultaneously with UDMT. </h2></center>
 
 <center><iframe width="680" height="400" src="https://www.youtube.com/embed/yFT3AdmNVg8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center> 
 
@@ -12,7 +12,7 @@ title: Gallery
 <hr>
 
 <center>
-    <h2>2. Neuroethology analysis of multiple mice combined with a head-mounted microscope.</h2></center><br>
+    <h2>2. Neuroethology analysis of multiple mice combined with a head-mounted microscope.</h2></center>
 
 <center><iframe width="690" height="350" src="https://www.youtube.com/embed/zufYK1ovlLU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
@@ -22,10 +22,10 @@ title: Gallery
 
 
 <center>
-    <h2>3.Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2></center><br>
+    <h2>3.Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2></center>
 
 <center><iframe width="690" height="350" src="https://www.youtube.com/embed/nl_3FHD-53k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
-
+<br>
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_drosophila.png?raw=true" width="700" align="middle"></center>
 
 *a, Schematic of the recording system for Drosophila. b, Example image and magnified views of the 17-Drosophila dataset. Scale bar, 5 mm. c, Projected trajectories of the 17 Drosophila during the entire recording period. d, Velocity (left) and acceleration (right) of all 17 Drosophila averaged over 0.2-s intervals as a function of time.  Lines and shaded region denote mean and 95% confidence intervals, respectively. e, 3D (x-y-t) trajectories of the 17 Drosophila in 100 seconds. The trajectories of two chasing Drosophila are shown separately in the inset. The frame rate of the 17-Drosophila dataset is 54 Hz and the total number of frames is 26,900.*
@@ -39,7 +39,7 @@ title: Gallery
 
 
 <center><h2>4. Tracking the movement of 7 C. elegans simultaneously with UDMT.</h2></center>
-
+<br>
 <center><iframe width="850" height="400" src="https://www.youtube.com/embed/glL-mF55HbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_celegan.png?raw=true" width="850" align="middle"></center>
@@ -54,11 +54,11 @@ title: Gallery
 
 
 
-<center><h2>5. Analyzing the aggressive behavior of betta fish with UDMT.</h2></center><br>
+<center><h2>5. Analyzing the aggressive behavior of betta fish with UDMT.</h2></center>
 
 <center><iframe width="850" height="400" src="https://www.youtube.com/embed/z724dDa0CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
-
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_fish.png?raw=true" width="850" align="middle"></center>
+<br>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_fish.png?raw=true" width="700" align="middle"></center>
 
 
 
