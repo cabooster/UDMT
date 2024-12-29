@@ -15,11 +15,11 @@ All behavioral recordings used in this study have been archived and made publicl
     vertical-align: middle;
     width: 90%;
     font-size: 17px; 
-    border: 3px solid black;
+    border: 2px solid black;
   }
   td, th {
-    padding: 4px;
-    border: 3px solid black; /* 可选：添加边框 */
+    padding: 2px;
+    border: 2px solid black; /* 可选：添加边框 */
   }
 </style>
 
