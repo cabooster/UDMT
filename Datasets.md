@@ -6,6 +6,22 @@ title: Datasets
 All behavioral recordings used in this study have been archived and made publicly available at https://cabooster.github.io/DeepCAD-RT/Datasets/. The source data of neuroethological research of freely behaving mice, including behavioral recordings and synchronized calcium imaging data, are publicly available at https://cabooster.github.io/DeepCAD-RT/Datasets/.
 
 ## Download links
+
+<style>
+  table {
+    margin: auto;
+    border-collapse: collapse;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    font-size: 40px; /* 设置表格中内容的字体大小 */
+  }
+  td, th {
+    padding: 8px;
+    border: 1px solid black; /* 可选：添加边框 */
+  }
+</style>
+
 <table>
   <tr>
     <td>
