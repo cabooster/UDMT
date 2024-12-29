@@ -4,31 +4,17 @@ title: Gallery
 ---
 
 
-<center><h2>1. DeepCAD-RT enhances the in vivo recording of calcium transients in dendritic spines </h2></center><br>
+<center><h2>1. Tracking the movement of 10 mice simultaneously with UDMT. </h2></center><br>
 
-<center><iframe width="680" height="400" src="https://www.youtube.com/embed/oH5L7AxUxOU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center> 
-
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_mouse.png?raw=true" width="700" align="middle"></center>
-
-
-
-*Imaging calcium transients in dendritic spines of a mouse expressing genetically encoded GCaMP6f calcium indicator. One example frame is shown for the raw low-SNR recording (top), DeepCAD-RT denoised recording (middle), and synchronized high-SNR recording with 10-fold SNR (bottom). Magnified views of the yellow boxed region showing calcium dynamics of two spatially adjacent dendritic branches. Scale bar, 20 μm for the whole field-of-view (FOV) and 5 μm for magnified views.* 
-
+<center><iframe width="680" height="400" src="https://www.youtube.com/embed/yFT3AdmNVg8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center> 
 
 
 <hr>
 
 <center>
-    <h2>2. DeepCAD-RT massively improves the imaging SNR of neuronal population recordings in the zebrafish brain</h2></center><br>
+    <h2>2. Neuroethology analysis of multiple mice combined with a head-mounted microscope.</h2></center><br>
 
-<center><iframe width="690" height="350" src="https://www.youtube.com/embed/GN0IO7bGoGg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
-
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_zebra.png?raw=true" width="700" align="middle"></center>
-
-
-
-*Time-lapse imaging of the calcium dynamics of telencephalic neurons in the zebrafish brain (GCaMP6s). Top, the original low-SNR data. Middle, DeepCAD-RT enhanced data. Bottom, high-SNR recording with 10-fold SNR. Magnified views show the neural activity of the yellow boxed region in a short period. Scale bar, 20 μm for the entire FOV and 5 μm for magnified views.*
-
+<center><iframe width="690" height="350" src="https://www.youtube.com/embed/zufYK1ovlLU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 
 <hr>
@@ -36,15 +22,13 @@ title: Gallery
 
 
 <center>
-    <h2>3. DeepCAD-RT enhances the neuronal population imaging of Drosophila mushroom body</h2></center><br>
+    <h2>3.Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2></center><br>
 
-<center><iframe width="690" height="350" src="https://www.youtube.com/embed/K2MSZdkKzi4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="690" height="350" src="https://www.youtube.com/embed/nl_3FHD-53k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_drosophila.png?raw=true" width="700" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_drosophila.png?raw=true" width="700" align="middle"></center>
 
-
-
-*Denoising performance of DeepCAD on calcium imaging of Drosophila mushroom body (GCaMP7f). The same frame is shown for the original low-SNR data (left), DeepCAD-RT denoised image (middle), and high-SNR image with 10-fold SNR (right). Magnified views show snapshots of the yellow boxed region at three moments. Scale bar, 10 μm for the whole FOV and 5 μm for magnified views.*
+*a, Schematic of the recording system for Drosophila. b, Example image and magnified views of the 17-Drosophila dataset. Scale bar, 5 mm. c, Projected trajectories of the 17 Drosophila during the entire recording period. d, Velocity (left) and acceleration (right) of all 17 Drosophila averaged over 0.2-s intervals as a function of time.  Lines and shaded region denote mean and 95% confidence intervals, respectively. e, 3D (x-y-t) trajectories of the 17 Drosophila in 100 seconds. The trajectories of two chasing Drosophila are shown separately in the inset. The frame rate of the 17-Drosophila dataset is 54 Hz and the total number of frames is 26,900.*
 
 
 
@@ -54,15 +38,15 @@ title: Gallery
 
 
 
-<center><h2>4. DeepCAD-RT reveals the 3D migration of neutrophils in vivo after acute brain injury</h2></center>
+<center><h2>4. Tracking the movement of 7 C. elegans simultaneously with UDMT.</h2></center>
 
-<center><iframe width="850" height="400" src="https://www.youtube.com/embed/eyLPVRcEGHs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="850" height="400" src="https://www.youtube.com/embed/glL-mF55HbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_NP.png?raw=true" width="850" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_celegan.png?raw=true" width="850" align="middle"></center>
 
 
 
-*3D imaging of neutrophil migration in a 150×150×30 μm3 volume (15 planes) after acute brain injury. The raw noisy volume (left) and corresponding denoised volume (right) are visualized in the same perspective. Acute brain injury was induced with craniotomy. Neutrophils were labeled with a fluorescent-conjugated Ly-6G antibody (the green channel). Blood vessels were stained with A wheat germ agglutinin (WGA, the magenta channel) dye. Since blood vessels are stationary, the magenta channel was averaged by multiple frames to improve its SNR. Scale bar, 50 μm.*
+*a, Example image of the 7-C. elegans dataset. Scale bar, 300 μm. b, Velocity of all of 7 C. elegans averaged over 10-s intervals as a function of time. Lines and shaded region denote mean and 95% confidence intervals, respectively. The frame rate of the 7-C. elegans dataset is 10 Hz and the total number of frames is 13,550 frames. c, Directional change frequency of seven C. elegans. The directional change frequency was averaged over 20-s intervals. d. Comparing the performance of UDMT with other tracking methods on all C. elegans and Drosophila datasets. The number of animals is indicated at the bottom of each bar plot. The bars represent mean values and error whiskers represent 98% confidence intervals. N=5 for all datasets and each black point indicates a sample. N/A means that DLC fails to track Drosophila datasets.*
 
 
 
@@ -70,15 +54,15 @@ title: Gallery
 
 
 
-<center><h2>5. DeepCAD-RT reveals the ATP (Adenosine 5’-triphosphate) dynamics of astrocytes in 3D after laser-induced brain injury</h2></center><br>
+<center><h2>5. Analyzing the aggressive behavior of betta fish with UDMT.</h2></center><br>
 
-<center><iframe width="850" height="400" src="https://www.youtube.com/embed/kSMYJgE4M54" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="850" height="400" src="https://www.youtube.com/embed/z724dDa0CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_ATP.png?raw=true" width="850" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_fish.png?raw=true" width="850" align="middle"></center>
 
 
 
-*3D visualization of ATP-release events in a 350×350×60 μm3 volume (30 planes, 1 Hz volume rate) after laser-induced brain injury. Left, the raw volume without denoising. Right, the same volume enhanced with DeepCAD-RT. A representative time point is demonstrated here and similar performance was achieved throughout the whole imaging session (1 hour, 3600 volumes). Four ATP-release events are indicated with arrowheads of different colors. The laser-damaged point (red dashed circle) was located at the center of the volume. Scale bar, 50 μm.*
+*The interaction of two Betta splendens (betta fish) in the same arena is continuously recorded (51 Hz frame rate, 15,020 frames). Their swimming trajectories were extracted using UDMT. a, Projected trajectories of the two betta fish during the entire recording period. b, 3D (x-y-t) trajectories of the two betta fish in a 300-second time window. The trajectories during chasing are shown separately in the inset. c, Velocity of the two betta fish. Traces were averaged over 10 frames. The purple shaded area indicates the time of confrontation, during which the speed of both animals decreased to nearly zero. The blue shaded area indicates the time of chasing, when the speed of the escaping fish (ID 2) increased rapidly. d, Representative video frames showing the confrontation and chasing behavior of the two betta fish. The tracks show the movement of the two betta fish over 1.5 seconds. Scale bar, 20 mm.*
 
 
 
