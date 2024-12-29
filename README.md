@@ -1,3 +1,3 @@
-# DeepCAD-RT website
+# UDMT website
 
-**This website [cabooster.github.io/deepcad-rt/](https://cabooster.github.io/DeepCAD-RT/) is in continuous update.**
+**This website [cabooster.github.io/UDMT/](https://cabooster.github.io/UDMT/) is in continuous update.**
