@@ -375,6 +375,7 @@ All behavioral recordings used in this study have been archived and made publicl
     </td>
   </tr>
 </table>
+<br>
 a. one with a head-mounted microscope.<br>
 b. video with illumination change.
 
