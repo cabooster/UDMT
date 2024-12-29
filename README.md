@@ -16,13 +16,12 @@
 
 ## Overview
 
-**Among the challenges of fluorescence microscopy, poor imaging signal-to-noise ratio (SNR) caused by limited photon budget lingeringly stands in the central position.** Fluorescence microscopy is inherently sensitive to detection noise because the photon flux in fluorescence imaging is far lower than that in photography. For almost all fluorescence imaging technologies, the inherent [**shot-noise limit**](https://cabooster.github.io/DeepCAD-RT/About/) determines the upper bound of imaging SNR and restricts the imaging resolution, speed, and sensitivity. To capture enough fluorescence photons for satisfactory SNR, researchers have to sacrifice imaging resolution, speed, and even sample health.  
+Animal behavior is closely related to their internal state and external environment. Quantifying animal behavior is a fundamental step in ecology, neuroscience, psychology, and various other fields. However, there exist enduring challenges impeding multi-animal tracking advancing towards higher accuracy, larger scale, and more complex scenarios, especially the similar appearance and frequent interactions of animals of the same species.
 
-We present a versatile method **DeepCAD-RT** to denoise fluorescence time-lapse images with rapid processing speed that can be incorporated with the microscope acquisition system to achieve real-time denoising. Our method is based on deep self-supervised learning and the original low-SNR data can be directly used for training convolutional networks, making it particularly advantageous in functional imaging where the sample is undergoing fast dynamics and capturing ground-truth data is hard or impossible. We have demonstrated extensive experiments including calcium imaging in mice, zebrafish, and flies, cell migration observations, and the imaging of a new genetically encoded ATP sensor, covering both 2D single-plane imaging and 3D volumetric imaging. **Qualitative and quantitative evaluations show that our method can substantially enhance fluorescence time-lapse imaging data and permit high-sensitivity imaging of biological dynamics beyond the shot-noise limit.**
-
+Growing demands in quantitative ethology has motivated concerted efforts to develop high-accuracy and generalized tracking methods. Here, we present an **unsupervised deep-learning method for multi-animal tracking (UDMT)** that outperforms existing tracking methods. **UDMT does not require any human annotations for training.** The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. UDMT is grounded in a bidirectional closed-loop tracking strategy that visual tracking can be conducted equivalently in both forward and backward directions.  To better capture the spatiotemporal evolution of animal features more effectively, we incorporated a spatiotemporal transformer network (ST-Net) to utilize self-attention and cross-attention mechanisms for feature extraction, leading to a threefold reduction in IDSW compared with convolutional neural networks (CNNs). For identity correction, we designed a sophisticated module based on bidirectional tracking to relocate missing targets caused by crowding and occlusion, achieving a 2.7-fold improvement in tracking accuracy. We demonstrate the state-of-the-art performance of UDMT on five different kinds of model animals, including mice, rats, *Drosophila*, *C. elegans*, and *Betta splendens*. Combined with a head-mounted miniaturized microscope, we recorded the calcium transients synchronized with mouse locomotion to decipher the correlations between animal locomotion and neural activity. 
 
 For more details, please see the companion paper where the method first appeared: 
-["*Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit, Nature Biotechnology (2022)*"](https://www.nature.com/articles/s41587-022-01450-8).
+["*Unsupervised multi-animal tracking for quantitative ethology*"](https://www.nature.com/articles/s41587-022-01450-8).
 
 <img src="images/schematic.png" width="800" align="middle">
 
@@ -32,38 +31,9 @@ For more details, please see the companion paper where the method first appeared
   <summary>Click to unfold the directory tree</summary>
 
 ```
-DeepCAD-RT
-|---DeepCAD_RT_pytorch #Pytorch implementation of DeepCAD-RT#
-|---|---demo_train_pipeline.py
-|---|---demo_test_pipeline.py
-|---|---convert_pth_to_onnx.py
-|---|---deepcad
-|---|---|---__init__.py
-|---|---|---utils.py
-|---|---|---network.py
-|---|---|---model_3DUnet.py
-|---|---|---data_process.py
-|---|---|---buildingblocks.py
-|---|---|---test_collection.py
-|---|---|---train_collection.py
-|---|---|---movie_display.py
-|---|---notebooks
-|---|---|---demo_train_pipeline.ipynb
-|---|---|---demo_test_pipeline.ipynb
-|---|---|---DeepCAD_RT_demo_colab.ipynb
-|---|---datasets
-|---|---|---DataForPytorch # project_name #
-|---|---|---|---data.tif
-|---|---pth
-|---|---|---ModelForPytorch
-|---|---|---|---model.pth
-|---|---|---|---model.yaml
-|---|---onnx
-|---|---|---ModelForPytorch
-|---|---|---|---model.onnx
-|---|---results
-|---|---|--- # test results#
-|---DeepCAD_RT_GUI #Matlab GUI of DeepCAD-RT#
+UDMT
+|---UDMT_pytorch #Pytorch implementation of DeepCAD-RT#
+|---UDMT_GUI #Python GUI of DeepCAD-RT#
 ```
 - **DeepCAD_RT_pytorch** contains the Pytorch implementation of DeepCAD-RT (Python scripts, Jupyter notebooks, Colab notebook)
 - **DeepCAD_RT_GUI** contains all C++ and Matlab files for the real-time implementation of DeepCAD-RT
@@ -160,17 +130,17 @@ To achieve real-time denoising, DeepCAD-RT was optimally deployed on GPU using T
 
 ## Results
 
-### 1. DeepCAD-RT massively improves the imaging SNR of neuronal population recordings in the zebrafish brain.
+### 1. Tracking the movement of 10 mice simultaneously with UDMT.
 
 [![IMAGE ALT TEXT](images/sv1_video.png)](https://youtu.be/yFT3AdmNVg8 "Video Title")
 
-### 2. Denoising performance of DeepCAD-RT of neutrophils in the mouse brain in vivo.
+### 2. Neuroethology analysis of multiple mice combined with a head-mounted microscope.
 
-[![IMAGE ALT TEXT](images/sv5_video.png)]( https://www.youtube.com/embed/eyLPVRcEGHs "Video Title")
+[![IMAGE ALT TEXT](images/sv5_video.png)]( https://youtu.be/zufYK1ovlLU "Video Title")
 
-### 3. DeepCAD-RT reveals the ATP (Adenosine 5’-triphosphate) dynamics of astrocytes in 3D after laser-induced brain injury.
+### 3. Analyzing the aggressive behavior of betta fish with UDMT.
 
-[![IMAGE ALT TEXT](images/sv10_video.png)](https://www.youtube.com/embed/u1ejSaVvWiY "Video Title")
+[![IMAGE ALT TEXT](images/sv8_video.png)](https://youtu.be/z724dDa0CRM "Video Title")
 
 More demo videos are presented on [our website](https://cabooster.github.io/DeepCAD-RT/Gallery/).
 
