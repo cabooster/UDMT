@@ -2,9 +2,8 @@
 layout: page
 title: About
 ---
-<img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/logo.PNG?raw=true" width="700" align="right" />
-### [GitHub](https://github.com/cabooster/DeepCAD-RT) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
-
+<img src="https://github.com/cabooster/UDMT/blob/main/images/logo.png?raw=true" width="700" align="right" />
+### [GitHub](https://github.com/cabooster/UDMT) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
 ## Content
 
 - [Introduction](#introduction)
@@ -58,7 +57,7 @@ We present a versatile method **DeepCAD-RT** to denoise fluorescence images with
 <center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_ATP.png?raw=true" width="850" align="middle"></center>
 
 
-<center>More demo images and videos are demonstrated in <a href='https://cabooster.github.io/DeepCAD-RT/Gallery/'>Gallery</a>. More details please refer to <a href='https://www.nature.com/articles/s41587-022-01450-8'>the companion paper</a></center>.
+<center>More demo images and videos are demonstrated in <a href='https://cabooster.github.io/UDMT/Gallery/'>Gallery</a>. More details please refer to <a href='https://www.nature.com/articles/s41587-022-01450-8'>the companion paper</a></center>.
 
 
 ## Citation
