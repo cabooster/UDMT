@@ -24,17 +24,17 @@ Quantitative ethology necessitates accurate tracking of animal locomotion, espec
   
 <hr>
    <p>
-  Noise is an ineluctable obstacle in scientific observation. For almost all fluorescence imaging technologies, the inherent <a href="https://cabooster.github.io/DeepCAD-RT/About/"><b>shot-noise limit</b></a> determines the upper bound of imaging SNR and restricts the imaging resolution, speed, and sensitivity. With advancements in methods and applications, we present <b>DeepCAD-RT</b>, a versatile model to denoise fluorescence images with <b>rapid processing speed and improved performance</b>. It can also be incorporated with the microscope acquisition system to achieve <b>real-time denoising</b>. We demonstrate the capability and generality of DeepCAD-RT on a series of photon-limited imaging experiments.
+     
  <br><br>
   </p>
-     <img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/deepcad2.png?raw=true" width="460" align="left">
+     <img src="https://github.com/cabooster/UDMT/blob/main/images/udmt2.png?raw=true" width="460" align="left">
  <h3>   <a href='https://www.biorxiv.org/content/10.1101/2022.03.14.484230v1'>Paper</a> | <a href='https://github.com/cabooster/DeepCAD-RT'>Code</a> </h3>
-<h3>Much faster processing speed and much lower memory cost:</h3>
-We constructed a lightweight network and compressed the model parameters by <b>94%</b>, which consequently reduced <b>85%</b> processing time and <b>70%</b> memory consumption. 
-<br><h3>More stable performance:</h3>
-We provide <b>16-fold data augmentation</b> to alleviate the data dependency and make the method still tractable with a small amount of data.
-<br><h3>Hardware deployment:</h3>
-We optimized the hardware deployment and achieved an overall improvement of a <b>27-fold</b> reduction in running memory and a <b>20-fold</b> acceleration in inference speed, which supports real-time image denoising incorporated with the microscope acquisition system. 
+<h3>Tracking in a completely unsupervised manner:</h3>
+UDMT does not require any human annotations for training. The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. 
+<br><h3>Spatiotemporal transformer for better feature extraction:</h3>
+To better capture the spatiotemporal evolution of animal features more effectively, we incorporated a spatiotemporal transformer network (ST-Net) to utilize self-attention and cross-attention mechanisms for feature extraction, leading to a threefold reduction in IDSW compared with convolutional neural networks (CNNs).
+<br><h3>Three key modules for performance optimization:</h3>
+We designed three critical functional modules to solve the inherent performance degradation by localization refining, bidirectional ID correction, and automatic parameter tuning.
  <br>
   
   <p>
