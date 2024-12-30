@@ -54,7 +54,7 @@ Here, we present an **unsupervised deep-learning method for multi-animal trackin
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result3.png?raw=true" width="850" align="middle"></center>
 <i>Example frames and magnified views of a 7-mouse video at three different time points. Tracking results and corresponding IOU metrics of UDMT, DLC and SLEAP are shown. Scale bars, 50 mm for all images.</i>
 <br>
-<center>More demo images and videos are demonstrated in <a href='https://cabooster.github.io/UDMT/Gallery/'>Gallery</a>. More details please refer to <a href='https://www.nature.com/articles/s41587-022-01450-8'>the companion paper</a></center>.
+More demo images and videos are demonstrated in <a href='https://cabooster.github.io/UDMT/Gallery/'>Gallery</a>. More details please refer to <a href='https://www.nature.com/articles/s41587-022-01450-8'>the companion paper</a>.
 
 
 ## Citation
