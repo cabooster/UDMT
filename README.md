@@ -1,6 +1,6 @@
 # UDMT: **Unsupervised multi-animal tracking for** quantitative ethology
 
-<center><img src="images/logo.png" width="700" align="middle" /></center>
+<center><img src="images/logo_blue.png" width="700" align="middle" /></center>
 
 ### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
 
@@ -16,9 +16,11 @@
 
 ## Overview
 
-Animal behavior is closely related to their internal state and external environment. Quantifying animal behavior is a fundamental step in ecology, neuroscience, psychology, and various other fields. However, there exist enduring challenges impeding multi-animal tracking advancing towards higher accuracy, larger scale, and more complex scenarios, especially the similar appearance and frequent interactions of animals of the same species.
+**Animal behavior is closely related to their internal state and external environment. Quantifying animal behavior is a fundamental step in ecology, neuroscience, psychology, and various other fields.** However, there exist enduring challenges impeding multi-animal tracking advancing towards higher accuracy, larger scale, and more complex scenarios, especially the similar appearance and frequent interactions of animals of the same species.
 
-Growing demands in quantitative ethology has motivated concerted efforts to develop high-accuracy and generalized tracking methods. Here, we present an **unsupervised deep-learning method for multi-animal tracking (UDMT)** that outperforms existing tracking methods. **UDMT does not require any human annotations for training.** The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. UDMT is grounded in a bidirectional closed-loop tracking strategy that visual tracking can be conducted equivalently in both forward and backward directions.  To better capture the spatiotemporal evolution of animal features more effectively, we incorporated a spatiotemporal transformer network (ST-Net) to utilize self-attention and cross-attention mechanisms for feature extraction, leading to a threefold reduction in IDSW compared with convolutional neural networks (CNNs). For identity correction, we designed a sophisticated module based on bidirectional tracking to relocate missing targets caused by crowding and occlusion, achieving a 2.7-fold improvement in tracking accuracy. We demonstrate the state-of-the-art performance of UDMT on five different kinds of model animals, including mice, rats, *Drosophila*, *C. elegans*, and *Betta splendens*. Combined with a head-mounted miniaturized microscope, we recorded the calcium transients synchronized with mouse locomotion to decipher the correlations between animal locomotion and neural activity. 
+Growing demands in quantitative ethology has motivated concerted efforts to develop high-accuracy and generalized tracking methods. Here, we present an **unsupervised deep-learning method for multi-animal tracking (UDMT)** that outperforms existing tracking methods. **UDMT does not require any human annotations for training.** The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. 
+
+We demonstrate the state-of-the-art performance of UDMT on five different kinds of model animals, including mice, rats, *Drosophila*, *C. elegans*, and *Betta splendens*. Combined with a head-mounted miniaturized microscope, we recorded the calcium transients synchronized with mouse locomotion to decipher the correlations between animal locomotion and neural activity. 
 
 For more details, please see the companion paper where the method first appeared: 
 ["*Unsupervised multi-animal tracking for quantitative ethology*"](https://www.nature.com/articles/s41587-022-01450-8).
@@ -142,7 +144,7 @@ To achieve real-time denoising, DeepCAD-RT was optimally deployed on GPU using T
 
 [![IMAGE ALT TEXT](images/sv8_video.png)](https://youtu.be/z724dDa0CRM "Video Title")
 
-More demo videos are presented on [our website](https://cabooster.github.io/DeepCAD-RT/Gallery/).
+More demo videos are presented on [our website](https://cabooster.github.io/UDMT/Gallery/).
 
 ## Citation
 
