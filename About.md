@@ -1,4 +1,4 @@
----
+![image](https://github.com/user-attachments/assets/bc660448-4981-4fa1-96e8-7ac9b075e2dc)---
 layout: page
 title: About
 ---
@@ -47,11 +47,12 @@ Here, we present an **unsupervised deep-learning method for multi-animal trackin
 <center><h3>2. Comparative analysis of tracking accuracy across different variables</h3></center>
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result2.png?raw=true" width="850" align="middle"></center>
+<i>The 5-mouse dataset (33 Hz frame rate, 18,000 frames, N=5) was used in this experiment for quantitative evaluation.</i>
 
 <center><h3>3.Visualization of animal localization accuracy through tracking snapshots</h3></center>
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result3.png?raw=true" width="850" align="middle"></center>
-
+<i>Example frames and magnified views of a 7-mouse video at three different time points. Tracking results and corresponding IOU metrics of UDMT, DLC and SLEAP are shown. Scale bars, 50 mm for all images.</i>
 
 <center>More demo images and videos are demonstrated in <a href='https://cabooster.github.io/UDMT/Gallery/'>Gallery</a>. More details please refer to <a href='https://www.nature.com/articles/s41587-022-01450-8'>the companion paper</a></center>.
 
