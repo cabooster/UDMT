@@ -48,9 +48,9 @@ Here, we present an **unsupervised deep-learning method for multi-animal trackin
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result2.png?raw=true" width="850" align="middle"></center>
 
-<center><h3>3. DeepCAD-RT reveals the ATP (Adenosine 5’-triphosphate) dynamics of astrocytes in 3D after laser-induced brain injury</h3></center>
+<center><h3>3.Visualization of animal localization accuracy through tracking snapshots</h3></center>
 
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_ATP.png?raw=true" width="850" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result3.png?raw=true" width="850" align="middle"></center>
 
 
 <center>More demo images and videos are demonstrated in <a href='https://cabooster.github.io/UDMT/Gallery/'>Gallery</a>. More details please refer to <a href='https://www.nature.com/articles/s41587-022-01450-8'>the companion paper</a></center>.
@@ -62,7 +62,6 @@ If you use this code please cite the companion paper where the original method a
 
 - Xinyang Li, Yixin Li, Yiliang Zhou, et al. Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit. Nat Biotechnol (2022). [https://doi.org/10.1038/s41587-022-01450-8](https://www.nature.com/articles/s41587-022-01450-8)
 
-- Xinyang Li, Guoxun Zhang, Jiamin Wu, et al. Reinforcing neuron extraction and spike inference in calcium imaging using deep self-supervised denoising. Nat Methods 18, 1395–1400 (2021). [https://doi.org/10.1038/s41592-021-01225-0](https://www.nature.com/articles/s41592-021-01225-0) 
 
 
 
