@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/bc660448-4981-4fa1-96e8-7ac9b075e2dc)---
+---
 layout: page
 title: About
 ---
