@@ -23,12 +23,11 @@ Quantitative ethology necessitates accurate tracking of animal locomotion, espec
   <br> 
   
 <hr>
-   <p>
-     
+  
  <br><br>
-  </p>
+  
      <img src="https://github.com/cabooster/UDMT/blob/main/images/udmt2.png?raw=true" width="460" align="left">
- <h3>   <a href='https://www.biorxiv.org/content/10.1101/2022.03.14.484230v1'>Paper</a> | <a href='https://github.com/cabooster/DeepCAD-RT'>Code</a> </h3>
+ <h3>   <a href='https://www.biorxiv.org/content/10.1101/2022.03.14.484230v1'>Paper</a> | <a href='https://github.com/cabooster/UDMT'>Code</a> </h3>
 <h3>Tracking in a completely unsupervised manner:</h3>
 UDMT does not require any human annotations for training. The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. 
 <br><h3>Spatiotemporal transformer for better feature extraction:</h3>
@@ -37,25 +36,16 @@ To better capture the spatiotemporal evolution of animal features more effective
 We designed three critical functional modules to solve the inherent performance degradation by localization refining, bidirectional ID correction, and automatic parameter tuning.
  <br>
   
-  <p>
-    <br>
-    <center><h2>Real-time implementation </h2></center>
-
-  To achieve real-time processing during imaging acquisition, we made a program interface to incorporate DeepCAD-RT into our image acquisition software (Scanimage 5.7, Vidrio Technologies). For further acceleration and memory conservation, the inference of DeepCAD-RT was optimally deployed on GPU with TensorRT (NVIDIA), programmed in C++ for best hardware interaction, and then compiled in Matlab (MathWorks). Three parallel threads were designed for imaging, data processing, and display. The schedule for multi-thread programming is depicted in the following figure. The real-time implementation of DeepCAD-RT has been packaged as a free plugin with a user-friendly interface, and it could also be called by a Matlab script.
-  </p>
-  <p>
-  <center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/deepcad5.png?raw=true" width="950" align="middle" /></center>
-   </p>
   
-  <br> 
-  <a href="https://www.nature.com/articles/s41587-022-01450-8"><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/deepcadrt3r.png?raw=true" width="300" align="left"/></a>
- <h3>Paper</h3>
-<p>Nature Biotechnology, 2022. </p>
-<h3>Citation</h3>
-<p>Li, X., Li, Y., Zhou, Y. et al. Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit. Nat Biotechnol (2022). <a href="https://www.nature.com/articles/s41587-022-01450-8">https://doi.org/10.1038/s41587-022-01450-8</a>
-</p>
-  <h3>Code: <a href='https://github.com/cabooster/DeepCAD-RT'>PyTorch</a> | <a href='https://github.com/cabooster/DeepCAD-RT/tree/main/DeepCAD_RT_GUI'>Matlab</a>   </h3>
-  <br> <br>
+    <br>
+    <center><h2> User-Friendly GUI </h2></center>
+<p>
+  We have released a user-friendly GUI of UDMT to make it an easily accessible tool for quantitative ethology and neuroethology.
+  </p>
+  
+  <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI.png?raw=true" width="950" align="middle" /></center>
+   
+   <br>
   
   
   <hr>
