@@ -28,7 +28,7 @@ However, there exist enduring challenges impeding multi-animal tracking advancin
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_background.png?raw=true" width="1000" align="middle" /></center>
 
 
-### Unsupervised learning
+### Unsupervised Learning
 
 Recently, unsupervised learning shows great potential to eliminate the reliance on human annotation or ground-truth labels by constructing supervisory relationships directly from data, instead of relying on external labels. Latest research has demonstrated that unsupervised learning can perform better than supervised methods when applied to the test dataset, providing a feasible methodology for achieving higher accuracy with minimal annotation costs. Moreover, theory and practice have shown that unsupervised learning can eliminate annotation bias inherent in supervised methods, which is caused by human variability and mistakes, or by insufficient labeling diversity that fails to represent the entire dataset. Despite these expected advantages, the benefits of unsupervised learning have not yet been realized in multi-animal tracking, and comprehensive efforts are still needed to achieve high-accuracy tracking without requiring human annotation.
 
