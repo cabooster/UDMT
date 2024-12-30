@@ -13,44 +13,40 @@ title: About
 ## Introduction
 
 ### Background
+Animal behavior is closely related to their internal state and external environment. Quantifying animal behavior is a fundamental step in ecology, neuroscience, psychology, and various other fields. As the most basic representation of behavior, the position of animals can reflect the locomotion of individuals and is an indispensable metric for behavioral analysis, especially for population-level studies involving multiple animals. Over the past few decades, the technology for animal tracking evolves continuously and recent advances have catalyzed a series of scientific discoveries. Specifically, tracking insects in laboratories permits the identification of neural circuits and genes involved in visual navigation and locomotion control. In the wild, statistics on individual and population-level animal migration allows the revelation of disruption and ecotoxicology caused by chemical pollution.
 
-**Among the challenges of fluorescence microscopy, poor imaging signal-to-noise ratio (SNR) caused by limited photon budget lingeringly stands in the central position.** Fluorescence microscopy is inherently sensitive to detection noise because the photon flux in fluorescence imaging is much lower than that in photography. To capture enough fluorescence photons for satisfactory SNR, researchers have to sacrifice imaging speed, resolution, and even sample health. The causes of this photon-limited challenge are as follows:
 
-- The **low photon yield** of fluorescent indicators and their **low concentration** in labeled cells result in the lack of photons at the source. 
+However, there exist enduring challenges impeding multi-animal tracking advancing towards higher accuracy, larger scale, and more complex scenarios, especially the similar appearance and frequent interactions of animals of the same species.
+- **High Annotation Workload:** Supervised-learning-based tracking methods achieve good performance but require large amounts of manual annotations, making them time-consuming and labor-intensive, especially with increasing animal numbers and behavioral diversity.
 
-- Although using higher excitation power is a straightforward way to increase fluorescence photons, living systems are too fragile to tolerate high excitation dosage. Extensive experiments have shown that illumination-induced **photobleaching, phototoxicity, and tissue heating** will disturb crucial cellular processes including cell proliferation, migration, vesicle release, neuronal firing, etc. 
+- **Limitations of Semi-Automatic Annotation:** While semi-automatic annotation through GUIs reduces human intervention, it struggles in complex environments and low-contrast conditions, where threshold-based segmentation becomes ineffective.
 
-- Recording fast biological processes necessitates high imaging speed and the **short dwell time** further intensifies the shortage of photons.
- 
-- The **quantum nature of photons** makes the stochasticity (shot noise<sup>*</sup>) of optical measurements inevitable. The intensity detected by photoelectric sensors follows a Poisson distribution parameterized with the exact photon count. In fluorescence imaging, detection noise dominated by photon shot noise exacerbates the measurement uncertainty and obstructs the veritable visualization of underlying structures, potentially altering morphological and functional interpretations that follow. 
-
-***Shot noise**: In optics, shot noise describes the fluctuations of the number of photons detected due to their occurrence independent of each other. There are other mechanisms of noise in optical signals which often dwarf the contribution of shot noise. But when these noises are suppressed, optical detection is said to be 'photon noise limited' because only shot noise is left. [[Wikipedia]](https://en.wikipedia.org/wiki/Shot_noise#)*
+- **Tracking Accuracy Challenges:** Frequent animal interactions and occlusions lead to identity switches and trajectory errors in existing methods, resulting in accumulated inaccuracies that degrade overall tracking performance.
 
 
 
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/deepcad6.png?raw=true" width="1000" align="middle" /></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_background.png?raw=true" width="1000" align="middle" /></center>
 
 
-### Noise model
+### Unsupervised learning
 
-Considering the detection physics, three sources mainly contribute to the detection noise in fluorescence imaging, namely **the dark noise, the photon shot noise, and the readout noise**. Among them, the dark noise and the shot noise follow a [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution) and the readout noise follows a [Gaussian distribution](https://en.wikipedia.org/wiki/Normal_distribution). Hence, the detection noise of fluorescence microscopy follows a **Mixed Poisson-Gaussian (MPG) distribution** [[paper link]](https://ieeexplore.ieee.org/document/8327626). Benefiting from advanced manufacturing technologies of integrated circuits and high-performance sensor cooling methods, the dark noise and the readout noise are relatively low. Thus, **the photon shot noise plays the dominant role in fluorescence microscopy.**
+Recently, unsupervised learning shows great potential to eliminate the reliance on human annotation or ground-truth labels by constructing supervisory relationships directly from data, instead of relying on external labels. Latest research has demonstrated that unsupervised learning can perform better than supervised methods when applied to the test dataset, providing a feasible methodology for achieving higher accuracy with minimal annotation costs. Moreover, theory and practice have shown that unsupervised learning can eliminate annotation bias inherent in supervised methods, which is caused by human variability and mistakes, or by insufficient labeling diversity that fails to represent the entire dataset. Despite these expected advantages, the benefits of unsupervised learning have not yet been realized in multi-animal tracking, and comprehensive efforts are still needed to achieve high-accuracy tracking without requiring human annotation.
 
 
 ### Our Contribution
 
-We present a versatile method **DeepCAD-RT** to denoise fluorescence images with rapid processing speed that can be incorporated with the microscope acquisition system to achieve real-time denoising. Our method is based on deep self-supervised learning and the original low-SNR data can be directly used for training convolutional networks, making it particularly advantageous in functional imaging where the sample is undergoing fast dynamics and capturing ground-truth data is hard or impossible. We have demonstrated extensive experiments including calcium imaging in mice, zebrafish, and flies, cell migration observations, and the imaging of a new genetically encoded ATP sensor, covering both 2D single-plane imaging and 3D volumetric imaging. Qualitative and quantitative evaluations show that our method can substantially enhance fluorescence time-lapse imaging data and permit high-sensitivity imaging of biological dynamics beyond the shot-noise limit.
-
+Here, we present an **unsupervised deep-learning method for multi-animal tracking (UDMT)** that outperforms existing tracking methods. UDMT does not require any human annotations for training. The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. UDMT is grounded in a bidirectional closed-loop tracking strategy that visual tracking can be conducted equivalently in both forward and backward directions. The network is trained in a completely unsupervised way by optimizing the network parameters to make the forward tracking and the backward tracking consistent. To better capture the spatiotemporal evolution of animal features more effectively, we incorporated a spatiotemporal transformer network (ST-Net) to utilize self-attention and cross-attention mechanisms for feature extraction, leading to a threefold reduction in IDSW compared with convolutional neural networks (CNNs). For identity correction, we designed a sophisticated module based on bidirectional tracking to relocate missing targets caused by crowding and occlusion, achieving a 2.7-fold improvement in tracking accuracy. We demonstrate the state-of-the-art performance of UDMT on five different kinds of model animals, including mice, rats, Drosophila, C. elegans, and Betta splendens. Combined with a head-mounted miniaturized microscope, we recorded the calcium transients synchronized with mouse locomotion to decipher the correlations between animal locomotion and neural activity. We have released the Python source code and a user-friendly GUI of UDMT to make it an easily accessible tool for quantitative ethology and neuroethology.
 
 
 ## Results
 
-<center><h3>1. DeepCAD-RT massively improves the imaging SNR of neuronal population recordings in the zebrafish brain</h3></center>
+<center><h3>1. Qualitative evaluation of UDMT in various demanding recording conditions.  </h3></center>
 
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_zebra.png?raw=true" width="850" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result1.png?raw=true" width="850" align="middle"></center>
+<i>Numbers near the boxes represent the IOU, which is the intersection over union between ground-truth bounding box and the predicted bounding box of target animals.</i>
+<center><h3>2. Comparative analysis of tracking accuracy across different variables</h3></center>
 
-<center><h3>2. DeepCAD-RT reveals the 3D migration of neutrophils in vivo after acute brain injury</h3></center>
-
-<center><img src="https://github.com/cabooster/DeepCAD-RT/blob/page/images/gallery_NP.png?raw=true" width="850" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result2.png?raw=true" width="850" align="middle"></center>
 
 <center><h3>3. DeepCAD-RT reveals the ATP (Adenosine 5’-triphosphate) dynamics of astrocytes in 3D after laser-induced brain injury</h3></center>
 
