@@ -28,7 +28,7 @@ title: Gallery
 
 
 <center>
-    <h2>4.Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2></center>
+    <h2>4. Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2></center>
 <br>
 <center><iframe width="690" height="350" src="https://www.youtube.com/embed/nl_3FHD-53k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
