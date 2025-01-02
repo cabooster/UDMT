@@ -52,7 +52,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td rowspan="5">
-      <p>Mouse (black)</p>
+      <p>Mouse (black)<br><a href="https://doi.org/10.5281/zenodo.6254739"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6254739.svg" alt="DOI"></a></p>
     </td>
     <td>
       <p>3</p>
