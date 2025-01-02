@@ -59,7 +59,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td rowspan="5">
-      <p>Mouse (black)<br><a href="https://doi.org/10.5281/zenodo.14586426"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14586426.svg" alt="DOI" width="200"></a></p>
+      <p>Mouse (black)<br><a href="https://doi.org/10.5281/zenodo.14580256"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14580256.svg" alt="DOI" width="200"></a></p>
     </td>
     <td>
       <p>3</p>
@@ -153,7 +153,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td rowspan="2">
-      <p>Mouse with microscope</p>
+      <p>Mouse with miniscope<br><a href="https://doi.org/10.5281/zenodo.14586426"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14586426.svg" alt="DOI" width="200"></a></p>
     </td>
     <td rowspan="2">
       <p>5<sup>a</sup></p>
@@ -190,7 +190,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td>
-      <p>Mouse (white)</p>
+      <p>Mouse (white)<br><a href="https://doi.org/10.5281/zenodo.14580256"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14580256.svg" alt="DOI" width="200"></a></p>
     </td>
     <td>
       <p>5</p>
@@ -213,7 +213,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td>
-      <p>Rat & Mouse</p>
+      <p>Rat & Mouse<br><a href="https://doi.org/10.5281/zenodo.14580256"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14580256.svg" alt="DOI" width="200"></a></p>
     </td>
     <td>
       <p>3</p>
@@ -236,7 +236,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td rowspan="5">
-      <p><i>Drosophila</i></p>
+      <p><i>Drosophila</i><br><a href="https://doi.org/10.5281/zenodo.14580256"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14580256.svg" alt="DOI" width="200"></a></p>
     </td>
     <td>
       <p>12</p>
@@ -318,7 +318,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td rowspan="2">
-      <p><i>C. elegans</i></p>
+      <p><i>C. elegans</i><br><a href="https://doi.org/10.5281/zenodo.14580256"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14580256.svg" alt="DOI" width="200"></a></p>
     </td>
     <td>
       <p>6</p>
@@ -352,7 +352,7 @@ All behavioral recordings used in this study have been archived and made publicl
   </tr>
   <tr>
     <td rowspan="2">
-      <p><i>Betta splendens</i></p>
+      <p><i>Betta splendens</i><br><a href="https://doi.org/10.5281/zenodo.14580256"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14580256.svg" alt="DOI" width="200"></a></p>
     </td>
     <td rowspan="2">
       <p>2</p>
