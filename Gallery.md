@@ -12,7 +12,14 @@ title: Gallery
 <hr>
 
 <center>
-    <h2>2. Neuroethology analysis of multiple mice combined with a head-mounted microscope.</h2></center>
+    <h2>2. UDMT tracks 5 white mice in low-contrast conditions.</h2></center>
+<br>
+<center><iframe width="690" height="350" src="https://www.youtube.com/embed/jSazagWEmtc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+
+
+<hr>
+<center>
+    <h2>3. Neuroethology analysis of multiple mice combined with a head-mounted microscope.</h2></center>
 <br>
 <center><iframe width="690" height="350" src="https://www.youtube.com/embed/zufYK1ovlLU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
@@ -20,9 +27,8 @@ title: Gallery
 <hr>
 
 
-
 <center>
-    <h2>3.Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2></center>
+    <h2>4.Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2></center>
 <br>
 <center><iframe width="690" height="350" src="https://www.youtube.com/embed/nl_3FHD-53k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
@@ -34,7 +40,7 @@ title: Gallery
 
 <hr>
 
-<center><h2>4. Tracking the movement of 7 C. elegans simultaneously with UDMT.</h2></center>
+<center><h2>5. Tracking the movement of 7 C. elegans simultaneously with UDMT.</h2></center>
 <br>
 <center><iframe width="850" height="400" src="https://www.youtube.com/embed/glL-mF55HbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
@@ -48,7 +54,7 @@ title: Gallery
 
 
 
-<center><h2>5. Analyzing the aggressive behavior of betta fish with UDMT.</h2></center>
+<center><h2>6. Analyzing the aggressive behavior of betta fish with UDMT.</h2></center>
 <br>
 <center><iframe width="850" height="400" src="https://www.youtube.com/embed/z724dDa0CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
