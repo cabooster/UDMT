@@ -25,7 +25,7 @@ All behavioral recordings used in this study have been archived and made publicl
   }
   p, a, img {
   display: inline-block; /* 保持元素可被居中 */
-  /*margin: 2;  移除默认的上下外边距 */
+  margin: 2;  /*移除默认的上下外边距 */
   vertical-align: middle; /* 确保元素自身垂直居中 */
 }
 </style>
