@@ -18,7 +18,7 @@ All behavioral recordings used in this study have been archived and made publicl
     border: 2px solid black;
   }
   td, th {
-    padding: 2px;
+    padding: 20px;
     border: 2px solid black; /* 可选：添加边框 */
   }
     a {
