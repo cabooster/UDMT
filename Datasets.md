@@ -18,12 +18,14 @@ All behavioral recordings used in this study have been archived and made publicl
     border: 2px solid black;
   }
   td, th {
-    padding: 2px;
-    border: 2px solid black; /* 可选：添加边框 */
+    padding: 10px; /* 增加内边距 */
+    border: 2px solid black; 
+    vertical-align: middle; /* 垂直居中 */
+    text-align: center; /* 水平居中 */
   }
   p, a, img {
   display: inline-block; /* 保持元素可被居中 */
-  margin: 2;  /*移除默认的上下外边距 */
+  /*margin: 2;  移除默认的上下外边距 */
   vertical-align: middle; /* 确保元素自身垂直居中 */
 }
 </style>
