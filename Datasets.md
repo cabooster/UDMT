@@ -3,7 +3,7 @@ layout: page
 title: Datasets
 ---
 
-All behavioral recordings used in this study have been archived and made publicly available at https://cabooster.github.io/DeepCAD-RT/Datasets/. The source data of neuroethological research of freely behaving mice, including behavioral recordings and synchronized calcium imaging data, are publicly available at https://cabooster.github.io/DeepCAD-RT/Datasets/.
+All behavioral recordings used in this study have been archived and made publicly available at [https://zenodo.org/records/14580256](https://zenodo.org/records/14580256). The source data of neuroethological research of freely behaving mice, including behavioral recordings and synchronized calcium imaging data, are publicly available at [https://zenodo.org/records/14586426](https://zenodo.org/records/14586426).
 
 ## Download links
 
