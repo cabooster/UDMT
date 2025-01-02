@@ -21,6 +21,9 @@ All behavioral recordings used in this study have been archived and made publicl
     padding: 2px;
     border: 2px solid black; /* 可选：添加边框 */
   }
+    a {
+    display: inline-block; /* 将链接设为块状以便居中 */
+  }
 </style>
 
 <table>
