@@ -3,7 +3,22 @@ layout: default
 title: Home
 ---
 
+
 <div class="page">
+<style>
+    .gif-container {
+      display: flex;
+      gap: 20px; /* GIF 之间的间距 */
+    }
+    .gif-container img {
+      width: 200px; /* 统一设置宽度 */
+      height: 200px; /* 统一设置高度 */
+      object-fit: cover; /* 保持比例，填满指定大小 */
+      border: 2px solid #000; /* 可选：添加边框 */
+      border-radius: 8px; /* 可选：添加圆角 */
+    }
+  </style>
+  
   <p> 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue.png?raw=true" width="700" align="middle" /></center>
 </p>
@@ -12,8 +27,14 @@ title: Home
   <header>
     <h1 class="landing-title"> UDMT: Unsupervised multi-animal tracking for quantitative ethology </h1>
   </header>
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt0.png?raw=true" width="1100" align="middle" /></center>
 
+<div class="gif-container">
+    <img src="https://github.com/cabooster/UDMT/blob/main/images/mice.gif?raw=true" alt="GIF 1">
+    <img src="https://github.com/cabooster/UDMT/blob/main/images/mice.gif?raw=true" alt="GIF 2">
+    <img src="https://github.com/cabooster/UDMT/blob/main/images/mice.gif?raw=true" alt="GIF 3">
+    <img src="https://github.com/cabooster/UDMT/blob/main/images/mice.gif?raw=true" alt="GIF 4">
+  </div>
+  
   <p>
   <center><h1>1. Basic principle </h1></center>
 Quantitative ethology necessitates accurate tracking of animal locomotion, especially for population-level analyses involving multiple individuals. However, current methods rely on laborious annotations for supervised training and have restricted performance in challenging conditions. <b>Here, we present <u>the first</u> unsupervised multi-animal tracking method (UDMT) that achieves state-of-the-art performance without requiring any human annotations.</b> By synergizing a bidirectional closed-loop tracking strategy, a spatiotemporal transformer network, and three sophisticatedly designed modules for localization refining, bidirectional ID correction, and automatic parameter tuning, UDMT can track multiple animals accurately in various challenging conditions, such as crowding, occlusion, rapid motion, low contrast, and cross-species experiments. 
