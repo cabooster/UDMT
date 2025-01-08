@@ -6,9 +6,9 @@ title: About
 ### [GitHub](https://github.com/cabooster/UDMT) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
 ## Content
 
-- [Introduction](#introduction)
-- [Results](#results)
-- [Citation](#citation)
+- [**Introduction**](#introduction)
+- [**Results**](#results)
+- [**Citation**](#citation)
 
 ## Introduction
 
