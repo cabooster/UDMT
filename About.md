@@ -50,7 +50,7 @@ Recently, unsupervised learning shows great potential to eliminate the reliance 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result2.png?raw=true" width="1000" align="middle"></center>
 <i>The 5-mouse dataset (33 Hz frame rate, 18,000 frames, N=5) was used in this experiment for quantitative evaluation.</i>
 
-<h3>3.Visualizing the accuracy of animal localization in snapshots.</h3>
+<h3>3.Visualizing the accuracy of animal localization in video snapshots.</h3>
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result3.png?raw=true" width="1000" align="middle"></center>
 <i>Example frames and magnified views of a 7-mouse video at three different time points. Tracking results and corresponding IOU metrics of UDMT, DLC and SLEAP are shown. Scale bars, 50 mm for all images.</i>
