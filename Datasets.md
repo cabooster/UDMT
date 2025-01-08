@@ -387,9 +387,9 @@ title: Datasets
     </td>
   </tr>
 </table>
-<br>
-a. one with a head-mounted microscope.<br>
-b. video with illumination change.
+
+a. One mouse with the head-mounted microscope and the other four without.<br>
+b. The illumination fluctuates to test the robustness of the algorithm.
 
 
 ## Citation
