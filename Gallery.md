@@ -54,7 +54,7 @@ title: Gallery
 <br>
 <center><iframe width="1000" height="600" src="https://www.youtube.com/embed/z724dDa0CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_fish.png?raw=true" width="800" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_fish.png?raw=true" width="900" align="middle"></center>
 
 *The interaction of two Betta splendens (betta fish) in the same arena is continuously recorded (51 Hz frame rate, 15,020 frames). Their swimming trajectories were extracted using UDMT. a, Projected trajectories of the two betta fish during the entire recording period. b, 3D (x-y-t) trajectories of the two betta fish in a 300-second time window. The trajectories during chasing are shown separately in the inset. c, Velocity of the two betta fish. Traces were averaged over 10 frames. The purple shaded area indicates the time of confrontation, during which the speed of both animals decreased to nearly zero. The blue shaded area indicates the time of chasing, when the speed of the escaping fish (ID 2) increased rapidly. d, Representative video frames showing the confrontation and chasing behavior of the two betta fish. The tracks show the movement of the two betta fish over 1.5 seconds. Scale bar, 20 mm.*
 
