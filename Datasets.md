@@ -3,7 +3,7 @@ layout: page
 title: Datasets
 ---
 
-All behavioral recordings used in this study have been archived and made publicly available at [https://zenodo.org/records/14580256](https://zenodo.org/records/14580256). The source data of neuroethological research of freely behaving mice, including behavioral recordings and synchronized calcium imaging data, are publicly available at [https://zenodo.org/records/14586426](https://zenodo.org/records/14586426). 
+All behavioral recordings and manual annotations used in this study have been archived and made publicly available at [https://zenodo.org/records/14580256](https://zenodo.org/records/14580256). The source data of neuroethological research of freely behaving mice, including behavioral recordings and synchronized calcium imaging data, are publicly available at [https://zenodo.org/records/14586426](https://zenodo.org/records/14586426). 
 <br>
 Moreover, **all data collected in this study** has been uploaded to [https://zenodo.org/records/14580391](https://zenodo.org/records/14580391) (part #1) and [https://zenodo.org/records/14586218](https://zenodo.org/records/14586218) (part #2).
 
