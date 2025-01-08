@@ -21,7 +21,7 @@ title: Gallery
 
 <h2>3. Neuroethology analysis of multiple mice combined with a head-mounted microscope.</h2>
 <br>
-<center><iframe width="1000" height="650" src="https://www.youtube.com/embed/zufYK1ovlLU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="1000" height="600" src="https://www.youtube.com/embed/zufYK1ovlLU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 
 <hr>
@@ -30,7 +30,7 @@ title: Gallery
 
 <h2>4. Tracking the movement of 17 Drosophila simultaneously with UDMT.</h2>
 <br>
-<center><iframe width="1000" height="650" src="https://www.youtube.com/embed/nl_3FHD-53k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="1000" height="600" src="https://www.youtube.com/embed/nl_3FHD-53k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_drosophila.png?raw=true" width="1000" align="middle"></center>
 
@@ -41,7 +41,7 @@ title: Gallery
 
 <h2>5. Tracking the movement of 7 C. elegans simultaneously with UDMT.</h2>
 <br>
-<center><iframe width="1000" height="650" src="https://www.youtube.com/embed/glL-mF55HbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="1000" height="550" src="https://www.youtube.com/embed/glL-mF55HbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_celegan.png?raw=true" width="1000" align="middle"></center>
 
@@ -52,7 +52,7 @@ title: Gallery
 
 <h2>6. Analyzing the aggressive behavior of betta fish with UDMT.</h2>
 <br>
-<center><iframe width="1000" height="650" src="https://www.youtube.com/embed/z724dDa0CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="1000" height="600" src="https://www.youtube.com/embed/z724dDa0CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <br>
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/gallery_fish.png?raw=true" width="1000" align="middle"></center>
 
