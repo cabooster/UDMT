@@ -18,7 +18,7 @@ title: Datasets
     border-collapse: collapse;
     text-align: center;
     vertical-align: middle;
-    width: 90%;
+    width: 100%;
     font-size: 17px; 
     border: 2px solid black;
   }
