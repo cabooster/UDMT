@@ -2,7 +2,7 @@
 layout: page
 title: About
 ---
-<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue.png?raw=true" width="700" align="right" />
+<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="700" align="right" />
 ### [GitHub](https://github.com/cabooster/UDMT) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
 ## Content
 
