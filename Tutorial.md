@@ -2,7 +2,7 @@
 layout: page
 title: DeepCAD-RT tutorial
 ---
-<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="700" align="right" />
+<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="600" align="right" />
 
 
 
@@ -36,18 +36,24 @@ title: DeepCAD-RT tutorial
 
 ### 3. Tracking initialization
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini1.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini1.png?raw=true" width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini2.png?raw=true" width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 4. Create training dataset
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-create.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-create.png?raw=true"  width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 5. Train network
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-train.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-train.png?raw=true"  width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 6. Analyze videos
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
-## 
+### 7. Visualize tracks
+
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
