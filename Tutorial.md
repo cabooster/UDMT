@@ -36,18 +36,18 @@ title: DeepCAD-RT tutorial
 
 ### 3. Tracking initialization
 
-<img src="M:\11-LYX\25-code-release\images\GUI-ini1.png" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini1.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 4. Create training dataset
 
-<img src="M:\11-LYX\25-code-release\images\GUI-create.png" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-create.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 5. Train network
 
-<img src="M:\11-LYX\25-code-release\images\GUI-train.png" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-train.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 6. Analyze videos
 
-<img src="M:\11-LYX\25-code-release\images\GUI-analyze.png" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ## 
