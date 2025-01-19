@@ -1,19 +1,20 @@
 ---
 layout: page
-title: DeepCAD-RT tutorial
+title: UDMT tutorial
 ---
 <img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="600" align="right" />
 
 
 
-## GUI Tutorial
+## GUI tutorial
 
 ### 1. Start UDMT in the terminal
 
 1. Once you have UDMT installed, start by opening a terminal. If you installed via the recommended method, activate the environment with:
 
    ```
-   $ source activate udmt
+   $ source activate git clone https://github.com/cabooster/UDMT
+   $ git clone https://github.com/cabooster/UDMT
    $ cd UDMT/
    ```
 
@@ -32,28 +33,163 @@ title: DeepCAD-RT tutorial
    | [XMem.pth](https://zenodo.org/records/14671891/files/XMem.pth?download=1) | `.\UDMT-main-pyqt\udmt\gui\tabs\xmem\saves`     |
    | [sam_vit_b_01ec64.pth](https://zenodo.org/records/14671891/files/sam_vit_b_01ec64.pth?download=1) | `.\UDMT-main-pyqt\udmt\gui\tabs\xmem\sam_model` |
 
-### 2. Create a project
+### 2. Create a new project
+
+1. Click the **Create New Project** button.
+
+   <img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-start1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+2. Set the **Project Path** and **Project Name**.
+
+3. Add videos by clicking the **Browse Videos** button, then select the folders containing your videos.
+
+4. By default, the selected videos will be **copied to the project path**.
+
+5. Finally, click the **Create** button to complete this process. The project you created will open automatically.
+
+   <img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-start2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+**Open an existing project**
+
+1. To reopen a project, click the **Load Project** button on the home page.
+2. Navigate to your project folder and select the **config.yaml** file.
+
+#### Directory structure
+
+<details>
+  <summary>Click to unfold the directory tree</summary>
+
+
+```
+UDMT #Python GUI of UDMT
+|-- config.yaml
+|-- videos
+    |-- video1.mp4
+    |-- video2.mp4
+|-- training-datasets
+    |-- video1
+        |-- img
+        	|-- ...
+        |-- label
+        	|-- ...
+|-- models
+    |-- video1
+        |-- DiMPnet_ep0018.pth.tar
+        |-- DiMPnet_ep0019.pth.tar
+        |-- DiMPnet_ep0020.pth.tar
+|-- tracking-results
+    |-- video1
+        |-- video1-whole-filter5.mp4
+        |-- video1-whole-filter5.npy
+        |-- tmp-videos
+        	|-- ...
+|-- tmp
+    |-- video1
+        |-- evaluation_metric.json
+        |-- evaluation_metric_for_test.json
+        |-- evaluation_metric_for_train.json
+        |-- extracted-images
+            |-- start_pos_array.txt
+            |-- 00000.jpg
+			|-- ...
+        |-- images
+        	|-- ...
+        |-- masks
+        	|-- ...
+        |-- test_set_results
+        	|-- ...
+        |-- train_set_results
+        	|-- ...
+
+
+```
+
+#### Folder description
+
+`project_name/videos`: Path to save the videos to be processed.
+
+`project_name/training-datasets`: Path to save the training datasets.
+
+`project_name/models`: Path to save the models.
+
+`project_name/tracking-results`: Path to save the tracking results, including `.npy` files and `.MP4` files showing the tracking trajectories.
+
+`project_name/tmp`: Path to save temporary files, including images used during tracking initialization, extracted frames, and files generated during parameter tuning.
 
 ### 3. Tracking initialization
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini1.png?raw=true" width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+1. Click the **Select Videos** button to choose the videos you want to process (you can select videos from the `videos` folder in your project file).
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini2.png?raw=true" width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+   <img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+2. After selecting the videos, click the **Launch Tracking Initialization GUI** button to open the sub-GUI.
+
+   <img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+3. In the sub-GUI:
+
+   - Click on the centroids of all the animals you want to track.
+   - Then, click **Forward Propagate** to start the foreground extraction process.
+
+4. Wait until foreground extraction is completed for all frames.
+
+5. Once finished, close the sub-GUI to proceed to the next tab.
 
 ### 4. Create training dataset
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-create.png?raw=true"  width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+1. Click the **Select Videos** button to choose the videos you want to process (if you have already selected videos in the previous tab, you don't need to select them again).
+2. After selecting the videos, choose the parameters for preprocessing the videos.
+3. Click the **Create Training Dataset** button to start the creation process.
+4. During the process, you can click the **Show Video** button at any time to visualize the creation progress.
+5. Once the creation is complete, a popup message will appear, notifying you to proceed to the next tab.
+
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-create.png?raw=true"  width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 5. Train network
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-train.png?raw=true"  width="700" align="middle" alt="description" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+1. Click the **Select Videos** button to choose the videos you want to process (if you have already selected videos in the previous tab, you don't need to select them again).
+2. Set the training parameters:
+   - **Batch Size**: Select a larger batch size if you have multiple GPUs. If you encounter a "CUDA out of memory" error, reduce the batch size.
+   - **Number of Workers**: Set to 0 on Windows; on Linux, you can set it to 8.
+   - **Max Training Epochs**: The default is 20 epochs. This value doesn't need to be changed unless necessary.
+3. Click the **Train Network** button to start the training process.
+
+<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-train.png?raw=true"  width="700" align="middle"  style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 6. Analyze videos
+
+1. Select the videos you want to process.
+2. Choose the parameters for preprocessing the videos and set the **Filter Size** for post-processing smooth trajectory filtering.
+3. Click the **Analyze Videos** button to start the tracking process.
+4. During the tracking, you can click the **Show Video** button at any time to visualize the tracking process. (This includes **automatic parameter tuning** and the final tracking process.)
+5. Once the tracking is complete, the result files will be automatically saved in the **tracking-results** folder.
+6. A popup notification will appear, notifying you to proceed to the next tab.
 
 <img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
 
 ### 7. Visualize tracks
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+**Visualize Tracks Tab**
+
+1. Select the videos you want to process.
+
+2. Choose the parameters for post-processing the videos.
+
+   <img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+3. Click the **Launch Track Visualization GUI** button to start the visualization.
+
+4. In the pop-up sub-GUI:
+
+   - The left side shows the current frame.
+   - The right side displays the trajectory XY coordinates that change with each frame.
+
+5. You can click the **Frame** bar to visualize each frame.
+
+6. Adjust the **Dot Size** bar to change the size of the dots marking positions in the image.
 
 <img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+
+## GUI demo
+
+<center><iframe width="800" height="500" src="https://www.youtube.com/embed/u1ejSaVvWiY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </center>
