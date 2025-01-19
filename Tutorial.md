@@ -13,7 +13,7 @@ title: UDMT tutorial
 1. Once you have UDMT installed, start by opening a terminal. Activate the environment and download the codes with:
 
    ```
-   $ source activate git clone https://github.com/cabooster/UDMT
+   $ source activate udmt
    $ git clone https://github.com/cabooster/UDMT
    $ cd UDMT/
    ```
@@ -29,7 +29,7 @@ title: UDMT tutorial
 
    | Model name                                                   | Location                         |
    | ------------------------------------------------------------ | -------------------------------- |
-   | [trdimp_net_ep.pth.tar](https://zenodo.org/records/14671891/files/sam_vit_b_01ec64.pth?download=1) | `./udmt/gui/pretrained`          |
+   | [trdimp_net_ep.pth.tar](https://zenodo.org/records/14671891/files/trdimp_net_ep.pth.tar?download=1) | `./udmt/gui/pretrained`          |
    | [XMem.pth](https://zenodo.org/records/14671891/files/XMem.pth?download=1) | `./udmt/gui/tabs/xmem/saves`     |
    | [sam_vit_b_01ec64.pth](https://zenodo.org/records/14671891/files/sam_vit_b_01ec64.pth?download=1) | `./udmt/gui/tabs/xmem/sam_model` |
 
@@ -41,11 +41,9 @@ title: UDMT tutorial
 
 2. Set the **Project Path** and **Project Name**.
 
-3. Add videos by clicking the **Browse Videos** button, then select the folders containing your videos.
+3. Add videos by clicking the **Browse Videos** button, then select the folders containing your videos. By default, the selected videos will be copied to the project path.
 
-4. By default, the selected videos will be copied to the project path.
-
-5. Finally, click the **Create** button to complete this process. The project you created will open automatically.
+4. Finally, click the **Create** button to complete this process. The project you created will open automatically.
 
    <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-start2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
@@ -60,7 +58,6 @@ title: UDMT tutorial
 <details>
   <summary>Click to unfold the directory tree</summary>
 <pre><code>
-
 UDMT
 |-- config.yaml
 |-- videos
@@ -119,11 +116,11 @@ UDMT
 
 ### 3. Tracking initialization
 
-1. Click the **Select Videos** button to choose the videos you want to process (you can select videos from the `videos` folder in your project file).
+1. Click the **Select Videos** button to choose a video you want to process (you can select videos from the `videos` folder in your project file).
 
    <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
-2. After selecting the videos, click the **Launch Tracking Initialization GUI** button to open the sub-GUI.
+2. After selecting the video, click the **Launch Tracking Initialization GUI** button to open the sub-GUI.
 
    <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
