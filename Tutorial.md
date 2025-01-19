@@ -198,6 +198,6 @@ UDMT
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
-## GUI demo
+## GUI demo video
 
 <center><iframe width="800" height="500" src="https://www.youtube.com/embed/7rkpVTawpBU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </center>
