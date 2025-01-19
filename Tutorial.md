@@ -52,6 +52,7 @@ title: UDMT tutorial
 **Open an existing project**
 
 1. To reopen a project, click the **Load Project** button on the home page.
+
 2. Navigate to your project folder and select the **config.yaml** file.
 
 #### Directory structure
@@ -135,9 +136,13 @@ UDMT
 ### 4. Create training dataset
 
 1. Click the **Select Videos** button to choose a video you want to process (if you have already selected videos in the previous tab, you don't need to select again).
+ 
 2. After selecting the video, choose the parameters for preprocessing the videos.
+
 3. Click the **Create Training Dataset** button to start the creation process.
+
 4. During the process, you can click the **Show Video** button at any time to visualize the creation progress.
+
 5. Once the creation is complete, a popup message will appear, notifying you to proceed to the next tab.
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-create.png?raw=true"  width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
@@ -161,11 +166,17 @@ UDMT
 ### 6. Analyze videos
 
 1. Select a video you want to process.
+ 
 2. Choose the parameters for preprocessing the videos and set the **Filter Size** for post-processing smooth trajectory filtering.
+
 3. Click the **Analyze Videos** button to start the tracking process.
+
 4. During the tracking, you can click the **Show Video** button at any time to visualize the tracking process. (This includes **automatic parameter tuning** and the final tracking process.)
+
 5. Once the tracking is complete, the result files will be automatically saved in the **tracking-results** folder.
-6. A popup notification will appear, notifying you to proceed to the next tab.
+
+6. A popup message will appear, notifying you to proceed to the next tab.
+
 
 <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
