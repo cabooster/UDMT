@@ -2,7 +2,7 @@
 layout: page
 title: UDMT tutorial
 ---
-<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="600" align="right" />
+<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="500" align="right" />
 
 
 
@@ -104,6 +104,8 @@ UDMT #Python GUI of UDMT
 
 ```
 
+</details>
+
 #### Folder description
 
 `project_name/videos`: Path to save the videos to be processed.
@@ -165,7 +167,7 @@ UDMT #Python GUI of UDMT
 5. Once the tracking is complete, the result files will be automatically saved in the **tracking-results** folder.
 6. A popup notification will appear, notifying you to proceed to the next tab.
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;">
+<center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 ### 7. Visualize tracks
 
