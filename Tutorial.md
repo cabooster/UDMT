@@ -2,7 +2,7 @@
 layout: page
 title: UDMT tutorial
 ---
-<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="500" align="right" />
+<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="400" align="right" />
 
 
 
@@ -58,9 +58,8 @@ title: UDMT tutorial
 
 <details>
   <summary>Click to unfold the directory tree</summary>
+<pre>
 
-
-```
 UDMT
 |-- config.yaml
 |-- videos
@@ -100,7 +99,8 @@ UDMT
         	|-- ...
         |-- train_set_results
         	|-- ...
-```
+
+</pre>
 
 </details>
 
