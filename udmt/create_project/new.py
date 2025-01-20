@@ -184,7 +184,7 @@ def create_new_project(
 
     print('Generated "{}"'.format(project_path / "config.yaml"))
     print(
-        "\nA new project with name %s is created at %s and a configurable file (config.yaml) is stored there. Change the parameters in this file to adapt to your project's needs.\n Once you have changed the configuration file, use the function 'extract_frames' to select frames for labeling.\n. [OPTIONAL] Use the function 'add_new_videos' to add new videos to your project (at any stage)."
+        "A new project with name %s is created at %s and a configurable file (config.yaml) is stored there."
         % (project_name, str(wd))
     )
     return projconfigfile

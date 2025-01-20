@@ -56,7 +56,8 @@ class ResourceManager:
 
             self.workspace = path.join('./workspace', basename)
 
-        print(f'Workspace is in: {self.workspace}')
+        normalized_path = os.path.normpath(self.workspace)
+        print(f'Workspace of UDMT - Tracking initialization GUI is in: {normalized_path}')
 
         # determine the location of input images
         need_decoding = False
@@ -94,7 +95,7 @@ class ResourceManager:
 
         assert self.length > 0, f'No images found! Check {self.workspace}/images. Remove folder if necessary.'
 
-        print(f'{self.length} images found.')
+        print(f'{self.length} images ready to process.')
 
         self.height, self.width = self.get_image(0).shape[:2]
         self.visualization_init = False
@@ -105,7 +106,8 @@ class ResourceManager:
         cap = cv2.VideoCapture(video)
         frame_index = 0
         frame_index_true = 0
-        print(f'Extracting frames from {video} into {self.image_dir}...')
+
+        print(f'Extracting frames from {os.path.normpath(video)} into {os.path.normpath(self.image_dir)}...')
         bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
         while(cap.isOpened()):
             _, frame = cap.read()
@@ -128,8 +130,8 @@ class ResourceManager:
             bar.update(frame_index)
         bar.finish()
         if self.divide_num == 2:
-            print('The frame rate of this video is high; downsample by a factor of 2 when extracting the foreground.')
-        print('Done!')
+            print('Save time by downsampling the video twice when running the UDMT - Tracking Initialization module.')
+        print('Extracting frames finished! Please follow the guide in UDMT - Tracking Initialization GUI.')
 
         # self.scale = resize_scale
 

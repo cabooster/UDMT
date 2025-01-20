@@ -1,4 +1,4 @@
-# loss 相关的代码
+
 import os
 
 import cv2
@@ -10,6 +10,7 @@ import torch
 from udmt.gui.tabs.ST_Net.pytracking.libs import dcf
 from udmt.gui.tabs.ST_Net.ltr.data import processing_utils as prutils
 # import ltr.data.processing_utils as prutils
+debug_flag = False
 class DiMPActor(BaseActor):
     """Actor for training the DiMP network."""
     def __init__(self, net, objective, loss_weight=None):
@@ -56,21 +57,24 @@ class DiMPActor(BaseActor):
             for test_img_num in range(target_scores_iter.shape[0]):
                 for batch_num in range(target_scores_iter.shape[1]):
                     if debug_forward:
-                        debug_save_path = './save_tmp_trdimp'
-                        if not os.path.exists(debug_save_path):
-                            os.makedirs(debug_save_path)
+                        if debug_flag:
+                            debug_save_path = './save_tmp_trdimp'
+                            if not os.path.exists(debug_save_path):
+                                os.makedirs(debug_save_path)
 
                         if batch_num == 0:
 
                             save_patch = data['train_images'][test_img_num,batch_num].cpu().numpy()
                             save_patch = np.transpose(save_patch, (1, 2, 0))
                             save_patch = save_patch * 255
-                            cv2.imwrite(debug_save_path+'/patch_train_'+str(test_img_num)+'.jpg', save_patch)
+                            if debug_flag:
+                                cv2.imwrite(debug_save_path+'/patch_train_'+str(test_img_num)+'.jpg', save_patch)
 
                             save_patch = data['test_images'][test_img_num,batch_num].cpu().numpy()
                             save_patch = np.transpose(save_patch, (1, 2, 0))
                             save_patch = save_patch * 255
-                            cv2.imwrite(debug_save_path+'/patch_test_'+str(test_img_num)+'.jpg', save_patch)
+                            if debug_flag:
+                                cv2.imwrite(debug_save_path+'/patch_test_'+str(test_img_num)+'.jpg', save_patch)
 
 
                     translation_vec, _, _ = localize_target(data, target_scores_iter[test_img_num,batch_num])
@@ -98,18 +102,21 @@ class DiMPActor(BaseActor):
                 for test_img_num in range(backward_target_scores_iter.shape[0]):
                     for batch_num in range(backward_target_scores_iter.shape[1]):
                         if debug_backward:
-                            debug_save_path = './save_tmp_trdimp'
-                            if not os.path.exists(debug_save_path):
-                                os.makedirs(debug_save_path)
+                            if debug_flag:
+                                debug_save_path = './save_tmp_trdimp'
+                                if not os.path.exists(debug_save_path):
+                                    os.makedirs(debug_save_path)
                             save_patch = data['train_images'][test_img_num,batch_num].cpu().numpy()
                             save_patch = np.transpose(save_patch, (1, 2, 0))
                             save_patch = save_patch * 255
-                            cv2.imwrite(debug_save_path+'/patch_train_back.jpg', save_patch)
+                            if debug_flag:
+                                cv2.imwrite(debug_save_path+'/patch_train_back.jpg', save_patch)
 
                             save_patch = data['test_images'][test_img_num,batch_num].cpu().numpy()
                             save_patch = np.transpose(save_patch, (1, 2, 0))
                             save_patch = save_patch * 255
-                            cv2.imwrite(debug_save_path+'/patch_test_back.jpg', save_patch)
+                            if debug_flag:
+                                cv2.imwrite(debug_save_path+'/patch_test_back.jpg', save_patch)
 
 
                         translation_vec, _, _ = localize_target(data, backward_target_scores_iter[test_img_num,batch_num])
@@ -316,7 +323,7 @@ def localize_target(data,scores):
     # change
 
     # if self.params.get('advanced_localization', False):
-    #     return self.localize_advanced(scores, sample_pos, sample_scales) #注释掉这部分结果有时会差一些 简易版选择不用这个部分
+    #     return self.localize_advanced(scores, sample_pos, sample_scales) #bad after comment
 
     # Get maximum
     score_sz = torch.Tensor(list(scores.shape[-2:]))
@@ -393,7 +400,7 @@ class KLDiMPActor(BaseActor):
                                            test_imgs=data['test_images'], # (3,10,3,352,352)
                                            train_bb=data['train_anno'], # (3,10,4)
                                            train_label=data['train_label'])
-        debug_forward = True
+        debug_forward = False
         debug_backward = False
 
 
@@ -410,6 +417,7 @@ class KLDiMPActor(BaseActor):
             # print(target_scores_iter[0,0])
             for test_img_num in range(target_scores_iter.shape[0]):
                 for batch_num in range(target_scores_iter.shape[1]):
+
                     if debug_forward:
                         debug_save_path = './save_tmp_trdimp'
                         if not os.path.exists(debug_save_path):

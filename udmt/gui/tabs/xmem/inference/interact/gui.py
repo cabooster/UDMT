@@ -70,7 +70,7 @@ class App(QWidget):
         self.height, self.width = self.res_man.h, self.res_man.w
 
         # set window
-        self.setWindowTitle('UDMT-Tracking initialization')
+        self.setWindowTitle('UDMT - Tracking Initialization')
         self.setGeometry(100, 100, self.width, self.height+100)
         self.setWindowIcon(QIcon('docs/icon.png'))
 
@@ -99,7 +99,7 @@ class App(QWidget):
         self.lcd.setMinimumHeight(28)
         self.lcd.setMinimumWidth(150)
         self.lcd.setText('{: 4d} / {: 4d}'.format(0, self.num_frames-1))
-        self.lcd.setAlignment(Qt.AlignCenter)  # 居中对齐
+        self.lcd.setAlignment(Qt.AlignCenter)
 
         # timeline slider
         self.tl_slider = QSlider(Qt.Horizontal)
@@ -271,8 +271,8 @@ class App(QWidget):
         ##########################################
 
         minimap_area.addLayout(minimap_ctrl)
-        minimap_area.addStretch()  # 添加上方弹性空间
-        minimap_area.addWidget(self.minimap, alignment=Qt.AlignCenter)  # 居中对齐
+        minimap_area.addStretch()
+        minimap_area.addWidget(self.minimap, alignment=Qt.AlignCenter)
         minimap_area.addStretch()
         # minimap_area.addWidget(self.minimap)
 
@@ -368,7 +368,7 @@ class App(QWidget):
         self.show_current_frame()
         self.show()
         self.console_push_text('--------------------------------------------------')
-        self.console_push_text('Welcome to UDMT-Tracking initialization GUI.')
+        self.console_push_text('Welcome to UDMT - Tracking Initialization GUI.')
         self.console_push_text('Step 1: Click the center of each animal you want to track at frame 0.')
         self.console_push_text('Step 2: Press "Forward Propagate" button for foreground extraction.')
         self.console_push_text('--------------------------------------------------')
@@ -569,6 +569,7 @@ class App(QWidget):
             pass
 
     def on_forward_propagation(self):
+        print("Forward propagation in progress. Please wait...")
         if self.propagating:
             # acts as a pause button
             self.propagating = False
@@ -635,7 +636,7 @@ class App(QWidget):
         self.on_pause()
         self.tl_slide()
         QApplication.processEvents()
-        # 提取完成时弹出提示窗口
+
         if self.cursur == self.num_frames-1:
             QMessageBox.information(
                 self,
@@ -643,6 +644,7 @@ class App(QWidget):
                 "Tracking initialization has been successfully completed!",
                 QMessageBox.Ok
             )
+        print("Tracking initialization has been successfully completed! Move to 'UDMT - Create Training Dataset'.")
 
     def pause_propagation(self):
         self.propagating = False

@@ -28,9 +28,9 @@ class EnvironmentSettings:
                 # Check if it's a file
                 if os.path.isfile(item_path):
                     os.remove(item_path)  # Delete the file
-                    print(f"Deleted file: {item_path}")
+                    print(f"Deleted existing model file: {item_path}")
 
                 # Check if it's a directory
                 elif os.path.isdir(item_path):
                     shutil.rmtree(item_path)  # Delete the subfolder and its contents
-                    print(f"Deleted folder: {item_path}")
+                    print(f"Deleted existing folder: {item_path}")

@@ -1,4 +1,6 @@
-# 选择inference的参数以及模型文件名
+
+import os
+
 from udmt.gui.tabs.ST_Net.pytracking.utils import TrackerParams
 from udmt.gui.tabs.ST_Net.pytracking.features.net_wrappers import NetWithBackbone
 # from pytracking.utils import TrackerParams
@@ -92,7 +94,8 @@ def parameters(gui_param):
     # DiMPnet_ep0023_finetune_5mice_20hz_scale3
     network_name = gui_param['model_path'] #  DiMPnet_ep0054.pth.tar DiMPnet_ep0088_super DiMPnet_ep0099_unsuper_fromscratch  DiMPnet_ep0099_unsuper_pre3 trdimp_net.pth.tar DiMPnet_ep0083_finetune_5fish
     params.net = NetWithBackbone(net_path = network_name, use_gpu=params.use_gpu)
-    print('using ', network_name)
+    # print('using ', network_name)
+
     params.vot_anno_conversion_type = 'preserve_area'
 
     return params

@@ -163,12 +163,12 @@ class VideoSelectionWidget(QtWidgets.QWidget):
         cwd = self.root.project_folder
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
-            "Select a video to analyze",  # 修改提示语为单数
+            "Select a video to analyze",
             cwd,
             f"Videos ({' *.'.join(UDMTParams.VIDEOTYPES)[1:]})",
         )
 
-        if filename:  # 如果选择了文件
+        if filename:
             # 直接保存单个文件路径
             self.root.video_files = [filename]
 

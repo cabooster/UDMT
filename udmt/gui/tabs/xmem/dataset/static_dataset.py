@@ -41,7 +41,7 @@ class StaticTransformDataset(Dataset):
             elif method == 1:
                 self.im_list.extend([path.join(root, im) for im in os.listdir(root) if '.jpg' in im] * multiplier)
 
-        print(f'{len(self.im_list)} images found.')
+        print(f'{len(self.im_list)} images ready to process.')
 
         # These set of transform is the same for im/gt pairs, but different among the 3 sampled frames
         self.pair_im_lone_transform = transforms.Compose([

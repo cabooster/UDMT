@@ -2,11 +2,11 @@
 from PySide6.QtCore import QObject, Signal
 
 class SharedState(QObject):
-    test_spin_changed = Signal(float)  # 信号：当值改变时触发
+    test_spin_changed = Signal(float)
 
     def __init__(self):
         super().__init__()
-        self._test_spin = 0.8  # 默认值
+        self._test_spin = 0.8
 
     def set_test_spin(self, value):
         """设置新的值，并发出信号"""
@@ -19,5 +19,5 @@ class SharedState(QObject):
         return self._test_spin
 
 
-# 单例对象
+
 shared_state = SharedState()

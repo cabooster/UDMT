@@ -9,7 +9,7 @@ import os
 import warnings
 
 import matplotlib.colors as mcolors
-import napari
+# import napari
 import numpy as np
 import pandas as pd
 from matplotlib.collections import LineCollection

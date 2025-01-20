@@ -5,7 +5,7 @@ Not related to automatic evaluation in the DAVIS dataset
 You can inherit the Interaction class to create new interaction types
 undo is (sometimes partially) supported
 """
-
+import os
 
 import torch
 import torch.nn.functional as F
@@ -28,7 +28,7 @@ def save_ndarray_to_txt(file_path, array):
         raise ValueError("The input must be a NumPy ndarray.")
 
     np.savetxt(file_path, array, fmt='%.2f', delimiter=',')
-    print(f"Array saved to {file_path} (overwritten).")
+    print(f"Animal initial positions saved to {os.path.normpath(file_path)} (overwritten).")
 def aggregate_sbg(prob, keep_bg=False, hard=False):
     device = prob.device
     k, h, w = prob.shape

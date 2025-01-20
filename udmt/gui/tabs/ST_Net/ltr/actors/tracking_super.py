@@ -1,4 +1,4 @@
-# loss 相关的代码
+
 from . import BaseActor
 import torch
 from pytracking import dcf
@@ -102,7 +102,7 @@ def localize_target(data,scores):
     # change
 
     # if self.params.get('advanced_localization', False):
-    #     return self.localize_advanced(scores, sample_pos, sample_scales) #注释掉这部分结果有时会差一些 简易版选择不用这个部分
+    #     return self.localize_advanced(scores, sample_pos, sample_scales) #bad after comment
 
     # Get maximum
     score_sz = torch.Tensor(list(scores.shape[-2:]))

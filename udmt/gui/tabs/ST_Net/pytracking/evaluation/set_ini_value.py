@@ -8,14 +8,14 @@ debug = False
 print_flag = False
 def _read_image(image_file: str):
         im = cv.imread(image_file)
-        # 获取原始图像的高度和宽度
+
         original_height, original_width = im.shape[:2]
 
-        # 计算新的高度和宽度
+
         new_height = int(original_height)
         new_width = int(original_width)
 
-        # 使用cv2.resize函数调整图像大小
+
         resized_image = cv2.resize(im, (new_width, new_height))
         return cv.cvtColor(resized_image, cv.COLOR_BGR2RGB)
 def set_ini_value(animal_species,img_name_list,start_point_corr,object_num,bg_path):
@@ -77,7 +77,7 @@ def set_ini_value(animal_species,img_name_list,start_point_corr,object_num,bg_pa
             target_class_list.append(target_class)
     # Count the occurrences of each number in the list
     counter = Counter(target_class_list)
-    # 创建一个新列表，其中每个元素是原始元素的出现次数
+
     count_list = [counter[item] for item in target_class_list]
     # Extract numbers that appear only once
     unique_numbers = [num for num, count in counter.items() if count == 1]

@@ -653,7 +653,7 @@ class KLDiMPProcessing(BaseProcessing):
             assert self.mode == 'sequence' or len(data[s + '_images']) == 1, \
                 "In pair mode, num train/test frames must be 1"
 
-            # Add a uniform noise to the center pos # 向目标bbox的center和scale增加抖动，增加抖动是防止网络学习到目标一直位于搜索区域中心的错误偏置
+            # Add a uniform noise to the center pos
             jittered_anno = [self._get_jittered_box(a, s) for a in data[s + '_anno']]
 
             crops, boxes = prutils.target_image_crop(data[s + '_images'], jittered_anno, data[s + '_anno'],

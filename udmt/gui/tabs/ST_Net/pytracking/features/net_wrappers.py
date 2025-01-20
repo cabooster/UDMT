@@ -1,3 +1,5 @@
+import os
+
 import torch
 from pytracking.utils.loading import load_network
 
@@ -29,7 +31,7 @@ class NetWrapper:
 
     def load_network(self):
         self.net = load_network(self.net_path, **self.net_kwargs)
-        print('loading----->',self.net_path)
+        # print('loading----->', os.path.normpath(self.net_path))
         if self.use_gpu:
             self.cuda()
         self.eval()

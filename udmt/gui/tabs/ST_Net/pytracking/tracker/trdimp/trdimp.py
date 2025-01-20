@@ -39,16 +39,16 @@ import matplotlib.pyplot as plt
 import random
 import pdb
 def setup_seed(seed):
-    np.random.seed(seed) # numpy 的设置
+    np.random.seed(seed)
     random.seed(seed)  # python random module
-    os.environ['PYTHONHASHSEED'] = str(seed) # 为了使得hash随机化，使得实验可以复现
-    torch.manual_seed(seed) # 为cpu设置随机种子
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
     if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed) # 为当前GPU设置随机种子
-        torch.cuda.manual_seed_all(seed) # 如果使用多GPU为，所有GPU设置随机种子
-        torch.backends.cudnn.benchmark = False # 设置为True，会使得cuDNN来衡量自己库里面的多个卷积算法的速度，然后选择其中最快的那个卷积算法。
-        torch.backends.cudnn.deterministic = True # 每次返回的卷积算法将是确定的，即默认算法。如果配合上设置 Torch 的随机种子为固定值的话，
-                                                    # 应该可以保证每次运行网络的时候相同输入的输出是固定的
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+
 class TrDiMP(BaseTracker):
 
     multiobj_mode = 'parallel'
@@ -126,7 +126,7 @@ class TrDiMP(BaseTracker):
         init_backbone_feat = self.generate_init_samples(im)
 
         # Initialize classifier
-        self.init_classifier(init_backbone_feat) # memory爆炸
+        self.init_classifier(init_backbone_feat)
 
         # Initialize IoUNet
         if self.params.get('use_iou_net', True):
@@ -707,7 +707,7 @@ class TrDiMP(BaseTracker):
         # change
 
         if self.params.get('advanced_localization', False):
-            return self.localize_advanced(scores, sample_pos, sample_scales)#注释掉这部分结果有时会差一些 简易版选择不用这个部分
+            return self.localize_advanced(scores, sample_pos, sample_scales)
 
         # Get maximum
         score_sz = torch.Tensor(list(scores.shape[-2:]))
@@ -1103,7 +1103,7 @@ class TrDiMP(BaseTracker):
             self.transformer_memory, _ = self.net.classifier.transformer.encoder(self.x_clf.unsqueeze(1), pos=None)
         with torch.no_grad(): ###debug
             for i in range(x.shape[0]):
-                _, cur_encoded_feat = self.net.classifier.transformer.decoder(x[i,...].unsqueeze(0).unsqueeze(0), memory=self.transformer_memory, pos=self.transformer_label, query_pos=None) # memory爆炸
+                _, cur_encoded_feat = self.net.classifier.transformer.decoder(x[i,...].unsqueeze(0).unsqueeze(0), memory=self.transformer_memory, pos=self.transformer_label, query_pos=None)
                 if i == 0:
                     encoded_feat = cur_encoded_feat
                 else:

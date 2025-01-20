@@ -58,9 +58,9 @@ def create_train_label(dataset, trajectories_file_path, train_label_path):
     if filter_flag:
         for animal_id in range(ani_num):
             data = target_pos_mul[animal_id]
-            filtered_x = generic_filter(data[:, 0], mean_filter, size=filter_size)  # 滤波器窗口大小为3
+            filtered_x = generic_filter(data[:, 0], mean_filter, size=filter_size)
             filtered_y = generic_filter(data[:, 1], mean_filter, size=filter_size)
-            # 将滤波后的x和y坐标重新组合成时间序列的二维坐标数据
+
             filtered_time_series = np.column_stack((filtered_x, filtered_y))
             target_pos_mul[animal_id] = filtered_time_series
         #################################
@@ -84,7 +84,8 @@ def create_train_label(dataset, trajectories_file_path, train_label_path):
                   #     f.write(','.join(['{:.2f}'.format(i) for i in x]) + ',' +','.join(['{:.2f}'.format(i) for i in x]) + '\n')
                   target_size = target_sz_mul[animal_id][jj][0]
                   f.write(','.join(['{:.2f}'.format(i) for i in target_pos_mul[animal_id][jj]]) + ',' + ','.join(['{:.2f}'.format(i) for i in target_sz_mul[animal_id][jj]]) + '\n')
-        print('train label save folder finish --->',train_label_path)
+        print('Train label is saved in ',train_label_path)
+        print('The training dataset is successfully created.')
     # print(dataset_name)
     # print(trajectories_file_path)
 

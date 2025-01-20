@@ -1,4 +1,4 @@
-# inference的主代码
+
 import datetime
 import functools
 import importlib
@@ -48,6 +48,7 @@ save_flag = True
 vis_flag = True
 combine_flag = False
 speed_up_flag = True
+DEBUG_FLAG = False
 ##########################
 refine_pos_flag = True #!!!!!!!!!!!!!!!!
 ##########################
@@ -75,7 +76,9 @@ min_loss_time = 10000
 # target_sz_uniform = 125 #fish 78 micro 145 white mice 125
 # area_in_first_frame = 3218 #fish 691 micro 9846 white mice 3218
 ##########################
-
+def debug_print(message):
+    if DEBUG_FLAG:
+        print(message)
 def save_to_json(file_path, data):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
@@ -144,7 +147,7 @@ class Tracker:
                 self.visdom.register(help_text, 'text', 1, 'Help')
             except:
                 time.sleep(0.5)
-                print('!!! WARNING: Visdom could not start, so using matplotlib visualization instead !!!\n'
+                debug_print('!!! WARNING: Visdom could not start, so using matplotlib visualization instead !!!\n'
                       '!!! Start Visdom in a separate terminal window by typing \'visdom\' !!!')
 
     def _visdom_ui_handler(self, data):
@@ -176,7 +179,7 @@ class Tracker:
         target_sz_bias_gl = target_sz_bias
         search_scale_gl = search_scale
         params = self.get_parameters(search_scale_gl,gui_param)
-        print('params.search_area_scale:',params.search_area_scale)
+        # debug_print('params.search_area_scale:',params.search_area_scale)
         visualization_ = visualization
 
         debug_ = debug
@@ -248,10 +251,10 @@ class Tracker:
         # object in frame i
         # segmentation[i] is the multi-label segmentation mask for frame i (numpy array)
         global min_correct_time,min_miss_time,min_loss_time,corresponding_miss_num
-
-        # print('start min_correct_time: ',min_correct_time)
-        # print('start min_miss_time: ',min_miss_time)
-        # print('start min_loss_time: ',min_loss_time)
+        if DEBUG_FLAG:
+            print('start min_correct_time: ',min_correct_time)
+            print('start min_miss_time: ',min_miss_time)
+            print('start min_loss_time: ',min_loss_time)
         #
         #
         # print('###########',random.random())
@@ -284,11 +287,11 @@ class Tracker:
         start_point_corr = seq.init_bbox_all
         target_sz_ini, target_sz_uniform, area_in_first_frame, kernel, area_mean = set_ini_value(animal_species,seq.frames,start_point_corr,seq.object_num,bg)#
         true_bias = target_sz_ini * target_sz_bias_gl#debug 250113
-        print('target_sz_bias_gl', target_sz_bias_gl)
-        print('target_sz_ini', target_sz_ini)
-        print('true_bias',true_bias)
+        debug_print(f'target_sz_bias_gl:{target_sz_bias_gl}')
+        debug_print(f'target_sz_ini: {target_sz_ini}')
+        debug_print(f'true_bias:{true_bias}' )
         target_sz_ini += true_bias
-        print('target_sz_ini final',target_sz_ini)
+        debug_print(f'target_sz_ini final: {target_sz_ini}')
         ##################
         output_bb_list = [[]for i in range(seq.object_num)]
         score_map_list = [[]for i in range(seq.object_num)]
@@ -402,7 +405,8 @@ class Tracker:
         elif gui_param['status_flag'] == 2:
             result_dir = gui_param['project_folder'] + '/tmp/' + gui_param['video_name'] + '/test_set_results'
         else:
-            result_dir = gui_param['project_folder'] + '/tracking-results/' + gui_param['video_name'] + '/tmp-videos'
+            result_dir = gui_param['project_folder'] + '/tracking-results/' + gui_param['video_name']
+
         if not os.path.exists(result_dir):
             os.makedirs(result_dir)
         formatted_target_sz = "{:.2f}".format(target_sz_ini)
@@ -416,9 +420,15 @@ class Tracker:
         if save_flag:
             fourcc = cv2.VideoWriter_fourcc(*'MJPG')
             formatted_target_sz = "{:.2f}".format(target_sz_ini)
-            out_save = cv2.VideoWriter(result_dir + '/' + seq.name + '_' + formatted_target_sz + '_' + str(search_scale_gl) + '_pre_scale_'+ str(img_pre_scale) + '_eval_new.avi', fourcc, 30, (img_height, img_width), True)
+            if gui_param['status_flag'] == 3:
+                result_video_dir = result_dir + '/tmp-videos'
+            else:
+                result_video_dir = result_dir
+            if not os.path.exists(result_video_dir):
+                os.makedirs(result_video_dir)
+            out_save = cv2.VideoWriter(result_video_dir + '/' + seq.name + '_' + formatted_target_sz + '_' + str(search_scale_gl) + '_pre_scale_'+ str(img_pre_scale) + '_eval_new.avi', fourcc, 30, (img_height, img_width), True)
             # out_compensate = None
-            out_compensate = cv2.VideoWriter(result_dir + '/' + seq.name + '_' + formatted_target_sz + '_' + str(search_scale_gl)  + '_pre_scale_'+ str(img_pre_scale)+ '_backward_track_new.avi', fourcc, 30, (img_height, img_width), True)
+            out_compensate = cv2.VideoWriter(result_video_dir + '/' + seq.name + '_' + formatted_target_sz + '_' + str(search_scale_gl)  + '_pre_scale_'+ str(img_pre_scale)+ '_backward_track_new.avi', fourcc, 30, (img_height, img_width), True)
 
             ##################### save result##############################
 
@@ -479,7 +489,7 @@ class Tracker:
             info['previous_output'] = prev_output
 
             im_show = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            # print(image.shape[1])
+            # debug_print(image.shape[1])
             update_model_flag = False
             correct_frame_flag = False
             s_list = []
@@ -525,19 +535,19 @@ class Tracker:
                     output_bb_list[i].append(np.asarray(out['target_bbox']))
                     # aaa = np.asarray(out['target_bbox'])[:2]+(np.asarray(out['target_bbox'])[2:])*1/2
                     # bbb = np.asarray(tracker[i].pos[[1,0]])
-                    # print('aaa',aaa)
-                    # print('bbb',bbb)
+                    # debug_print('aaa',aaa)
+                    # debug_print('bbb',bbb)
                     target_pos_mul[i].append(np.asarray(tracker[i].pos[[1,0]]))
                     target_sz_mul[i].append(np.asarray(out['target_bbox'])[2:])
 
             else:
                 # out, score_map = tracker.track(image, info)
-                print()
+                debug_print('')
             # if frame_num > 15:
             #     score_judge_list = []
             #     score_sz = torch.Tensor(list(score_map_list[0][0].shape[-2:]))
             #     score_center = (score_sz - 1)/2
-            #     print('score_judge_list: range', frame_num-6, 'to', frame_num)
+            #     debug_print('score_judge_list: range', frame_num-6, 'to', frame_num)
             #     for mouse_id in range(2):
             #         score_ = score_map_list[mouse_id][frame_num-6:frame_num]
             #         max_score = []
@@ -552,23 +562,23 @@ class Tracker:
             if refine_pos_flag: #### debug 1012
                 if ((frame_num > 10) & (frame_num % 1 == 0)):
                     # if frame_num < 2280:
-                         # print('tracker[0].pos',tracker[0].pos)
-                         # print(target_pos_mul[0][-1])
+                         # debug_print('tracker[0].pos',tracker[0].pos)
+                         # debug_print(target_pos_mul[0][-1])
                          target_pos_mul, miss_target_time, miss_target_id_list, target_refine_list = refine_pos(image,target_pos_mul,target_sz_mul,bg, seq.name,current_frame=frame_num,animal_num=seq.object_num,animal_species=animal_species,area_in_first_frame=area_in_first_frame,kernel=kernel,down_sample_fg=down_sample_fg)
                          miss_target_time_sum += miss_target_time
                          if not combine_flag:
                              for animal_id in range(seq.object_num): # debug in 1101
-                                 # print('animal_id:',animal_id)
-                                 # print('tracker.pos before', tracker[animal_id].pos)
+                                 # debug_print('animal_id:',animal_id)
+                                 # debug_print('tracker.pos before', tracker[animal_id].pos)
                                  pos_after_refine = torch.tensor([target_pos_mul[animal_id][-1][1],target_pos_mul[animal_id][-1][0]],dtype=torch.float32)
                                  tracker[animal_id].update_post(update_judge_flag_list[animal_id],pos_after_refine,sample_scales_list[animal_id],sample_pos_list[animal_id],test_x_list[animal_id], x_clf_list[animal_id], s_list[animal_id], scale_ind_list[animal_id] ,animal_id, frame_num)
-                                 # print('tracker.pos after', tracker[animal_id].pos)
+                                 # debug_print('tracker.pos after', tracker[animal_id].pos)
                              update_model_flag = True
                          # else:
                          #     for animal_id in range(seq.object_num): # debug in 1101
-                         #         # print('tracker.pos before', tracker[animal_id].pos)
+                         #         # debug_print('tracker.pos before', tracker[animal_id].pos)
                          #         tracker[animal_id].pos = torch.tensor([target_pos_mul[animal_id][-1][1],target_pos_mul[animal_id][-1][0]],dtype=torch.float32)
-                         #         # print('tracker.pos after', tracker[animal_id].pos)
+                         #         # debug_print('tracker.pos after', tracker[animal_id].pos)
 
                          #########################
                          if len(miss_target_id_list)>0:
@@ -584,29 +594,29 @@ class Tracker:
                             else:
                                 loss_detect_length = 20
                             if len(loss_list_mul[animal_id]) > loss_detect_length:
-                              # print('animal_id',animal_id, "\033[0;31m", 'loss more than 10 frames', "\033[0m")
-                              # print('loss_list_mul[animal_id]', loss_list_mul[animal_id])
-                              check_add_one = lambda arr:functools.reduce(lambda x,y:(x+1==y if isinstance(x,int) else x[0] and x[1]+1==y, y),arr)[0] #判断是否是连续检测不到需要补的动物
-                              continue_loss = (check_add_one(loss_list_mul[animal_id][-loss_detect_length:])) & (frame_num - loss_list_mul[animal_id][-1] == 0) #防止过了很多帧之后再cross 会记忆之前的状态
+                              # debug_print('animal_id',animal_id, "\033[0;31m", 'loss more than 10 frames', "\033[0m")
+                              # debug_print('loss_list_mul[animal_id]', loss_list_mul[animal_id])
+                              check_add_one = lambda arr:functools.reduce(lambda x,y:(x+1==y if isinstance(x,int) else x[0] and x[1]+1==y, y),arr)[0]
+                              continue_loss = (check_add_one(loss_list_mul[animal_id][-loss_detect_length:])) & (frame_num - loss_list_mul[animal_id][-1] == 0)
                               # if frame_num > 1117:
                               #     if animal_id == 1:
                               #         aa = check_add_one(loss_list_mul[animal_id][-10:])
                               #         bb = frame_num - loss_list_mul[animal_id][-1] == 1
-                              #         print(continue_loss)
+                              #         debug_print(continue_loss)
                             else:
                               continue_loss = False
                             #continue_loss = False ###############
                             if continue_loss:
 
-                                 print('continue_loss of id ',animal_id)
-                                 print(loss_list_mul[animal_id])
+                                 debug_print(f'continue_loss of id : {animal_id}')
+                                 debug_print(loss_list_mul[animal_id])
                                  target_pos_mul,refine_loss_flag = refine_pos_for_loss(image,target_pos_mul,target_sz_mul,bg, seq.name,current_frame=frame_num,animal_num=seq.object_num,animal_species=animal_species,area_in_first_frame=area_in_first_frame, target_refine_list=target_refine_list,loss_animal_id=animal_id,kernel=kernel,down_sample_fg=down_sample_fg)
                                  ########################
                                  if refine_loss_flag:
                                      del tracker[animal_id]
                                      params = self.get_parameters(search_scale_gl,gui_param)
                                      tracker_new = self.create_tracker(params)
-                                     print('params.search_area_scale:',params.search_area_scale)
+                                     debug_print(f'params.search_area_scale: {params.search_area_scale}')
                                      init_info = seq.init_info()
                                      init_info['init_bbox'] = np.array([target_pos_mul[animal_id][-1][0], target_pos_mul[animal_id][-1][1], target_sz_mul[animal_id][-1][0], target_sz_mul[animal_id][-1][1]])
                                      out = tracker_new.initialize(image, init_info)
@@ -618,11 +628,11 @@ class Tracker:
             if not combine_flag:
                 if update_model_flag == False:
                     for animal_id in range(seq.object_num): # debug in 1104
-                         # print('animal_id norefine:',animal_id)
-                         # print('tracker.pos before', tracker[animal_id].pos)
+                         # debug_print('animal_id norefine:',animal_id)
+                         # debug_print('tracker.pos before', tracker[animal_id].pos)
                          pos_after_refine = torch.tensor([target_pos_mul[animal_id][-1][1],target_pos_mul[animal_id][-1][0]],dtype=torch.float32)
                          tracker[animal_id].update_post(update_judge_flag_list[animal_id],pos_after_refine,sample_scales_list[animal_id],sample_pos_list[animal_id],test_x_list[animal_id], x_clf_list[animal_id], s_list[animal_id], scale_ind_list[animal_id] ,animal_id, frame_num)
-                         # print('tracker.pos update:', tracker[animal_id].pos)
+                         # debug_print('tracker.pos update:', tracker[animal_id].pos)
             tt4 = time.time()
             if ((animal_species == 1) | (animal_species == 3)):
                 if data_fps <= 20:
@@ -646,19 +656,18 @@ class Tracker:
                                Q=tracklet2
                                dtw, d = similaritymeasures.dtw(P, Q)
                                # dh, ind1, ind2 = directed_hausdorff(P, Q)
-                               dtw_yuzhi = 0.8 # 不能改！！！
+                               dtw_yuzhi = 0.8
                                if dtw < dtw_yuzhi:
-                                   print('frame:', frame_num, 'pair:', pair, 'coincide??')
+                                   debug_print(f'frame:, {frame_num}, pair:, {pair}, coincide??')
                                    #####
                                    judge_distance_interval = 10
                                    distance_coincide_object = np.asarray(target_pos_mul[pair[0]][frame_num-judge_distance_interval:frame_num]) - np.asarray(target_pos_mul[pair[1]][frame_num-judge_distance_interval:frame_num])
                                    avg_distance_coincide_object = distance_coincide_object.mean(axis=0)
                                    distance_coincide_combine = np.sqrt(np.sum(avg_distance_coincide_object ** 2))
-                                   print('distance_coincide_combine:',distance_coincide_combine)
+                                   debug_print(f'distance_coincide_combine:{distance_coincide_combine}' )
                                    if distance_coincide_combine < output_bb_list[0][0][0]*0.8:
-                                      print('frame:',frame_num,'distance confirm!!')
-
-                                      print('frame:',frame_num,'frame num confirm! Coincide!')
+                                      debug_print(f'frame:, {frame_num},distance confirm!!')
+                                      debug_print(f'frame: {frame_num},frame num confirm! Coincide!')
                                       show_text = show_text + ' Coincide!'
                                       coincide_flag = 1
                                       coincide_pair = pair
@@ -666,27 +675,27 @@ class Tracker:
                                       if (coincide_flag == 1) & (correct_flag == 1) :
                                           time_step1 = int(data_fps * 2. / judgement_gap)
                                           if len(cross_list_mul[pair_id]) > time_step1:
-                                              print("\033[0;31m", 'continue_cross judge', "\033[0m")
+                                              debug_print("continue_cross judge")
                                               ############
-                                              print('frame:', frame_num)
-                                              print('cross_list_mul[pair_id]:',cross_list_mul[pair_id][-10:])
+                                              debug_print(f'frame: {frame_num}')
+                                              debug_print(f'cross_list_mul[pair_id]:,{cross_list_mul[pair_id][-10:]}')
                                               ############
-                                              check_add_one = lambda arr:functools.reduce(lambda x,y:(x+judgement_gap==y if isinstance(x,int) else x[0] and x[1]+judgement_gap==y, y),arr)[0] #判断是否是连续检测不到需要补的动物
-                                              continue_cross = (check_add_one(cross_list_mul[pair_id][-time_step1:])) & (frame_num - cross_list_mul[pair_id][-1] == judgement_gap) #防止过了很多帧之后再cross 会记忆之前的状态
+                                              check_add_one = lambda arr:functools.reduce(lambda x,y:(x+judgement_gap==y if isinstance(x,int) else x[0] and x[1]+judgement_gap==y, y),arr)[0]
+                                              continue_cross = (check_add_one(cross_list_mul[pair_id][-time_step1:])) & (frame_num - cross_list_mul[pair_id][-1] == judgement_gap)
 
                                           else:
                                               continue_cross = False
 
                                           time_step2 = int(data_fps * 2. / judgement_gap) + 10
                                           if len(cross_list_mul[pair_id]) > time_step2: #
-                                              print("\033[0;31m", 'cross_limit judge', "\033[0m")
+                                              debug_print('cross_limit judge')
                                               check_add_one = lambda arr:functools.reduce(lambda x,y:(x+judgement_gap==y if isinstance(x,int) else x[0] and x[1]+judgement_gap==y, y),arr)[0]
                                               cross_limit = (check_add_one(cross_list_mul[pair_id][-time_step2:])) & (frame_num - cross_list_mul[pair_id][-1] == judgement_gap)
-                                              print('time_step2:',time_step2,' cross_list_mul[pair_id]:',cross_list_mul[pair_id][-time_step2:])
+                                              debug_print(f'time_step2:,{time_step2} cross_list_mul[pair_id]:{cross_list_mul[pair_id][-time_step2:]}')
                                               if cross_limit == True:
-                                                  print('if cross_limit == True:')
+                                                  debug_print('if cross_limit == True:')
                                                   if search_period:
-                                                      print('stop because of frequent crossing')
+                                                      debug_print('stop because of frequent crossing')
                                                       break_flag = True
 
 
@@ -700,9 +709,9 @@ class Tracker:
                                                                                          kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg
                                                                                          )
                                           if continue_cross: # if continue_cross:
-                                              print("\033[0;31m", 'swap try', "\033[0m")
-                                              if swap_time_list[pair_id][0] % 2 == 0: # 交替尝试-3 或许以后可以加入-4 % 3之类的
-                                                  print("\033[0;31m", 'swap switch', "\033[0m")
+                                              debug_print("swap try")
+                                              if swap_time_list[pair_id][0] % 2 == 0:
+                                                  debug_print('swap switch')
                                                   detect_x, detect_y = missing_object_detect(image, target_pos_mul,
                                                                                              target_sz_mul, bg, seq.name,
                                                                                              current_frame=frame_num,
@@ -711,9 +720,10 @@ class Tracker:
                                                                                              fine_detection_mode=fine_detection_mode,
                                                                                              area_in_first_frame=area_in_first_frame,
                                                                                              kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg,
-                                                                                             area_rank=-3) # 检测倒数第三面积的
-                                              if swap_time_list[pair_id][0] % 3 == 0: # 交替尝试-3 或许以后可以加入-4 % 3之类的
-                                                  print("\033[0;31m", 'swap switch', "\033[0m")
+                                                                                             area_rank=-3)
+                                              if swap_time_list[pair_id][0] % 3 == 0:
+                                                  if DEBUG_FLAG:
+                                                    print("\033[0;31m", 'swap switch', "\033[0m")
                                                   detect_x, detect_y = missing_object_detect(image, target_pos_mul,
                                                                                              target_sz_mul, bg, seq.name,
                                                                                              current_frame=frame_num,
@@ -722,12 +732,14 @@ class Tracker:
                                                                                              fine_detection_mode=fine_detection_mode,
                                                                                              area_in_first_frame=area_in_first_frame,
                                                                                              kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg,
-                                                                                             area_rank=-4) # 检测倒数第三面积的
+                                                                                             area_rank=-4)
                                               if swap_time_list[pair_id][0] > 10:
                                                   fine_detection_mode = True #### debug in 1012
-                                                  print("\033[0;31m", 'fine_detection_mode = True', "\033[0m")
+                                                  if DEBUG_FLAG:
+                                                    print("\033[0;31m", 'fine_detection_mode = True', "\033[0m")
                                               swap_time_list[pair_id][0] += 1
-                                              print('swap_time:', swap_time_list[pair_id][0], 'of', pairs[pair_id])
+                                              if DEBUG_FLAG:
+                                                print('swap_time:', swap_time_list[pair_id][0], 'of', pairs[pair_id])
 
                                           compensate_start = np.array([detect_x, detect_y])
                                           distance_between_detect_cross_list = []
@@ -737,11 +749,13 @@ class Tracker:
                                               distance_between_detect_cross_list.append(distance_between_detect_cross)
                                           distance_between_detect_cross = min(distance_between_detect_cross_list)
                                           if distance_between_detect_cross > target_sz_mul[0][0][0] * 0.8: # important # 10 mice 0.8 ori 1
-                                              print('compensate_start:',compensate_start)
+                                              if DEBUG_FLAG:
+                                                 print('compensate_start:',compensate_start)
                                               ######
 
                                               cross_list_mul[pair_id].append(frame_num)
-                                              print('pair_id:',pair_id,'cross_list_mul[pair_id]',cross_list_mul[pair_id])
+                                              if DEBUG_FLAG:
+                                                 print('pair_id:',pair_id,'cross_list_mul[pair_id]',cross_list_mul[pair_id])
                                               ###############################
                                               start_cross_id = None
                                               if len(not_far_list_mul[pair_id]) > 1:
@@ -759,7 +773,8 @@ class Tracker:
 
 
                                               ####################################
-                                              print('1:',coincide_pair[0],target_pos_mul[coincide_pair[0]][-1])
+                                              if DEBUG_FLAG:
+                                                print('1:',coincide_pair[0],target_pos_mul[coincide_pair[0]][-1])
                                               target_pos_mul, target_sz_mul,  final_compensate_id = single_compensate(tracker_compensate, compensate_start, target_pos_mul, target_sz_mul, score_map_list, seq, image,reverse_frame_list, frame_num, coincide_pair, out_compensate, animal_species,start_cross_id, data_fps,cross_limit=cross_limit, video_name=seq.name,gui_param = gui_param)
 
                                               cross_times = cross_times + 1
@@ -769,10 +784,13 @@ class Tracker:
                                               #     print('if cross_limit == True:')
                                               #     final_compensate_id = coincide_pair[0]
                                               if final_compensate_id != 10000:
-                                                  print('2:',final_compensate_id,target_pos_mul[final_compensate_id][-1])
+                                                  if DEBUG_FLAG:
+                                                     print('2:',final_compensate_id,target_pos_mul[final_compensate_id][-1])
                                                   del tracker[final_compensate_id]
+
                                                   params = self.get_parameters(search_scale_gl,gui_param)
-                                                  print('params.search_area_scale:',params.search_area_scale)
+                                                  if DEBUG_FLAG:
+                                                    print('params.search_area_scale:',params.search_area_scale)
                                                   tracker_new = self.create_tracker(params)
                                                   init_info = seq.init_info()
                                                   init_info['init_bbox'] = np.array([target_pos_mul[final_compensate_id][-1][0], target_pos_mul[final_compensate_id][-1][1], target_sz_mul[final_compensate_id][-1][0], target_sz_mul[final_compensate_id][-1][1]])
@@ -782,14 +800,17 @@ class Tracker:
                                                   swap_time_list[pair_id][0] = 0
                                                   if fine_detection_mode == True:
                                                       fine_detection_mode = False
-                                                      print("\033[0;31m", 'fine_detection_mode = False', "\033[0m")
-                                                  print("\033[0;31m", 'swap stop', "\033[0m")
+                                                      if DEBUG_FLAG:
+                                                        print("\033[0;31m", 'fine_detection_mode = False', "\033[0m")
+                                                  if DEBUG_FLAG:
+                                                     print("\033[0;31m", 'swap stop', "\033[0m")
                                                   correct_cross_times  += 1
                                                   correct_frame_flag = True
                                           else:
                                               not_far_list_mul[pair_id].append(frame_num)
-                                              print('distance_between_detect_cross:', distance_between_detect_cross)
-                                              print('%%%% not far enough! %%%%')
+                                              if DEBUG_FLAG:
+                                                  print('distance_between_detect_cross:', distance_between_detect_cross)
+                                                  print('%%%% not far enough! %%%%')
                                               coincide_flag = 0
             tt5 = time.time()
             #print('whole time ---->')
@@ -808,10 +829,12 @@ class Tracker:
             else:
                 swap_time_max = 30
             if swap_time_list[pair_id][0] > swap_time_max / judgement_gap: # too long no found & consider change params
-                 print('frame->', frame_num)
-                 print("\033[0;31m", 'swap_time_list more than ', swap_time_max, "\033[0m")
-                 if continue_cross:
-                     print('continue_cross of id ', coincide_pair[0], 'and', coincide_pair[1])
+                if DEBUG_FLAG:
+                     print('frame->', frame_num)
+                     print("\033[0;31m", 'swap_time_list more than ', swap_time_max, "\033[0m")
+                if continue_cross:
+                     if DEBUG_FLAG:
+                        print('continue_cross of id ', coincide_pair[0], 'and', coincide_pair[1])
                      continue_cross_id = coincide_pair[0]
                      target_pos_mul, refine_loss_flag = refine_pos_for_loss(image,target_pos_mul,target_sz_mul,bg, seq.name,current_frame=frame_num,animal_num=seq.object_num,animal_species=animal_species,area_in_first_frame=area_in_first_frame, target_refine_list=target_refine_list,loss_animal_id=continue_cross_id,kernel=kernel,down_sample_fg=down_sample_fg)
                      ################################################
@@ -819,7 +842,8 @@ class Tracker:
                          del tracker[continue_cross_id]
                          params = self.get_parameters(search_scale_gl,gui_param)
                          tracker_new = self.create_tracker(params)
-                         print('params.search_area_scale:',params.search_area_scale)
+                         if DEBUG_FLAG:
+                            print('params.search_area_scale:',params.search_area_scale)
                          init_info = seq.init_info()
                          init_info['init_bbox'] = np.array([target_pos_mul[continue_cross_id][-1][0], target_pos_mul[continue_cross_id][-1][1], target_sz_mul[continue_cross_id][-1][0], target_sz_mul[continue_cross_id][-1][1]])
                          out = tracker_new.initialize(image, init_info)
@@ -886,7 +910,7 @@ class Tracker:
                     height, width, channel = resized_im_show.shape
                     bytes_per_line = 3 * width
                     qt_image = QtGui.QImage(resized_im_show.data, width, height, bytes_per_line,QtGui.QImage.Format_RGB888)
-                    # 更新 QLabel 显示
+
                     play_video_widget.setPixmap(QtGui.QPixmap.fromImage(qt_image))
                     QtWidgets.QApplication.processEvents()
                     #############################
@@ -902,35 +926,40 @@ class Tracker:
                 not_found_times_per_animal = not_found_times/seq.object_num
                 # print(frame_num,'not_found_times_per_animal:',not_found_times_per_animal)
                 if not_found_times_per_animal > 20:# mice20 500
-                    print(frame_num,'stop because of frequent not_found_times_per_animal early:', not_found_times_per_animal)
+                    if DEBUG_FLAG:
+                        print(frame_num,'stop because of frequent not_found_times_per_animal early:', not_found_times_per_animal)
                     break_flag = True
                     early_stop_flag = True
                 miss_target_time_per_animal = miss_target_time_sum/seq.object_num
                 # print(frame_num,'miss_target_time_sum:',miss_target_time_sum)
                 if miss_target_time_per_animal > 30:#mice 30 500
-                    print(frame_num,'stop because of frequent missing target miss_target_time_per_animal early:', miss_target_time_per_animal)
+                    if DEBUG_FLAG:
+                        print(frame_num,'stop because of frequent missing target miss_target_time_per_animal early:', miss_target_time_per_animal)
                     break_flag = True
                     early_stop_flag = True
 
 
             if search_period:
                 if correct_cross_times > min_correct_time:
-                    print('correct_cross_times', correct_cross_times)
-                    print('min_correct_time', min_correct_time)
-                    print('stop because of frequent correction')
+                    if DEBUG_FLAG:
+                        print('correct_cross_times', correct_cross_times)
+                        print('min_correct_time', min_correct_time)
+                        print('stop because of frequent correction')
                     break_flag = True
                 elif correct_cross_times == min_correct_time:
                     if correct_loss_times > min_loss_time:
-                        print('correct_loss_times', correct_loss_times)
-                        print('min_loss_time', min_loss_time)
-                        print('stop because of loss time')
+                        if DEBUG_FLAG:
+                            print('correct_loss_times', correct_loss_times)
+                            print('min_loss_time', min_loss_time)
+                            print('stop because of loss time')
                         break_flag = True
                     else:
                        if miss_target_time_sum >= min_miss_time:
-                         print('correct_cross_times',correct_cross_times)
-                         print('min_correct_time', min_correct_time)
-                         print('stop because of frequent correction')
-                         break_flag = True
+                           if DEBUG_FLAG:
+                             print('correct_cross_times',correct_cross_times)
+                             print('min_correct_time', min_correct_time)
+                             print('stop because of frequent correction')
+                           break_flag = True
                 else:
                     break_flag = False
                     #else:
@@ -938,9 +967,10 @@ class Tracker:
                 miss_target_time_per_animal = miss_target_time_sum/seq.object_num
                 if miss_target_time_per_animal > 4:
                     if miss_target_time_sum > min_miss_time:
-                        print('miss_target_time_sum', miss_target_time_sum)
-                        print('min_miss_time', min_miss_time)
-                        print('stop because of frequent missing')
+                        if DEBUG_FLAG:
+                            print('miss_target_time_sum', miss_target_time_sum)
+                            print('min_miss_time', min_miss_time)
+                            print('stop because of frequent missing')
                         break_flag = True
             if break_flag:
                 break
@@ -949,23 +979,29 @@ class Tracker:
             if search_period:
                 if frame_num == test_img_num-1:
                     if correct_loss_times < min_loss_time:
-                        print('update min loss times...')
-                        print('min_loss_time before', min_loss_time)
+                        if DEBUG_FLAG:
+                            print('update min loss times...')
+                            print('min_loss_time before', min_loss_time)
                         min_loss_time = correct_loss_times
-                        print('min_correct_time after', min_loss_time)
-                        print('correct_cross_times', correct_loss_times)
+                        if DEBUG_FLAG:
+                            print('min_correct_time after', min_loss_time)
+                            print('correct_cross_times', correct_loss_times)
                     if correct_cross_times < min_correct_time:
-                        print('update min correct value...')
-                        print('min_correct_time before', min_correct_time)
+                        if DEBUG_FLAG:
+                            print('update min correct value...')
+                            print('min_correct_time before', min_correct_time)
                         min_correct_time = correct_cross_times
-                        print('min_correct_time after', min_correct_time)
-                        print('correct_cross_times', correct_cross_times)
+                        if DEBUG_FLAG:
+                            print('min_correct_time after', min_correct_time)
+                            print('correct_cross_times', correct_cross_times)
                     if miss_target_time_sum < min_miss_time:
-                        print('update min missing value...')
-                        print('min_miss_time before', min_miss_time)
+                        if DEBUG_FLAG:
+                            print('update min missing value...')
+                            print('min_miss_time before', min_miss_time)
                         min_miss_time = miss_target_time_sum
-                        print('min_miss_time after', min_miss_time)
-                        print('miss_target_time_sum', miss_target_time_sum)
+                        if DEBUG_FLAG:
+                            print('min_miss_time after', min_miss_time)
+                            print('miss_target_time_sum', miss_target_time_sum)
             used_time = time.time() - first_start_time
             metric_dict = {
                 "target_sz_bias": target_sz_bias_gl,
@@ -977,18 +1013,19 @@ class Tracker:
                 "used_time": used_time
             }
             if frame_num % 1999 == 0:
-                print(frame_num,':','\033[1;31mQuality check -----> \033[0m')
+                if DEBUG_FLAG:
+                    print(frame_num,':','\033[1;31mQuality check -----> \033[0m')
                 area_left += missing_object_cal(image,target_pos_mul,target_sz_uniform,bg, seq.name,current_frame=frame_num,animal_num=seq.object_num,animal_species=animal_species,kernel=kernel,down_sample_fg=down_sample_fg)
                 area_left_pre = area_left/area_in_first_frame
-                print('\033[1;31mCurrent correct number---------->\033[0m', correct_cross_times)
-                print('\033[1;31mLocation precision: miss target time sum---------->\033[0m', miss_target_time_sum)
-                print('\033[1;31mArea left---------->\033[0m', area_left_pre)
-                print('\033[1;31mCurrent correct loss number---------->\033[0m', correct_loss_times)
+                if DEBUG_FLAG:
+                    print('\033[1;31mCurrent correct number---------->\033[0m', correct_cross_times)
+                    print('\033[1;31mLocation precision: miss target time sum---------->\033[0m', miss_target_time_sum)
+                    print('\033[1;31mArea left---------->\033[0m', area_left_pre)
+                    print('\033[1;31mCurrent correct loss number---------->\033[0m', correct_loss_times)
                 not_found_times_per_animal = not_found_times/seq.object_num
-                print('\033[1;31mCurrent not_found_times_per_animal---------->\033[0m', not_found_times_per_animal)
-
-
-                print('\033[1;31mUsed time---------->\033[0m', used_time)
+                if DEBUG_FLAG:
+                    print('\033[1;31mCurrent not_found_times_per_animal---------->\033[0m', not_found_times_per_animal)
+                    print('\033[1;31mUsed time---------->\033[0m', used_time)
                 ##############
                 if quality_check_flag:
                     formatted_target_sz = "{:.2f}".format(target_sz_ini)

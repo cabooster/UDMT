@@ -101,7 +101,7 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
     #################################################### 0109
     # checkpoint_dict_unsuper = torch.load('./networks/resnet50_1kpretrained_timm_style.pth', map_location='cpu')
     # prefix = 'feature_extractor.'
-    # # 使用字典推导式生成新的字典
+
     # new_dict = {prefix + key: value for key, value in checkpoint_dict_unsuper.items()}
     # for key, value in new_dict.items():
     #     checkpoint_dict['net'][key] = new_dict[key]

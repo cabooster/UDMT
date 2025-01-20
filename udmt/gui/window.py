@@ -169,6 +169,11 @@ class MainWindow(QMainWindow):
 
     def window_set(self):
         self.setWindowTitle("UDMT")
+        # Set the initial size of the window
+        self.resize(1300, 780)
+
+        # Optionally set a minimum and/or maximum size
+        self.setMinimumSize(600, 400)
 
         palette = QtGui.QPalette()
         palette.setColor(QtGui.QPalette.Window, QtGui.QColor("#ffffff"))
@@ -204,7 +209,7 @@ class MainWindow(QMainWindow):
 
         # create QtSvgWidgets
         # svg_widget = QtSvgWidgets.QSvgWidget(svg_file_path)
-        # svg_widget.setFixedSize(250, 250)  # 设置固定大小
+        # svg_widget.setFixedSize(250, 250)
         # svg_widget.setFixedHeight(500)
 
         # add QtSvgWidgets
@@ -308,13 +313,6 @@ class MainWindow(QMainWindow):
         self.file_menu.addAction(self.saveAction)
         self.file_menu.addAction(self.exitAction)
 
-        # View menu
-        # view_menu = QMenu("&View", self)
-        # mode = view_menu.addMenu("Appearance")
-        # menu_bar.addMenu(view_menu)
-        # mode.addAction(self.lightmodeAction)
-        # mode.addAction(self.darkmodeAction)
-
         # Help menu
         help_menu = QMenu("&Help", self)
         menu_bar.addMenu(help_menu)
@@ -361,11 +359,11 @@ class MainWindow(QMainWindow):
         )
 
     def _open_help_url(self):
-        # 打开网址
+
         webbrowser.open("https://cabooster.github.io/UDMT/Tutorial/")
 
     def _open_about_url(self):
-        # 打开网址
+
         webbrowser.open("https://cabooster.github.io/UDMT/About/")
 
     # def _goto_superanimal(self):# model zoo delete
@@ -463,33 +461,9 @@ class MainWindow(QMainWindow):
         _attempt_attribute_update("shuffle", self.shuffle_value)
         _attempt_attribute_update("cfg_line", self.config)
 
-    # def is_transreid_available(self):
-    #     if self.is_multianimal:
-    #         try:
-    #             from udmt.pose_tracking_pytorch import transformer_reID
-    #
-    #             return True
-    #         except ModuleNotFoundError:
-    #             return False
-    #     else:
-    #         return False
 
     def closeEvent(self, event):
         print("Exiting...")
         self.receiver.terminate()
         event.accept()
         self.save_settings()
-        # answer = QtWidgets.QMessageBox.question(
-        #     self,
-        #     "Quit",
-        #     "Are you sure you want to quit?",
-        #     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel,
-        #     QtWidgets.QMessageBox.Cancel,
-        # )
-        # if answer == QtWidgets.QMessageBox.Yes:
-        #     self.receiver.terminate()
-        #     event.accept()
-        #     self.save_settings()
-        # else:
-        #     event.ignore()
-        #     print("")

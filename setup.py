@@ -15,7 +15,7 @@ with open("README.md", 'r', encoding='utf-8') as f:
 
 setup(
     name="udmt_pip",
-    version="0.0.8",
+    version="1.0.0",
     description=("UDMT: Unsupervised Multi-animal Tracking for Quantitative Ethology"),
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -55,9 +55,7 @@ setup(
         "pycocotools",
         "pyside6<6.3.2",
         "qdarkstyle==3.1",
-        "napari-deeplabcut==0.2.0",
         "qt-material",
-        "tensorflow==2.11.0",
         "segment-anything==1.0",
     ]
 )

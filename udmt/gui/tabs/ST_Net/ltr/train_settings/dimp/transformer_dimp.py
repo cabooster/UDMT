@@ -1,4 +1,3 @@
-# 设置训练时的参数 (数据集 max_epochs
 import torch.optim as optim
 # from ltr.dataset import Lasot, Got10k, TrackingNet, MSCOCOSeq
 # from ltr.data import processing, sampler, LTRLoader
@@ -25,7 +24,7 @@ def run(settings,run_training_params):
     settings.description = 'Transformer-assisted tracker. Our baseline approach is SuperDiMP'
     settings.batch_size = run_training_params['batch_size']
     settings.num_workers = run_training_params['num_workers']
-    settings.multi_gpu = False
+    settings.multi_gpu = True
     settings.print_interval = 10
     settings.normalize_mean = [0.485, 0.456, 0.406]
     settings.normalize_std = [0.229, 0.224, 0.225]
@@ -101,7 +100,7 @@ def run(settings,run_training_params):
     #                                     samples_per_epoch=50000, max_gap=500, num_test_frames=3, num_train_frames=3,
     #                                     processing=data_processing_train)
     dataset_train = sampler.DiMPSampler([got10k_train], [1],
-                                        samples_per_epoch=150, max_gap=10, num_test_frames=3, num_train_frames=3,
+                                        samples_per_epoch=5000, max_gap=10, num_test_frames=3, num_train_frames=3,
                                         processing=data_processing_train,train_num_per_sequence = 2000) # !!5000
 
     loader_train = LTRLoader('train', dataset_train, training=True, batch_size=settings.batch_size, num_workers=settings.num_workers,
@@ -158,7 +157,7 @@ def run(settings,run_training_params):
     trainer = LTRTrainer(actor, [loader_train], optimizer, settings, lr_scheduler)
     max_epochs = run_training_params['epoch_num']
     max_save_snapshots = run_training_params['max_save_snapshots']
-    print('------------------------------------------transformer_dimp.py---------------------------------------------------')
+    # print('------------------------------------------transformer_dimp.py---------------------------------------------------')
     pretrained_model = BASE_DIR + '/pretrained/trdimp_net_ep.pth.tar'
     trainer.train(max_epochs,max_save_snapshots, pretrained_model, load_latest=True, fail_safe=True)
     

@@ -25,7 +25,7 @@ class XMem(nn.Module):
         model_weights = self.init_hyperparameters(config, model_path, map_location)
 
         self.single_object = config.get('single_object', False)
-        print(f'Single object mode: {self.single_object}')
+        # print(f'Single object mode: {self.single_object}')
 
         self.key_encoder = KeyEncoder()
         self.value_encoder = ValueEncoder(self.value_dim, self.hidden_dim, self.single_object)
@@ -151,8 +151,8 @@ class XMem(nn.Module):
                 self.hidden_dim = 0
             else:
                 self.hidden_dim = model_weights['decoder.hidden_update.transform.weight'].shape[0]//3
-            print(f'Hyperparameters read from the model weights: '
-                    f'C^k={self.key_dim}, C^v={self.value_dim}, C^h={self.hidden_dim}')
+            # print(f'Hyperparameters read from the model weights: '
+            #         f'C^k={self.key_dim}, C^v={self.value_dim}, C^h={self.hidden_dim}')
         else:
             model_weights = None
             # load dimensions from config or default

@@ -21,11 +21,11 @@ class TrackletVisualizer:
 
 
         if self.nframes != self.nframes_from_data:
-            warning_message = (
-                f"Warning: The number of video frames ({self.nframes}) does not match the number of frames in the track data ({self.nframes_from_data}).\n"
-                "The video frames will be truncated to match the track data."
-            )
-            print(warning_message)
+            # warning_message = (
+            #     f"Warning: The number of video frames ({self.nframes}) does not match the number of frames in the track data ({self.nframes_from_data}).\n"
+            #     "The video frames will be truncated to match the track data."
+            # )
+            # print(warning_message)
             self.frames = self.frames[:self.nframes_from_data]
             self.nframes = len(self.frames)
 

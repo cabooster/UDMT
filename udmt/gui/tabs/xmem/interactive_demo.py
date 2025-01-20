@@ -109,7 +109,7 @@ def mask_seg_winclass(video_name,project_path,divide_num):
         resource_manager = ResourceManager(config,divide_num)
         start_point_save_path = project_path + '/tmp/' + file_name_without_extension + '/extracted-images/'
         if not os.path.exists(start_point_save_path):
-            # 创建文件夹
+            # make dir
             os.makedirs(start_point_save_path)
         # app = QApplication(sys.argv)
         ex = App(network, resource_manager, s2m_controller, fbrs_controller, sam_controller, config, start_point_save_path)

@@ -58,7 +58,7 @@ class LTRTrainer(BaseTrainer):
             data['settings'] = self.settings
 
             # forward pass
-            loss, stats = self.actor(data) # actor内有loss weight net(dimpnet) objective
+            loss, stats = self.actor(data) # actor loss weight net(dimpnet) objective
 
             # backward pass and update weights
             if loader.training:

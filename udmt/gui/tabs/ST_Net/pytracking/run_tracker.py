@@ -1,4 +1,4 @@
-# 选择inference的数据集
+
 import os
 import sys
 import argparse
@@ -24,7 +24,7 @@ def read_txt_to_nparray(file_path):
     :return: numpy 数组
     """
     with open(file_path, 'r', encoding='utf-8') as file:
-        # 使用 numpy 读取并解析
+
         data = np.loadtxt(file, delimiter=',')
     return data
 def get_sorted_frame_paths(frames_path, extension=".jpg"):
@@ -34,11 +34,11 @@ def get_sorted_frame_paths(frames_path, extension=".jpg"):
     :param extension: 图像文件扩展名（默认 ".jpg"）
     :return: 按排序后的完整图像路径列表
     """
-    # 获取所有指定扩展名的文件并排序
-    frame_list = [frame for frame in os.listdir(frames_path) if frame.endswith(extension)]
-    frame_list.sort(key=lambda f: int(f[:-len(extension)]))  # 按文件名中的数字排序
 
-    # 构造完整路径
+    frame_list = [frame for frame in os.listdir(frames_path) if frame.endswith(extension)]
+    frame_list.sort(key=lambda f: int(f[:-len(extension)]))
+
+
     frames_list = [os.path.join(frames_path, frame) for frame in frame_list]
     return frames_list
 def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', sequence=None, debug=0, threads=0,
@@ -81,16 +81,16 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
     early_stop_flag = run_dataset(sequence_obj, trackers, debug, threads, visdom_info=visdom_info,search_scale = search_scale,target_sz_bias = target_sz_bias,obj_id=obj_id,gui_param = gui_param)
     return early_stop_flag
 def setup_seed(seed):
-    np.random.seed(seed) # numpy 的设置
+    np.random.seed(seed)
     random.seed(seed)  # python random module
-    os.environ['PYTHONHASHSEED'] = str(seed) # 为了使得hash随机化，使得实验可以复现
-    torch.manual_seed(seed) # 为cpu设置随机种子
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
     if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed) # 为当前GPU设置随机种子
-        torch.cuda.manual_seed_all(seed) # 如果使用多GPU为，所有GPU设置随机种子
-        torch.backends.cudnn.benchmark = False # 设置为True，会使得cuDNN来衡量自己库里面的多个卷积算法的速度，然后选择其中最快的那个卷积算法。
-        torch.backends.cudnn.deterministic = True # 每次返回的卷积算法将是确定的，即默认算法。如果配合上设置 Torch 的随机种子为固定值的话，
-                                                    # 应该可以保证每次运行网络的时候相同输入的输出是固定的
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+
 
 def run_tracking(run_tracking_params):
     parser = argparse.ArgumentParser(description='Run tracker on sequence or dataset.')
@@ -111,22 +111,23 @@ def run_tracking(run_tracking_params):
     except:
         seq_name = args.sequence
     setup_seed(1024)
-
-    iteration_time = 0
+    print('Loading----->', os.path.normpath(run_tracking_params['model_path']))
+    iteration_time = 1
     start_time = time.time()
     for target_sz_bias in run_tracking_params['target_sz_bias_range']: # -15,0,5
-        print('target_sz_bias percentage:', target_sz_bias)
         early_stop_flag_list = []
         for search_scale in run_tracking_params['search_scale_range']:
-            print('search_scale:', search_scale)
+            print(f'Iterating through No. {iteration_time} set of parameters...')
+            print('target size bias:', target_sz_bias,'search region scale:', search_scale)
             early_stop_flag = run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset_name, seq_name, args.debug,
                             args.threads, {'use_visdom': args.use_visdom, 'server': args.visdom_server, 'port': args.visdom_port}, search_scale = search_scale, target_sz_bias = target_sz_bias, obj_id=0,gui_param = run_tracking_params)
             # print('early_stop_flag:', early_stop_flag)
             early_stop_flag_list.append(early_stop_flag)
-        # print('target_sz_bias:', target_sz_bias,'early_stop_flag_list:', early_stop_flag_list)
-        if early_stop_flag_list.count(False) > 0:
             iteration_time += 1
-        print('iteration_time:', iteration_time)
+        # print('target_sz_bias:', target_sz_bias,'early_stop_flag_list:', early_stop_flag_list)
+        # if early_stop_flag_list.count(False) > 0:
+
+        # print('iteration_time:', iteration_time)
         # if iteration_time == 3:
         #     break
     used_time = time.time() - start_time

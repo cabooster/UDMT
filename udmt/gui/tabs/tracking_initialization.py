@@ -30,10 +30,7 @@ from PySide6.QtCore import Qt
 
 
 def get_video_fps(video_path):
-    # 打开视频文件
     video = cv2.VideoCapture(video_path)
-
-    # 检查视频是否成功打开
     if not video.isOpened():
         print(f"Unable to open video: {video_path}")
         return None
@@ -60,9 +57,9 @@ class LoadingDialog(QDialog):
         self.label.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.label)
 
-        # 进度条
+
         self.progress_bar = QProgressBar(self)
-        self.progress_bar.setRange(0, 0)  # 设置为不确定模式
+        self.progress_bar.setRange(0, 0) # set to uncertain mode
         layout.addWidget(self.progress_bar)
 class TrackingInitialization(DefaultTab):
     def __init__(self, root, parent, h1_description):
@@ -116,10 +113,5 @@ class TrackingInitialization(DefaultTab):
             msg_box.setText("No video selected. Please select a video first.")
             msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
             msg_box.exec()
-        # if self.new_window and not self.new_window.isVisible():
-        #     self.new_window = None
-        # if not self.new_window:
-        #     # self.new_window = CalculatorWindow()
-        #     self.new_window = returnwinclass()
-        #     self.new_window.show()
+
 

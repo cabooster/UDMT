@@ -16,6 +16,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QPixmap
 from qt_material import apply_stylesheet
 def launch_udmt():
+    import warnings
+    warnings.filterwarnings("ignore", category=UserWarning)
     from udmt.version import VERSION
 
     print(f"Loading UDMT {VERSION}...")
@@ -57,7 +59,8 @@ def launch_udmt():
 
     window = MainWindow(app)
     window.receiver.start()
-    window.showMaximized()
+    window.show()
+    # window.showMaximized()
     splash.finish(window)
     sys.exit(app.exec())
 

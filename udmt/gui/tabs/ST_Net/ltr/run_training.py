@@ -1,4 +1,4 @@
-# run的文件
+
 import os
 import sys
 import argparse
@@ -28,7 +28,7 @@ def run_training(train_module, train_name, cudnn_benchmark=True,run_training_par
 
     torch.backends.cudnn.benchmark = cudnn_benchmark
 
-    print('Training:  {}  {}'.format(train_module, train_name))
+    # print('Training:  {}  {}'.format(train_module, train_name))
 
     settings = ws_settings.Settings(run_training_params)
     settings.module_name = train_module

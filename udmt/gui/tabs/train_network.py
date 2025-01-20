@@ -97,7 +97,7 @@ class TrainNetwork(DefaultTab):
         self.max_epoches_spin = QtWidgets.QSpinBox()
         self.max_epoches_spin.setMinimum(1)
         self.max_epoches_spin.setMaximum(100)
-        self.max_epoches_spin.setValue(5)
+        self.max_epoches_spin.setValue(20)
         self.max_epoches_spin.valueChanged.connect(self.log_max_iters)
 
         # Max number snapshots to keep
@@ -139,23 +139,6 @@ class TrainNetwork(DefaultTab):
 
     def train_network(self):
 
-        # config = self.root.config
-        # shuffle = int(self.shuffle.value())
-        # max_snapshots_to_keep = int(self.snapshots.value())
-        # displayiters = int(self.display_iters_spin.value())
-        # saveiters = int(self.save_iters_spin.value())
-        # maxiters = int(self.max_iters_spin.value())
-        #
-        # udmt.train_network(
-        #     config,
-        #     shuffle,
-        #     gputouse=None,
-        #     max_snapshots_to_keep=max_snapshots_to_keep,
-        #     autotune=None,
-        #     displayiters=displayiters,
-        #     saveiters=saveiters,
-        #     maxiters=maxiters,
-        # )
         video_name = list(self.files)[0]
         file_path = Path(video_name)
         file_name_without_extension = file_path.stem
@@ -164,7 +147,7 @@ class TrainNetwork(DefaultTab):
             QMessageBox.information(
                 self,
                 "Warning",
-                "Please complete the training dataset creation in 'UDMT - Create training dataset' before proceeding!",
+                "Please complete the training dataset creation in 'UDMT - Create Training Dataset' before proceeding!",
                 QMessageBox.Ok
             )
         else:
@@ -175,7 +158,10 @@ class TrainNetwork(DefaultTab):
                                    'batch_size': self.batch_size_spin.value(),
                                    'max_save_snapshots': 3,
                                    }
+            print('run_training_params:', run_training_params)
+            print('Start training...')
             run_training_process(run_training_params)
+            print("Move to 'UDMT - Analyze Video' for animal tracking.")
             ##############################################
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)

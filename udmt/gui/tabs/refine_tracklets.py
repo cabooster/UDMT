@@ -150,7 +150,7 @@ class RefineTracklets(DefaultTab):
         # Filter window length
         window_length_label = QtWidgets.QLabel("Filter size (post-processing)")
         self.window_length_widget = QtWidgets.QSpinBox()
-        self.window_length_widget.setValue(5)
+        self.window_length_widget.setValue(10)
         # self.window_length_widget.setMinimumWidth(150)
         self.window_length_widget.valueChanged.connect(self.log_window_length)
 

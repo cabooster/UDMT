@@ -20,15 +20,15 @@ def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_nam
     im_show = cv2.cvtColor(detect_img, cv2.COLOR_RGB2BGR)
     detect_img = cv2.cvtColor(detect_img,cv2.COLOR_RGB2GRAY)
     file_dir = './debug/'+ seq_name
-    if not os.path.exists(file_dir):
-                os.makedirs(file_dir)
+    # if not os.path.exists(file_dir):
+    #     os.makedirs(file_dir)
     file_name1 = file_dir + '/thresh_' + str(current_frame) + '.jpg'
     file_name2 = file_dir + '/thresh_full_mask_' + str(current_frame) + '.jpg'
     file_name3 = file_dir + '/thresh_before_' + str(current_frame) + '.jpg'
     file_name4 = file_dir + '/thresh_track_' + str(current_frame) + '.jpg'
     file_name5 = file_dir + '/thresh_cutbg_' + str(current_frame) + '.jpg'
     if isinstance(bg_img,str):
-        print('1')
+        # print('1')
         n=current_frame
 
         frame_id = "%07d" % (n / down_sample_fg)
@@ -40,7 +40,7 @@ def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_nam
         # cv2.imwrite(file_name1, thresh)
     else:
         diff = cv2.absdiff(bg_img,detect_img)
-        _, thresh = cv2.threshold(diff,40,255,cv2.THRESH_BINARY)   # 阈值图像
+        _, thresh = cv2.threshold(diff,40,255,cv2.THRESH_BINARY)
         if detect_debug:
             cv2.imshow('diff', diff)
             # cv2.imshow('thresh', thresh)
@@ -82,13 +82,13 @@ def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_nam
             dilate_kernel_size = int(area_mean/170)
             if dilate_kernel_size > 10:
                 dilate_kernel_size = 10
-            print('area_mean:',area_mean)
-            print('dilate_kernel_size:',dilate_kernel_size)
+            # print('area_mean:',area_mean)
+            # print('dilate_kernel_size:',dilate_kernel_size)
             if dilate_kernel_size != 0:
                 dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(dilate_kernel_size,dilate_kernel_size)) # 4 4
                 cv2.dilate(black_img, dilate_kernel, black_img, iterations=4)
 
-            # 显示图像
+
             if detect_debug:
                 cv2.imshow("Black Image2", black_img)
             # !!!!
@@ -131,7 +131,7 @@ def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_nam
                         thresh[int(target_pos_mul[i][current_frame][1]-target_sz_mul[i][current_frame][0]/2):int(target_pos_mul[i][current_frame][1]+target_sz_mul[i][current_frame][0]/2),int(target_pos_mul[i][current_frame][0]-target_sz_mul[i][current_frame][0]/2):int(target_pos_mul[i][current_frame][0]+target_sz_mul[i][current_frame][0]/2)] = 0
             if debug_save:
                 cv2.imwrite(file_name2, thresh)
-    ## todo 对图片进行腐蚀和扩张
+
     # if ((animal_species == 1) | (animal_species == 3)):
     #     erode_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
     #     dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(4,4))
@@ -176,7 +176,7 @@ def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_nam
 
 def refine_pos_for_loss(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_frame,animal_num,animal_species,area_in_first_frame, target_refine_list,loss_animal_id,kernel,down_sample_fg):
     refine_loss_flag = False
-    print('refine_pos_for_loss------------------>')
+    # print('refine_pos_for_loss------------------>')
     im_show = cv2.cvtColor(detect_img, cv2.COLOR_RGB2BGR)
     detect_img = cv2.cvtColor(detect_img,cv2.COLOR_RGB2GRAY)
     n = current_frame
@@ -213,7 +213,7 @@ def refine_pos_for_loss(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,
     target_class_list[0] = True
     target_loss_pos = target_pos_mul[loss_animal_id][-1]
 
-    print('before refine:',target_loss_pos)
+    # print('before refine:',target_loss_pos)
     distance_list = []
     distance_id = []
     # delete small fg
@@ -241,10 +241,10 @@ def refine_pos_for_loss(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,
 
         target_pos_mul[loss_animal_id][-1] = centroids_refine
 
-        print('after refine:',target_pos_mul[loss_animal_id][-1])
-        print('correct loss successfully!!')
+        # print('after refine:',target_pos_mul[loss_animal_id][-1])
+        # print('correct loss successfully!!')
         refine_loss_flag = True
-    # 如果只有cross area和匹配成功的前景 不会成功补回loss area
+
     return target_pos_mul,refine_loss_flag
 
 def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_frame,animal_num,animal_species,area_in_first_frame,kernel,down_sample_fg):
@@ -257,8 +257,8 @@ def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_f
     # area_in_first_frame = 5968  # 3220 white or min area in size-differ img 1874 1685
     # print(target_pos_mul[0][-1])
     file_dir = './debug/'+ seq_name
-    if not os.path.exists(file_dir):
-        os.makedirs(file_dir)
+    # if not os.path.exists(file_dir):
+    #     os.makedirs(file_dir)
     file_name3 = file_dir + '/thresh_after_erode_dilate_' + str(current_frame) + '.jpg'
     im_show = cv2.cvtColor(detect_img, cv2.COLOR_RGB2BGR)
     detect_img = cv2.cvtColor(detect_img,cv2.COLOR_RGB2GRAY)
@@ -302,7 +302,7 @@ def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_f
 
     area_mul = stats[:,4]
     # area_mul.sort()
-    # area_mul = area_mul[::-1] #从大到小排
+
     target_class_list = [False for i in range(area_mul.shape[0])]
     target_class_list[0] = True
     # delete small fg
@@ -360,22 +360,22 @@ def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_f
     if refine_judge_mode == 2:
         if refine_flag:
             if fix_miss_target_flag:
-                print('fix_miss_target id', miss_target_id)
+                # print('fix_miss_target id', miss_target_id)
                 if target_class_list.count(False) == 1:
                     miss_target_class = target_class_list.index(False)
                     centroids_refine = centroids[miss_target_class].squeeze()
-                    print('before refine:', target_pos_mul[miss_target_id][-1])
+                    # print('before refine:', target_pos_mul[miss_target_id][-1])
                     cv2.circle(im_show, (int(centroids_refine[0]), int(centroids_refine[1])), point_size, (0, 0, 0), 3)
                     # print(area_mul[miss_target_id])
                     ####### refine
                     # centroids_refine = np.array([100,100])
 
                     target_pos_mul[miss_target_id][-1] = centroids_refine
-                    print('after refine:', target_pos_mul[miss_target_id][-1])
-                    print('refine successfully!!')
+                    # print('after refine:', target_pos_mul[miss_target_id][-1])
+                    # print('refine successfully!!')
                     target_refine_list.append(miss_target_class)
-                else:
-                    print('0 or more than 2 choice')
+                # else:
+                #     print('0 or more than 2 choice')
 
 
     # for i in range(area_mul.shape[0]):
@@ -400,8 +400,8 @@ def missing_object_cal(detect_img,target_pos_mul,target_sz_uniform,bg_img,seq_na
     im_show = cv2.cvtColor(detect_img, cv2.COLOR_RGB2BGR)
     detect_img = cv2.cvtColor(detect_img,cv2.COLOR_RGB2GRAY)
     file_dir = './debug/'+ seq_name
-    if not os.path.exists(file_dir):
-                os.makedirs(file_dir)
+    # if not os.path.exists(file_dir):
+    #             os.makedirs(file_dir)
     # file_name1 = file_dir + '/thresh_' + str(current_frame) + '.jpg'
     file_name2 = file_dir + '/thresh_full_mask_' + str(current_frame) + '_cal.jpg'
     file_name3 = file_dir + '/thresh_before_' + str(current_frame) + '_cal.jpg'
@@ -419,7 +419,7 @@ def missing_object_cal(detect_img,target_pos_mul,target_sz_uniform,bg_img,seq_na
         # cv2.imwrite(file_name1, thresh)
     else:
         diff = cv2.absdiff(bg_img,detect_img)
-        _, thresh = cv2.threshold(diff,40,255,cv2.THRESH_BINARY)   # 阈值图像
+        _, thresh = cv2.threshold(diff,40,255,cv2.THRESH_BINARY)
         if detect_debug:
             cv2.imshow('diff', diff)
             # cv2.imshow('thresh', thresh)
@@ -445,7 +445,7 @@ def missing_object_cal(detect_img,target_pos_mul,target_sz_uniform,bg_img,seq_na
     #         if detect_debug:
     #             cv2.imshow("Black Image1", black_img_1)
     #         cv2.dilate(black_img, dilate_kernel, black_img, iterations=4)
-    #         # 显示图像
+
     #         if detect_debug:
     #             cv2.imshow("Black Image2", black_img)
     #         # !!!!
@@ -474,7 +474,7 @@ def missing_object_cal(detect_img,target_pos_mul,target_sz_uniform,bg_img,seq_na
     #
     #         cv2.imwrite(file_name2, thresh)
 
-    ## todo 对图片进行腐蚀和扩张
+
     thresh = cv2.resize(thresh,(detect_img.shape[1], detect_img.shape[0]))
     # if kernel > 8:#### debug 1012
     #     kernel = 8
@@ -496,5 +496,5 @@ def missing_object_cal(detect_img,target_pos_mul,target_sz_uniform,bg_img,seq_na
     if debug_save:
         cv2.imwrite(file_name2, thresh)
     nonzero_count = np.count_nonzero(thresh)
-    # print("非零元素的个数：", nonzero_count)
+
     return nonzero_count

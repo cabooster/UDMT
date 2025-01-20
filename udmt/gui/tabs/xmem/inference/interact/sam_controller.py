@@ -58,7 +58,7 @@ class SamController:
         # for ki in range(1, self.num_objects+1):
         #     p_srb = (scr_mask==ki).astype(np.uint8)
         #     n_srb = ((scr_mask!=ki) * (scr_mask!=self.ignore_class)).astype(np.uint8)
-        #     # image (1,3,h,w) 原图/255
+
         #     Rs = torch.from_numpy(np.stack([p_srb, n_srb], 0)).unsqueeze(0).float().to(image.device)
         #     #############
         #     # count = np.count_nonzero(p_srb)
@@ -67,9 +67,9 @@ class SamController:
         #     # p_srb_save = p_srb_save * 255
         #     # io.imsave('p_srb_save.tif', p_srb_save)
         #     #############
-        #     # Rs mark上去的点标签位置是1 别的位置是0 (1,2,h,w)
+
         #     prev_ = (prev_mask==ki).float().unsqueeze(0)
-        #     # prev_ 之前标的点 mark上去的点标签位置是1 别的位置是0 (1,1,h,w)
+
         #     #############
         #     # prev_ = prev_.numpy()
         #     # count = np.count_nonzero(prev_)
@@ -81,7 +81,7 @@ class SamController:
         #     inputs = torch.cat([image, (prev_mask==ki).float().unsqueeze(0), Rs], 1)
         #     # inputs (1,6,h,w)
         #     inputs, pads = pad_divide_by(inputs, 16)
-        #     # inputs (1,6,h,w) h,w是16的倍数
+
         #     unaggre_mask[ki-1] = unpad(torch.sigmoid(self.s2m_net(inputs)), pads)
         #
         # unaggre_mask_img = unaggre_mask.cpu().numpy()

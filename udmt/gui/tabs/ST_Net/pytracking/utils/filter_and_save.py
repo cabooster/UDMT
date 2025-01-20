@@ -78,9 +78,9 @@ def post_process_results(dataset, filter_size, trajectories_file_path, final_res
     if filter_flag:
         for animal_id in range(ani_num):
             data = center_pos_mul[animal_id]
-            filtered_x = generic_filter(data[:, 0], filter_func, size=filter_size)  # 滤波器窗口大小为3
+            filtered_x = generic_filter(data[:, 0], filter_func, size=filter_size)
             filtered_y = generic_filter(data[:, 1], filter_func, size=filter_size)
-            # 将滤波后的x和y坐标重新组合成时间序列的二维坐标数据
+
             filtered_time_series = np.column_stack((filtered_x, filtered_y))
             center_pos_mul[animal_id] = filtered_time_series
 
@@ -89,7 +89,7 @@ def post_process_results(dataset, filter_size, trajectories_file_path, final_res
     result_save_path = result_dir + '/' + dataset_name + '.npy'
     np.save(result_save_path, center_pos_mul)
     # loaded_data = np.load(result_save_path)
-    # print(loaded_data.shape)  # 应与 center_pos_mul 的形状一致
+
     return dataset_name, result_save_path
 # post_process_results('5-mice-1min',5,'E:/01-LYX/new-research/udmt_project/newwww-2025-01-13/tracking-results/5-mice-1min/label_5-mice-1min_58.00_2.0_pre_scale_0.8_202501151920','E:/01-LYX/new-research/udmt_project/newwww-2025-01-13/tracking-results/5-mice-1min')
 def create_tracking_video(video_frame_path, result_save_path, video_save_path,video_frame_rate, time_interval=40):
@@ -106,7 +106,7 @@ def create_tracking_video(video_frame_path, result_save_path, video_save_path,vi
     point_size = 2  # 1
     thickness = 3  # 2
     font_scale_frame = 1
-    show_flag = True
+    show_flag = False
     center_pos_mul = np.load(result_save_path)
     # Define colors for animals
     num_animals = center_pos_mul.shape[0]

@@ -32,13 +32,7 @@ def create_config_template():
     # Project path (change when moving around)
         project_path:
         \n
-    # Annotation data set configuration (and individual video cropping parameters)
         video_sets:
-        individuals:
-        \n
-    # Training,Evaluation and Analysis configuration
-        epoch:
-        batch_size:
         \n
         """
 

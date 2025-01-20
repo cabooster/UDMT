@@ -62,9 +62,9 @@ def post_process_mota_results(dataset, filter_size, trajectories_file_path, fina
     if filter_flag:
         for animal_id in range(ani_num):
             data = target_pos_mul[animal_id]
-            filtered_x = generic_filter(data[:, 0], mean_filter, size=filter_size)  # 滤波器窗口大小为3
+            filtered_x = generic_filter(data[:, 0], mean_filter, size=filter_size)
             filtered_y = generic_filter(data[:, 1], mean_filter, size=filter_size)
-            # 将滤波后的x和y坐标重新组合成时间序列的二维坐标数据
+
             filtered_time_series = np.column_stack((filtered_x, filtered_y))
             target_pos_mul[animal_id] = filtered_time_series
         #################################

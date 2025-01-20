@@ -1,4 +1,4 @@
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="750" align="middle" /></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="750" align="middle" /></center>
 <h1 align="center">UDMT: Unsupervised Multi-animal Tracking for Quantitative Ethology</h1>
 
 ### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
@@ -6,7 +6,6 @@
 ## Contents
 
 - [Overview](#overview)
-- [Directory structure](#directory-structure)
 - [Installation](#Installation)
 - [GUI Tutorial](#gui-tutorial)
 - [Results](#results)
@@ -24,26 +23,10 @@ We demonstrate the state-of-the-art performance of UDMT on five different kinds 
 For more details, please see the companion paper where the method first appeared: 
 ["*Unsupervised multi-animal tracking for quantitative ethology*"](https://www.nature.com/articles/s41587-022-01450-8).
 
-<img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_schematic.png?raw=true" width="800" align="middle">
-
-## Directory structure
-
-<details>
-  <summary>Click to unfold the directory tree</summary>
-
-```
-UDMT-main-pypt #Python GUI of UDMT
-|---udmt
-|-----gui
-```
-- **DeepCAD_RT_GUI** contains all files for the implementation of UDMT
-
-</details>
-
-
+<img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_schematic.png?raw=true" width="800" align="middle">
 
 ## Installation
-### 1. For Linux (recommended)
+### 1. For Linux (Recommended)
 
 #### Our environment 
 
@@ -70,13 +53,11 @@ UDMT-main-pypt #Python GUI of UDMT
    $ pip install udmt-pip
    ```
 
-
-
 ### Download the source code
 
 ```
 $ git clone https://github.com/cabooster/UDMT
-$ cd UDMT/UDMT-main-pyqt/
+$ cd UDMT/
 ```
 
 ### 2. For Windows
@@ -104,40 +85,36 @@ $ cd UDMT/UDMT-main-pyqt/
    $ pip install udmt-pip     
    ```
 
-3. Install Precise ROI pooling: If your environment is the same as ours, directly copy `<UDMT_install_path>\UDMT\env_file\prroi_pool.pyd` to `<Anaconda_install_path>\anaconda3\envs\udmt\Lib\site-packages`.  Otherwise, build `prroi_pool.pyd` file with Visual Studio with the [tutorial](https://github.com/visionml/pytracking/blob/master/INSTALL_win.md#build-precise-roi-pooling-with-visual-studio-optional).
+3. Install Precise ROI pooling: If your environment is the same as ours, directly copy `<UDMT_install_path>\udmt\env_file\prroi_pool.pyd` to `<Anaconda_install_path>\anaconda3\envs\udmt\Lib\site-packages`.  Otherwise, build `prroi_pool.pyd` file with Visual Studio with the [tutorial](https://github.com/visionml/pytracking/blob/master/INSTALL_win.md#build-precise-roi-pooling-with-visual-studio-optional).
 
 4. Install libjpeg-turbo: You can download installer from the official libjpeg-turbo [Sourceforge](https://sourceforge.net/projects/libjpeg-turbo/files/3.0.1/libjpeg-turbo-3.0.1-vc64.exe/download) repository, install it and copy `<libjpeg-turbo_install_path>\libjpeg-turbo64\bin\turbojpeg.dll` to the directory from the system PATH `C:\Windows\System32`.
 
 ## GUI Tutorial
 
-1. Once you have UDMT installed, start by opening a terminal. If you installed via the recommended method, activate the environment with:
+We have released the Python source code and a user-friendly GUI of UDMT to make it an easily accessible tool for quantitative ethology and neuroethology. Below is the tutorial video for the GUI. For detailed instructions on installing and using the GUI, please visit [**our project page**](https://cabooster.github.io/UDMT/Tutorial/).
 
-   ```
-   $ source activate udmt
-   $ cd UDMT/UDMT-main-pyqt/
-   ```
+[![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/GUI-video2.png)](https://youtu.be/7rkpVTawpBU "Video Title")
 
-2. To launch the GUI, simply enter in the terminal:
+#### Tips: 
 
-   ```
-   $ python3 -m udmt.gui.launch_script
-   ```
-
-   
+- **Quick Start with Demo Data**:
+  If you would like to try the GUI with a smaller dataset first, we provide a **demo video** ([Download Here](https://drive.google.com/file/d/13_sjRsFoZQ4kmnNKzdiDpxza0Gwu8fQn/view?usp=drive_link)) and a pre-trained **model** ([Download Here](https://drive.google.com/file/d/179JZLUcPfhE_B9XYt0YmIM1Jy6RK9fv8/view?usp=sharing)).
+  - When creating a project, you can select the folder containing the demo video to import it.
+  - If you want to skip the **Network Training** process, place the downloaded model into the `your_project_path/models` folder before running the **Analyze Video** step.
 
 ## Results
 
 ### 1. Tracking the movement of 10 mice simultaneously with UDMT.
 
-[![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/main/images/sv1_video.png)](https://youtu.be/yFT3AdmNVg8 "Video Title")
+[![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/sv1_video.png)](https://youtu.be/yFT3AdmNVg8 "Video Title")
 
 ### 2. Neuroethology analysis of multiple mice combined with a head-mounted microscope.
 
-[![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/main/images/sv5_video.png)]( https://youtu.be/zufYK1ovlLU "Video Title")
+[![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/sv5_video.png)]( https://youtu.be/zufYK1ovlLU "Video Title")
 
 ### 3. Analyzing the aggressive behavior of betta fish with UDMT.
 
-[![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/main/images/sv8_video.png)](https://youtu.be/z724dDa0CRM "Video Title")
+[![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/sv8_video.png)](https://youtu.be/z724dDa0CRM "Video Title")
 
 More demo videos are presented on [our website](https://cabooster.github.io/UDMT/Gallery/).
 
@@ -146,8 +123,6 @@ More demo videos are presented on [our website](https://cabooster.github.io/UDMT
 If you use this code, please cite the companion paper where the original method appeared: 
 
 - Xinyang Li, Yixin Li, Yiliang Zhou, et al. Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit. Nat. Biotechnol. (2022). [https://doi.org/10.1038/s41587-022-01450-8](https://www.nature.com/articles/s41587-022-01450-8)
-
-
 
 ```
 @article {li2022realtime,

@@ -89,7 +89,8 @@ class BaseTrainer:
                 if load_latest:
                     # print(pretrained_model) 
                     self.load_checkpoint(checkpoint=pretrained_model)
-                    print('loading pretrained checkpoint')
+                    print('Loading pretrained checkpoint:', os.path.normpath(pretrained_model))
+
                               
                 # for param_id in range(6):
                 #         print("\033[0;31m", "params={}, lr={}".format(param_id, self.optimizer.param_groups[0]['lr']),
@@ -208,7 +209,7 @@ class BaseTrainer:
         else:
             raise TypeError
             
-        print('checkpoint_path:',checkpoint_path)
+
         # Load network
         checkpoint_dict = loading.torch_load_legacy(checkpoint_path)
 
@@ -222,7 +223,7 @@ class BaseTrainer:
         # Never load the scheduler. It exists in older checkpoints.
         ignore_fields.extend(['lr_scheduler', 'constructor', 'net_type', 'actor_type', 'net_info'])
         ''''''
-        # 不载入filter层的权重
+        # not load filter weight
         del_key = []
         for key, _ in checkpoint_dict['net'].items():
             if ".filter" in key:
@@ -236,7 +237,7 @@ class BaseTrainer:
                 continue
             if key == 'net':
                 net.load_state_dict(checkpoint_dict[key], strict=False)
-            # 注释后不载入之前的学习率
+            # not load before learning rate after comment
             '''
             elif key == 'optimizer':
                 self.optimizer.load_state_dict(checkpoint_dict[key])
@@ -261,7 +262,7 @@ class BaseTrainer:
             if '.layer1' in name or '.layer2' in name or '.layer3' in name or 'extractor.conv1' in name or 'extractor.bn1' in name:
                 value.requires_grad = False
             # print(name)
-        for k, v in net.named_parameters():   # 查看是否冻结成功
+        for k, v in net.named_parameters():   # check if freeze
             print('{}: {}'.format(k, v.requires_grad))
         '''
         

@@ -131,7 +131,7 @@ class Got10k(BaseVideoDataset):
         for im_name in list(os.walk(label_dir, topdown=False))[-1][-1]:
             im_name = im_name.replace('.txt', '')
             dir_list.append(im_name)
-            print(im_name)
+            # print(im_name)
         #################
         return dir_list
 

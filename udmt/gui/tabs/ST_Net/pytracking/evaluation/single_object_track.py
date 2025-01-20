@@ -36,14 +36,14 @@ vel_change_flag = True
 score_map_flag = True
 def _read_image(image_file: str):
         im = cv.imread(image_file)
-        # 获取原始图像的高度和宽度
+
         original_height, original_width = im.shape[:2]
 
-        # 计算新的高度和宽度
+
         new_height = int(original_height)
         new_width = int(original_width)
 
-        # 使用cv2.resize函数调整图像大小
+
         resized_image = cv2.resize(im, (new_width, new_height))
         return cv.cvtColor(resized_image, cv.COLOR_BGR2RGB)
 def IoU(rec1, rec2):
@@ -152,7 +152,7 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
     # max_x = 862
     # min_y = 25
     # max_y = 609
-    print('match_compensate_target')
+    # print('match_compensate_target')
 
     point_size = 1
     thickness = 4
@@ -183,7 +183,7 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
 
     target_pos_mul = np.asarray(target_pos_mul)
     compensate_frame_length = target_pos_compensate.shape[0]
-    print('compensate_frame_length:',compensate_frame_length)
+    # print('compensate_frame_length:',compensate_frame_length)
     ###### calc_IoU
     # IoU_cross = []
     # box_lost = [int(target_pos_compensate[0][0] - target_sz_compensate[0][0] / 2), int(target_pos_compensate[0][1] - target_sz_compensate[0][1] / 2),int(target_pos_compensate[0][0] + target_sz_compensate[0][0] / 2), int(target_pos_compensate[0][1] + target_sz_compensate[0][1] / 2)]
@@ -253,12 +253,12 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
     if start_cross_id != None:
         if start_cross_id < start_id_new:
             start_id_new = start_cross_id - 10
-            print('start_id_new refresh algorithm 1!!')
+            # print('start_id_new refresh algorithm 1!!')
     if IoU_min_frame != None:
-        print('IoU_min_frame:',IoU_min_frame,'start_id_new:',start_id_new)
+        # print('IoU_min_frame:',IoU_min_frame,'start_id_new:',start_id_new)
         if IoU_min_frame < start_id_new:
             start_id_new = IoU_min_frame
-            print('start_id_new refresh algorithm 2!!')
+            # print('start_id_new refresh algorithm 2!!')
     if ((animal_species == 1) | (animal_species == 3)):
         if data_fps >= 60:
             end_id_new_vel = f + 10 # MICE
@@ -272,7 +272,7 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
         vel_max_pre_list =[]
         if start_id_new < 0:
             start_id_new = 0
-        print('vel_change_flag: range', start_id_new, 'to', end_id_new_vel)
+        # print('vel_change_flag: range', start_id_new, 'to', end_id_new_vel)
         for mouse_id in coincide_pair:
             trackk_ = target_pos_mul[mouse_id][start_id_new:end_id_new_vel]
             vel_trackk = np.diff(trackk_, axis=0)
@@ -288,23 +288,23 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
 
             vel_max_pre_list.append(int(max_/(mean_+0.000001)))
 
-        print('vel_change:', vel_change_list)
+        # print('vel_change:', vel_change_list)
         max_change = max(vel_change_list)
         max_change_id = vel_change_list.index(max_change)
-        print("\033[0;31m", 'max_vel_change_ID std:',coincide_pair[max_change_id], "\033[0m")
+        # print("\033[0;31m", 'max_vel_change_ID std:',coincide_pair[max_change_id], "\033[0m")
         voting_arr[coincide_pair[max_change_id]] += 1
 
-        print('vel_max_pre:', vel_max_pre_list)
+        # print('vel_max_pre:', vel_max_pre_list)
         vel_max_pre = max(vel_max_pre_list)
         max_change_id = vel_max_pre_list.index(vel_max_pre)
-        print("\033[0;31m", 'max_vel_change_ID max_/mean_:',coincide_pair[max_change_id], "\033[0m")
+        # print("\033[0;31m", 'max_vel_change_ID max_/mean_:',coincide_pair[max_change_id], "\033[0m")
         voting_arr[coincide_pair[max_change_id]] += 1
     end_id_new_sc = f+10
     if score_map_flag:
         score_judge_list = []
         score_sz = torch.Tensor(list(score_map_list[0][0].shape[-2:]))
         score_center = (score_sz - 1)/2
-        print('score_judge_list: range', start_id_new, 'to', end_id_new_sc)
+        # print('score_judge_list: range', start_id_new, 'to', end_id_new_sc)
         for mouse_id in coincide_pair:
             score_ = score_map_list[mouse_id][start_id_new:end_id_new_sc]
             max_score = []
@@ -315,10 +315,10 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
                 # target_disp1 = max_disp1 - score_center
             max_score = np.asarray(max_score)
             score_judge_list.append(max_score.min())
-        print('score_judge_list:', score_judge_list)
+        # print('score_judge_list:', score_judge_list)
         min_score = min(score_judge_list)
         min_score_id = score_judge_list.index(min_score)
-        print("\033[0;31m", 'min_score_ID:', coincide_pair[min_score_id], "\033[0m")
+        # print("\033[0;31m", 'min_score_ID:', coincide_pair[min_score_id], "\033[0m")
         voting_arr[coincide_pair[min_score_id]] += 1
 
     # return final_compensate_id
@@ -331,101 +331,8 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
         print('random id',final_compensate_id)
         '''
     final_compensate_id = np.argmax(voting_arr)
-    print("\033[0;31m", 'final_compensate_id:', final_compensate_id, "\033[0m")
+    # print("\033[0;31m", 'final_compensate_id:', final_compensate_id, "\033[0m")
     return final_compensate_id
-
-def match_compensate_target_simple(target_pos_mul, score_map_list,f,coincide_pair,mouse_num,animal_species):
-    # cal by final_result_display.py
-
-    print('match_compensate_target')
-
-    point_size = 1
-    thickness = 4
-    rect_color_mul = []
-    rect_color_mul.append((0, 255, 255))
-    rect_color_mul.append((255, 255, 0))
-    rect_color_mul.append((0, 0, 255))
-    rect_color_mul.append((0, 255, 0))
-    rect_color_mul.append((255, 0, 0))
-
-    rect_color_mul.append((0, 255, 255))
-    rect_color_mul.append((255, 255, 0))
-    rect_color_mul.append((0, 0, 255))
-    rect_color_mul.append((0, 255, 0))
-    rect_color_mul.append((255, 0, 0))
-
-    voting_arr = np.zeros(mouse_num)
-
-
-    target_pos_mul = np.asarray(target_pos_mul)
-
-
-    start_id_new = f - 20 # MICE
-
-
-    end_id_new = f+10
-    if vel_change_flag:
-        vel_change_list = []
-        vel_max_pre_list =[]
-        print('vel_change_flag: range', start_id_new, 'to', end_id_new)
-        for mouse_id in coincide_pair:
-            trackk_ = target_pos_mul[mouse_id][start_id_new:end_id_new]
-            vel_trackk = np.diff(trackk_, axis=0)
-            sum_vel = []
-            for vel_id in vel_trackk:
-                sum_vel.append(np.sqrt(np.sum(vel_id ** 2)))
-            sum_vel = np.asarray(sum_vel)
-            std_ = sum_vel.std()
-            max_ = sum_vel.max()
-            # median_ = np.median(sum_vel)
-            mean_ = sum_vel.mean()
-            vel_change_list.append(std_)
-
-            vel_max_pre_list.append(int(max_/(mean_+0.000001)))
-
-        print('vel_change:', vel_change_list)
-        max_change = max(vel_change_list)
-        max_change_id = vel_change_list.index(max_change)
-        print("\033[0;31m", 'max_vel_change_ID std:',coincide_pair[max_change_id], "\033[0m")
-        voting_arr[coincide_pair[max_change_id]] += 1
-
-        print('vel_max_pre:', vel_max_pre_list)
-        vel_max_pre = max(vel_max_pre_list)
-        max_change_id = vel_max_pre_list.index(vel_max_pre)
-        print("\033[0;31m", 'max_vel_change_ID max_/mean_:',coincide_pair[max_change_id], "\033[0m")
-        voting_arr[coincide_pair[max_change_id]] += 1
-
-    if score_map_flag:
-        score_judge_list = []
-        score_sz = torch.Tensor(list(score_map_list[0][0].shape[-2:]))
-        score_center = (score_sz - 1)/2
-        print('score_judge_list: range', start_id_new, 'to', end_id_new)
-        for mouse_id in coincide_pair:
-            score_ = score_map_list[mouse_id][start_id_new:end_id_new]
-            max_score = []
-            for score_id in score_:
-                max_score1, max_disp1 = dcf.max2d(score_id)
-                max_score.append(max_score1.numpy())
-                # max_disp1 = max_disp1[0,...].float().cpu().view(-1)
-                # target_disp1 = max_disp1 - score_center
-            max_score = np.asarray(max_score)
-            score_judge_list.append(max_score.min())
-        print('score_judge_list:', score_judge_list)
-        min_score = min(score_judge_list)
-        min_score_id = score_judge_list.index(min_score)
-        print("\033[0;31m", 'min_score_ID:', coincide_pair[min_score_id], "\033[0m")
-        voting_arr[coincide_pair[min_score_id]] += 1
-
-    # return final_compensate_id
-
-
-
-    # final_compensate_id = coincide_pair[0]
-
-    final_compensate_id = np.argmax(voting_arr)
-    print("\033[0;31m", 'final_compensate_id:', final_compensate_id, "\033[0m")
-    return final_compensate_id
-
 
 
 
@@ -495,7 +402,7 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
             height, width, channel = resized_im_show.shape
             bytes_per_line = 3 * width
             qt_image = QtGui.QImage(resized_im_show.data, width, height, bytes_per_line, QtGui.QImage.Format_RGB888)
-            # 更新 QLabel 显示
+
             play_video_widget.setPixmap(QtGui.QPixmap.fromImage(qt_image))
             QtWidgets.QApplication.processEvents()
             ##################################
@@ -529,7 +436,7 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
 
         if f < current_f-backward_frame_num_min:
             if IoU_cross_coincide < 0.1:
-                print('frame:',f,'IoU_cross_coincide < 0.1')
+                # print('frame:',f,'IoU_cross_coincide < 0.1')
                 break
             # else:
             #     print('frame:',f,'IoU_cross_coincide > 0.1','IOU:',IoU_cross_coincide)
@@ -541,8 +448,8 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
         plt.plot(np.asarray(distance_cross_mul[coincide_pair[1]]))
 
 
-    mins_0, _ =find_peaks(np.asarray(distance_cross_mul[coincide_pair[0]])*-1,width=10)  # 纵轴局部最低点
-    mins_1, _ =find_peaks(np.asarray(distance_cross_mul[coincide_pair[1]])*-1,width=10)  # 纵轴局部最低点
+    mins_0, _ =find_peaks(np.asarray(distance_cross_mul[coincide_pair[0]])*-1,width=10)
+    mins_1, _ =find_peaks(np.asarray(distance_cross_mul[coincide_pair[1]])*-1,width=10)
 
     if cross_point_detect_debug:
        plt.plot(mins_0, np.asarray(distance_cross_mul[coincide_pair[0]])[mins_0], 'x', label='mins')
@@ -561,9 +468,9 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
            if ((distance_cross_mul[coincide_pair[1]][dmc1] < 100) & (dmc1 < distance_cross_extrem)):
                 distance_cross_extrem = dmc1
 
-    print('distance_cross_extrem:',distance_cross_extrem)
-    if distance_cross_extrem == 10000:
-        print('no distance_cross_extrem!!!!!!!!!!!')
+    # print('distance_cross_extrem:',distance_cross_extrem)
+    # if distance_cross_extrem == 10000:
+        # print('no distance_cross_extrem!!!!!!!!!!!')
 
     if cross_point_detect_debug:
         plt.plot(np.asarray(IoU_cross_mul[coincide_pair[0]]))
@@ -571,16 +478,16 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
         plt.savefig('IoU_cross.jpg')
         plt.show()
     ###################################################cross_point_detect#############################################
-    print('debug in 0927')
+    # print('debug in 0927')
     for IoU_id in range(len(IoU_cross_between_pair)):
         # print('frame_id:',current_f - IoU_id,' IOU:',IoU_cross_between_pair[IoU_id])
         if IoU_cross_between_pair[IoU_id] < 0.1: # debug in 1106 for 30hz
-            print('stop at ',current_f - IoU_id)
+            # print('stop at ',current_f - IoU_id)
             IoU_min_frame = current_f - IoU_id
             break
         if IoU_id == len(IoU_cross_between_pair)-1:
             IoU_min_frame = None
-            print('no found debug in 0927!!')
+            # print('no found debug in 0927!!')
 
 
     for IoU_id in range(len(IoU_cross_mul[coincide_pair[0]])):
@@ -591,16 +498,16 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
         ''''''
         if ((IoU_cross_mul[coincide_pair[0]][IoU_id]>0.15)|(IoU_cross_mul[coincide_pair[1]][IoU_id]>0.15)):# mouse #related to mouse size important
             if (IoU_id < distance_cross_extrem + 15):
-                print('prepare for linking for',coincide_pair,'--------------------------------------->')
+                # print('prepare for linking for',coincide_pair,'--------------------------------------->')
                 compensate_limit = IoU_id + 1 #after debug
             else:
-                print('IoU_id:', IoU_id)
-                print('distance_cross_extrem', distance_cross_extrem)
-                print('prepare for linking with for', coincide_pair, ' with distance_cross--------------------------------------->')
+                # print('IoU_id:', IoU_id)
+                # print('distance_cross_extrem', distance_cross_extrem)
+                # print('prepare for linking with for', coincide_pair, ' with distance_cross--------------------------------------->')
                 compensate_limit = distance_cross_extrem
-            print('compensate_limit:',compensate_limit)
+            # print('compensate_limit:',compensate_limit)
             compensate_start_id = current_f - compensate_limit
-            print('cross frame:',compensate_start_id)
+            # print('cross frame:',compensate_start_id)
             #############debug in 1004
             new_flag = False
             if ((animal_species == 1) | (animal_species == 3)):
@@ -612,18 +519,18 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
                 end_f_bias =  10 # FISH
             if IoU_id >= end_f_bias:
                 if IoU_cross_between_pair[IoU_id - end_f_bias] < 0.5:
-                    print('IoU_cross_between_pair[IoU_id] < 0.5')
+                    # print('IoU_cross_between_pair[IoU_id] < 0.5')
                     for dd in range(IoU_id, 0, -1):
                         if IoU_cross_between_pair[dd - end_f_bias] > 0.5:
                             compensate_limit = dd - 5
                             new_flag = True
                             break
-                    if new_flag == False:
-                        print('new failed')
+                    # if new_flag == False:
+                    #     print('new failed')
                     compensate_start_id = current_f - compensate_limit
-                    print('cross frame new:',compensate_start_id)
-            else:
-                print('IoU_id < end_f_bias')
+                    # print('cross frame new:',compensate_start_id)
+            # else:
+            #     print('IoU_id < end_f_bias')
             ##############################
             target_pos_compensate_full = target_pos_compensate
             target_pos_compensate = target_pos_compensate[:compensate_limit+1]
@@ -641,9 +548,9 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
         if IoU_cross_flag:
            break
         if IoU_id == len(IoU_cross_mul[coincide_pair[0]])-1:
-            print('no found!!')
+            # print('no found!!')
             if cross_limit:
-                print('if cross_limit:')
+                # print('if cross_limit:')
                 compesate_length = 100
                 final_compensate_id = coincide_pair[0]
                 target_pos_compensate = target_pos_compensate[:compesate_length]
