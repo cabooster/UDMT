@@ -2,7 +2,7 @@
 layout: page
 title: UDMT tutorial
 ---
-<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="400" align="right" />
+<img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="400" align="right" />
 
 
 
@@ -37,7 +37,7 @@ title: UDMT tutorial
 
 1. Click the **Create New Project** button.
 
-   <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-start1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+   <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-start1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 2. Set the **Project Path** and **Project Name**.
 
@@ -45,7 +45,7 @@ title: UDMT tutorial
 
 4. Finally, click the **Create** button to complete this process. The project you created will open automatically.
 
-   <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-start2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+   <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-start2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 **Open an existing project**
 
@@ -118,11 +118,11 @@ UDMT
 
 1. Click the **Select Videos** button to choose a video you want to process (you can select videos from the `videos` folder in your project file).
 
-   <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+   <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-ini1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 2. After selecting the video, click the **Launch Tracking Initialization GUI** button to open the sub-GUI.
 
-   <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-ini2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+   <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-ini2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 3. In the sub-GUI, click on the centroids of all the animals you want to track.
 
@@ -142,7 +142,7 @@ UDMT
 
 5. Once the creation is complete, a popup message will appear, notifying you to proceed to the next tab.
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-create.png?raw=true"  width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-create.png?raw=true"  width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 ### 5. Train network
 
@@ -158,7 +158,7 @@ UDMT
 
 3. Click the **Train Network** button to start the training process.
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-train.png?raw=true"  width="700" align="middle"  style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-train.png?raw=true"  width="700" align="middle"  style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 ### 6. Analyze videos
 
@@ -175,7 +175,7 @@ UDMT
 6. A popup message will appear, notifying you to proceed to the next tab.
 
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-analyze.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-analyze.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 ### 7. Visualize tracks
 
@@ -183,7 +183,7 @@ UDMT
 
 2. Choose the parameters for post-processing the videos.
 
-   <center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+   <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-vis1.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 3. Click the **Launch Track Visualization GUI** button to start the visualization.
 
@@ -193,7 +193,7 @@ UDMT
 
 6. Adjust the **Dot Size** bar to change the size of the dots marking positions in the image.
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/GUI-vis2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-vis2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
 ## GUI demo video
 
