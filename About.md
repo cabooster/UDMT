@@ -2,7 +2,7 @@
 layout: page
 title: About
 ---
-<img src="https://github.com/cabooster/UDMT/blob/main/images/logo_blue_v2.png?raw=true" width="700" align="right" />
+<img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="700" align="right" />
 ### [GitHub](https://github.com/cabooster/UDMT) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
 ## Content
 
@@ -25,7 +25,7 @@ However, there exist enduring challenges impeding multi-animal tracking advancin
 
 
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_background.png?raw=true" width="1000" align="middle" /></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_background.png?raw=true" width="1000" align="middle" /></center>
 
 
 ### Unsupervised Learning
@@ -42,17 +42,17 @@ Recently, unsupervised learning shows great potential to eliminate the reliance 
 
 <h3>1. Quantitative evaluation of UDMT in various challenging conditions.</h3>
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result1.png?raw=true" width="1000" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_result1.png?raw=true" width="1000" align="middle"></center>
 <i>Numbers near the boxes represent IoU, which is the intersection over union between predicted bounding boxes and corresponding ground-truth.</i>
 
 <h3>2. Comparing UDMT with other latest methods including DeepLabCut, SLEAP, and idtracker.ai.</h3>
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result2.png?raw=true" width="1000" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_result2.png?raw=true" width="1000" align="middle"></center>
 <i>The 5-mouse dataset (33 Hz frame rate, 18,000 frames, N=5) was used in this experiment for quantitative evaluation.</i>
 
 <h3>3.Visualizing the accuracy of animal localization in video snapshots.</h3>
 
-<center><img src="https://github.com/cabooster/UDMT/blob/main/images/udmt_result3.png?raw=true" width="1000" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_result3.png?raw=true" width="1000" align="middle"></center>
 <i>Example frames and magnified views of a 7-mouse video at three different time points. Tracking results and corresponding IOU metrics of UDMT, DLC and SLEAP are shown. Scale bars, 50 mm for all images.</i>
 <br><br>
 
