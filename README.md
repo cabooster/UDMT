@@ -98,7 +98,7 @@ We have released the Python source code and a user-friendly GUI of UDMT to make 
 1. Once you have UDMT installed, start by opening a terminal. Activate the environment and download the codes with:
 
    ```
-   $ source activate git clone https://github.com/cabooster/UDMT
+   $ source activate udmt
    $ git clone https://github.com/cabooster/UDMT
    $ cd UDMT/
    ```
