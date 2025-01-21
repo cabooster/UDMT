@@ -53,13 +53,6 @@ For more details, please see the companion paper where the method first appeared
    $ pip install udmt-pip
    ```
 
-### Download the Source Code
-
-```
-$ git clone https://github.com/cabooster/UDMT
-$ cd UDMT/
-```
-
 ### 2. For Windows
 
 #### Our Environment 
@@ -98,8 +91,8 @@ We have released the Python source code and a user-friendly GUI of UDMT to make 
 1. Once you have UDMT installed, start by opening a terminal. Activate the environment and download the codes with:
 
    ```
-   $ source activate udmt
-   $ git clone https://github.com/cabooster/UDMT
+   $ conda activate udmt
+   $ git clone https://github.com/cabooster/UDMT.git
    $ cd UDMT/
    ```
 
@@ -116,7 +109,7 @@ If you would like to try the GUI with a smaller dataset first, we provide **demo
 - When creating a project, you can select the folder containing the demo video to import it.
 - If you want to skip the **Network Training** process, place the downloaded model into the `your_project_path/models` folder before running the **Analyze Video** step.
 
-Below is the tutorial video for the GUI. For detailed instructions on installing and using the GUI, please visit [**our project page**](https://cabooster.github.io/UDMT/Tutorial/).
+Below is the tutorial video for the GUI. For detailed instructions on installing and using the GUI, please visit [**our website**](https://cabooster.github.io/UDMT/Tutorial/).
 
 [![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/GUI-video2.png)](https://youtu.be/7rkpVTawpBU "Video Title")
 
