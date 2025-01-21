@@ -28,14 +28,14 @@ For more details, please see the companion paper where the method first appeared
 ## Installation
 ### 1. For Linux (Recommended)
 
-#### Our environment 
+#### Our Environment 
 
 * Ubuntu 20.04 (or newer)
 * Python 3.8
 * Pytorch 1.7.1
 * NVIDIA GPU (GeForce RTX 3090) + CUDA (11.7)
 
-#### Environment configuration 
+#### Environment Configuration 
 
 1. Create a virtual environment and install PyTorch. **In the 3rd step, please select the correct Pytorch version that matches your CUDA version from [https://pytorch.org/get-started/previous-versions/](https://pytorch.org/get-started/previous-versions/).** 
 
@@ -53,7 +53,7 @@ For more details, please see the companion paper where the method first appeared
    $ pip install udmt-pip
    ```
 
-### Download the source code
+### Download the Source Code
 
 ```
 $ git clone https://github.com/cabooster/UDMT
@@ -62,14 +62,14 @@ $ cd UDMT/
 
 ### 2. For Windows
 
-#### Our environment 
+#### Our Environment 
 
 * Windows 10
 * Python 3.8
 * Pytorch 1.7.1
 * NVIDIA GPU (GeForce RTX 3090) + CUDA (11.0)
 
-#### Environment configuration 
+#### Environment Configuration 
 
 1. Create a virtual environment and install PyTorch. **In the 3rd step, please select the correct Pytorch version that matches your CUDA version from [https://pytorch.org/get-started/previous-versions/](https://pytorch.org/get-started/previous-versions/).** 
 
@@ -91,16 +91,34 @@ $ cd UDMT/
 
 ## GUI Tutorial
 
-We have released the Python source code and a user-friendly GUI of UDMT to make it an easily accessible tool for quantitative ethology and neuroethology. Below is the tutorial video for the GUI. For detailed instructions on installing and using the GUI, please visit [**our project page**](https://cabooster.github.io/UDMT/Tutorial/).
+We have released the Python source code and a user-friendly GUI of UDMT to make it an easily accessible tool for quantitative ethology and neuroethology. 
+
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-home-page2.png?raw=true" width="800" align="middle"></center>
+
+1. Once you have UDMT installed, start by opening a terminal. Activate the environment and download the codes with:
+
+   ```
+   $ source activate git clone https://github.com/cabooster/UDMT
+   $ git clone https://github.com/cabooster/UDMT
+   $ cd UDMT/
+   ```
+
+2. To launch the GUI, simply enter in the terminal:
+
+   ```
+   $ python -m udmt.gui.launch_script
+   ```
+
+#### **Quick Start with Demo Data**:
+
+If you would like to try the GUI with a smaller dataset first, we provide **demo videos** ([5-mice video](https://zenodo.org/records/14689184/files/5-mice-1min.mp4?download=1) & [7-mice video](https://zenodo.org/records/14709082/files/7-mice-1min.mp4?download=1)) and pre-trained **models** (model for [5-mice](https://zenodo.org/records/14689184/files/DiMPnet_ep0020.pth.tar?download=1) and [7-mice](https://zenodo.org/records/14709082/files/DiMPnet_ep0020.pth.tar?download=1)).
+
+- When creating a project, you can select the folder containing the demo video to import it.
+- If you want to skip the **Network Training** process, place the downloaded model into the `your_project_path/models` folder before running the **Analyze Video** step.
+
+Below is the tutorial video for the GUI. For detailed instructions on installing and using the GUI, please visit [**our project page**](https://cabooster.github.io/UDMT/Tutorial/).
 
 [![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/GUI-video2.png)](https://youtu.be/7rkpVTawpBU "Video Title")
-
-#### Tips: 
-
-- **Quick Start with Demo Data**:
-  If you would like to try the GUI with a smaller dataset first, we provide a **demo video** ([Download Here](https://drive.google.com/file/d/13_sjRsFoZQ4kmnNKzdiDpxza0Gwu8fQn/view?usp=drive_link)) and a pre-trained **model** ([Download Here](https://drive.google.com/file/d/179JZLUcPfhE_B9XYt0YmIM1Jy6RK9fv8/view?usp=sharing)).
-  - When creating a project, you can select the folder containing the demo video to import it.
-  - If you want to skip the **Network Training** process, place the downloaded model into the `your_project_path/models` folder before running the **Analyze Video** step.
 
 ## Results
 

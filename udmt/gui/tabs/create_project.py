@@ -84,6 +84,9 @@ class ProjectCreator(QtWidgets.QDialog):
 
         self.copy_box = QtWidgets.QCheckBox("Copy videos to project folder")
         self.copy_box.setChecked(True)
+        self.concave_box = QtWidgets.QCheckBox("Including concave-shaped animals?")
+        self.concave_box.setToolTip("For example, C. elegans, their centroid may not be located within their body.")
+        self.concave_box.setChecked(False)
 
         browse_button = QtWidgets.QPushButton("Browse videos")
         browse_button.clicked.connect(self.browse_videos)
@@ -99,6 +102,7 @@ class ProjectCreator(QtWidgets.QDialog):
         video_frame.layout.insertLayout(0, layout1)
         video_frame.layout.addLayout(layout2)
         video_frame.layout.addWidget(self.copy_box)
+        video_frame.layout.addWidget(self.concave_box)
 
         return video_frame
 
@@ -142,12 +146,14 @@ class ProjectCreator(QtWidgets.QDialog):
                     self.video_frame.fancy_list._default_style
                 )
             to_copy = self.copy_box.isChecked()
+            is_concave  = self.concave_box.isChecked()
             # is_madlc = self.madlc_box.isChecked()
             config = udmt.create_new_project(
                 self.proj_default,
                 videos,
                 self.loc_default,
                 to_copy,
+                is_concave
             )
             self.parent.load_config(config)
             self.parent._update_project_state(

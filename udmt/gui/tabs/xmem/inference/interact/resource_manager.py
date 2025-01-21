@@ -123,7 +123,7 @@ class ResourceManager:
                     frame = cv2.resize(frame,dsize=(new_w,new_h),interpolation=cv2.INTER_AREA)
             else:
                 resize_scale = 1
-            if frame_index % self.divide_num:
+            if (frame_index % self.divide_num == 0):
                 cv2.imwrite(path.join(self.image_dir, f'{frame_index_true:07d}.jpg'), frame)
                 frame_index_true += 1
             frame_index += 1

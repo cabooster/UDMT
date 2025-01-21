@@ -19,6 +19,7 @@ def create_new_project(
     videos,
     working_directory=None,
     copy_videos=False,
+    is_concave=False,
     videotype=""
 ):
 
@@ -172,6 +173,7 @@ def create_new_project(
     cfg_file["video_sets"] = video_sets
     cfg_file["project_path"] = str(project_path)
     cfg_file["date"] = d
+    cfg_file["is_concave"] = is_concave
     # cfg_file["epoch"] = 20
     # cfg_file[
     #     "batch_size"

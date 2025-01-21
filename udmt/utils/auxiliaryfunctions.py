@@ -28,6 +28,7 @@ def create_config_template():
     # Project definitions (do not edit)
         Task:
         date:
+        is_concave:
         \n
     # Project path (change when moving around)
         project_path:

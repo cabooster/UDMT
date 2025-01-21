@@ -248,7 +248,8 @@ class CreateTrainingDataset(DefaultTab):
                                            'search_scale_range': np.arange(1.5, 3, 0.5),
                                            'target_sz_bias_range': [-0.1, 0, 0.1], #[-0.2, -0.1, 0, 0.1, 0.2]
                                            'status_flag': 1, # train_param_iter 1 test_param_iter 2 test 3
-                                           'evaluation_metric': []
+                                           'evaluation_metric': [],
+                                           'is_concave': self.root.cfg['is_concave']
                                            }
                     print('run_tracking_params:',run_tracking_params)
                     # run_training_process()

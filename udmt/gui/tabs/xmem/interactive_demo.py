@@ -66,7 +66,7 @@ def mask_seg_winclass(video_name,project_path,divide_num):
     parser.add_argument('--num_prototypes', help='P in paper', type=int, default=128)
 
     parser.add_argument('--top_k', type=int, default=30)
-    parser.add_argument('--mem_every', type=int, default=99)
+    parser.add_argument('--mem_every', type=int, default=1000)
     parser.add_argument('--deep_update_every', help='Leave -1 normally to synchronize with mem_every', type=int, default=-1)
     parser.add_argument('--no_amp', help='Turn off AMP', action='store_true')
     parser.add_argument('--size', default=480, type=int,

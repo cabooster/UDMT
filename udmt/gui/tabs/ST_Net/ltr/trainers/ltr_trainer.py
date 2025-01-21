@@ -2,7 +2,7 @@ import os
 from collections import OrderedDict
 from ltr.trainers import BaseTrainer
 from ltr.admin.stats import AverageMeter, StatValue
-from ltr.admin.tensorboard import TensorboardWriter
+# from ltr.admin.tensorboard import TensorboardWriter
 import torch
 import time
 
@@ -26,8 +26,8 @@ class LTRTrainer(BaseTrainer):
         self.stats = OrderedDict({loader.name: None for loader in self.loaders})
 
         # Initialize tensorboard
-        tensorboard_writer_dir = os.path.join(self.settings.env.tensorboard_dir, self.settings.project_path)
-        self.tensorboard_writer = TensorboardWriter(tensorboard_writer_dir, [l.name for l in loaders])
+        # tensorboard_writer_dir = os.path.join(self.settings.env.tensorboard_dir, self.settings.project_path)
+        # self.tensorboard_writer = TensorboardWriter(tensorboard_writer_dir, [l.name for l in loaders])
 
         self.move_data_to_gpu = getattr(settings, 'move_data_to_gpu', True)
 
@@ -80,7 +80,7 @@ class LTRTrainer(BaseTrainer):
                 self.cycle_dataset(loader)
 
         self._stats_new_epoch()
-        self._write_tensorboard()
+        # self._write_tensorboard()
 
     def _init_timing(self):
         self.num_frames = 0
@@ -129,8 +129,8 @@ class LTRTrainer(BaseTrainer):
                 if hasattr(stat_value, 'new_epoch'):
                     stat_value.new_epoch()
 
-    def _write_tensorboard(self):
-        if self.epoch == 1:
-            self.tensorboard_writer.write_info(self.settings.module_name, self.settings.script_name, self.settings.description)
-
-        self.tensorboard_writer.write_epoch(self.stats, self.epoch)
+    # def _write_tensorboard(self):
+    #     if self.epoch == 1:
+    #         self.tensorboard_writer.write_info(self.settings.module_name, self.settings.script_name, self.settings.description)
+    #
+    #     self.tensorboard_writer.write_epoch(self.stats, self.epoch)

@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 # from . import tracker_multi
-celegan_flag = False
+# celegan_flag = False
 point_size = 3
 thickness = 4
 detect_debug = False
@@ -247,7 +247,7 @@ def refine_pos_for_loss(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,
 
     return target_pos_mul,refine_loss_flag
 
-def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_frame,animal_num,animal_species,area_in_first_frame,kernel,down_sample_fg):
+def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_frame,animal_num,animal_species,area_in_first_frame,kernel,down_sample_fg,concave_flag):
 
     refine_debug = False
     if animal_species == 3:
@@ -289,7 +289,7 @@ def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_f
     num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(thresh, connectivity=8, ltype=None)
     #####################
     ##########################################
-    if celegan_flag:
+    if concave_flag:
       rec_image = np.zeros((detect_img.shape[0], detect_img.shape[1]), dtype=np.uint8)
       for stats_id in range(stats.shape[0]):
           if stats_id != 0:

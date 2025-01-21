@@ -564,7 +564,7 @@ class Tracker:
                     # if frame_num < 2280:
                          # debug_print('tracker[0].pos',tracker[0].pos)
                          # debug_print(target_pos_mul[0][-1])
-                         target_pos_mul, miss_target_time, miss_target_id_list, target_refine_list = refine_pos(image,target_pos_mul,target_sz_mul,bg, seq.name,current_frame=frame_num,animal_num=seq.object_num,animal_species=animal_species,area_in_first_frame=area_in_first_frame,kernel=kernel,down_sample_fg=down_sample_fg)
+                         target_pos_mul, miss_target_time, miss_target_id_list, target_refine_list = refine_pos(image,target_pos_mul,target_sz_mul,bg, seq.name,current_frame=frame_num,animal_num=seq.object_num,animal_species=animal_species,area_in_first_frame=area_in_first_frame,kernel=kernel,down_sample_fg=down_sample_fg,concave_flag=gui_param['is_concave'])
                          miss_target_time_sum += miss_target_time
                          if not combine_flag:
                              for animal_id in range(seq.object_num): # debug in 1101
