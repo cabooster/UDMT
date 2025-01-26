@@ -3,7 +3,7 @@ layout: page
 title: About
 ---
 <img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="700" align="right" />
-### [GitHub](https://github.com/cabooster/UDMT) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
+### [GitHub](https://github.com/cabooster/UDMT) | [Paper](https://doi.org/10.1101/2025.01.23.634625)
 ## Content
 
 - [**Introduction**](#introduction)
@@ -56,14 +56,14 @@ Recently, unsupervised learning shows great potential to eliminate the reliance 
 <i>Example frames and magnified views of a 7-mouse video at three different time points. Tracking results and corresponding IOU metrics of UDMT, DLC and SLEAP are shown. Scale bars, 50 mm for all images.</i>
 <br><br>
 
-**More results are demonstrated in <a href='https://cabooster.github.io/UDMT/Gallery/'>Gallery</a>. More details please refer to <a href='https://www.nature.com/articles/s41587-022-01450-8'>our paper</a>.**
+**More results are demonstrated in <a href='https://cabooster.github.io/UDMT/Gallery/'>Gallery</a>. More details please refer to <a href='https://doi.org/10.1101/2025.01.23.634625'>our paper</a>.**
 
 
 ## Citation
 
 If you use relevant resources, please cite the companion paper where the original method appeared: 
 
-- Xinyang Li, Yixin Li, Yiliang Zhou, et al. Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit. Nat Biotechnol (2022). [https://doi.org/10.1038/s41587-022-01450-8](https://www.nature.com/articles/s41587-022-01450-8)
+- Yixin Li, Xinyang Li, Qi Zhang, et al. Unsupervised multi-animal tracking for quantitative ethology. bioRxiv (2025). [https://doi.org/10.1101/2025.01.23.634625](https://doi.org/10.1101/2025.01.23.634625)
 
 
 
