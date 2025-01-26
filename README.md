@@ -137,11 +137,11 @@ If you use this code, please cite the companion paper where the original method 
 
 ```
 @article {Li2025.01.23.634625,
-   title = {Unsupervised multi-animal tracking for quantitative ethology},
-	author = {Li, Yixin and Li, Xinyang and Zhang, Qi and Zhang, Yuanlong and Fan, Jiaqi and Lu, Zhi and Li, Ziwei and Wu, Jiamin and Dai, Qionghai},
-	journal = {bioRxiv}
-	year = {2025},
-   publisher = {Cold Spring Harbor Laboratory},
-	doi = {10.1101/2025.01.23.634625},
+ title = {Unsupervised multi-animal tracking for quantitative ethology},
+ author = {Li, Yixin and Li, Xinyang and Zhang, Qi and Zhang, Yuanlong and Fan, Jiaqi and Lu, Zhi and Li, Ziwei and Wu, Jiamin and Dai, Qionghai},
+ journal = {bioRxiv}
+ year = {2025},
+ publisher = {Cold Spring Harbor Laboratory},
+ doi = {10.1101/2025.01.23.634625}
 }
 ```
