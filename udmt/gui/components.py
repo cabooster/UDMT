@@ -169,7 +169,7 @@ class VideoSelectionWidget(QtWidgets.QWidget):
         )
 
         if filename:
-            # 直接保存单个文件路径
+
             self.root.video_files = [filename]
 
     def clear_selected_videos(self):

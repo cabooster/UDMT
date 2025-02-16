@@ -21,6 +21,10 @@ _prroi_pooling = None
 def _import_prroi_pooling():
     global _prroi_pooling
 
+    import importlib
+    spec = importlib.util.find_spec('prroi_pool')
+    _prroi_pooling = importlib.util.module_from_spec(spec)
+
     if _prroi_pooling is None:
         try:
             from os.path import join as pjoin, dirname

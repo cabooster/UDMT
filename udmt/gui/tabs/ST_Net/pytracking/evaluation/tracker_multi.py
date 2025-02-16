@@ -27,6 +27,7 @@ from ..utils.plotting import draw_figure, overlay_mask
 # from .multi_object_wrapper import MultiObjectWrapper
 # from pathlib import Path
 import torch
+from udmt.gui.tabs.ST_Net.pytracking import run_tracker
 # from pytracking import dcf
 from similaritymeasures import similaritymeasures
 from .missing_object_detect import missing_object_detect,refine_pos,missing_object_cal,refine_pos_for_loss
@@ -41,7 +42,6 @@ _tracker_disp_colors = {1: (0, 255, 0), 2: (0, 0, 255), 3: (255, 0, 0),
                         7: (123, 123, 123), 8: (255, 128, 0), 9: (128, 0, 255)}
 ##########################
 # test_img_num = 2000 # !!32000 13040 15020 17760 29550 27980 16000 25000 42115 41770
-animal_species = 1 # !! 1  2 fish 3 mix 4 flies
 # data_fps = 60
 #### visualization ####
 save_flag = True
@@ -64,10 +64,10 @@ use_xmem = True
 quality_check_flag = False
 global search_scale_gl
 global target_sz_bias_gl
-min_correct_time = 10000
-corresponding_miss_num = 10000
-min_miss_time = 10000
-min_loss_time = 10000
+# min_correct_time = 10000
+# corresponding_miss_num = 10000
+# min_miss_time = 10000
+# min_loss_time = 10000
 
 # global target_sz_ini
 # global target_sz_uniform
@@ -216,15 +216,7 @@ class Tracker:
             # tracker = MultiObjectWrapper(self.tracker_class, params, self.visdom)
             tracker = []
             for i in range(seq.object_num):
-                if animal_species == 3:
-                    if i == 0:
-                        params_0 = self.get_parameters(search_scale_gl,gui_param)
-                        params_0.search_area_scale = 2
-                        tracker_id = self.create_tracker(params_0)
-                    else:
-                        tracker_id = self.create_tracker(params)
-                else:
-                    tracker_id = self.create_tracker(params)
+                tracker_id = self.create_tracker(params)
                 tracker.append(tracker_id)
             tracker_compensate = self.create_tracker(params)
 
@@ -235,7 +227,7 @@ class Tracker:
         return output, early_stop_flag
 
     def _track_sequence(self, tracker, seq, init_info, tracker_compensate = None,gui_param = None):
-
+        animal_species = 1
         # Define outputs
         # Each field in output is a list containing tracker prediction for each frame.
 
@@ -250,11 +242,14 @@ class Tracker:
         # time[i] is either the processing time for frame i, or an OrderedDict containing processing times for each
         # object in frame i
         # segmentation[i] is the multi-label segmentation mask for frame i (numpy array)
-        global min_correct_time,min_miss_time,min_loss_time,corresponding_miss_num
+        # global min_correct_time,min_miss_time,min_loss_time,corresponding_miss_num
+        # global  min_miss_time, min_loss_time, corresponding_miss_num
+        # run_tracker.min_correct_time +=1
+
         if DEBUG_FLAG:
-            print('start min_correct_time: ',min_correct_time)
-            print('start min_miss_time: ',min_miss_time)
-            print('start min_loss_time: ',min_loss_time)
+            print('start min_correct_time: ',run_tracker.min_correct_time)
+            print('start min_miss_time: ',run_tracker.min_miss_time)
+            print('start min_loss_time: ',run_tracker.min_loss_time)
         #
         #
         # print('###########',random.random())
@@ -285,8 +280,17 @@ class Tracker:
         # global target_sz_uniform
         # global area_in_first_frame
         start_point_corr = seq.init_bbox_all
-        target_sz_ini, target_sz_uniform, area_in_first_frame, kernel, area_mean = set_ini_value(animal_species,seq.frames,start_point_corr,seq.object_num,bg)#
-        true_bias = target_sz_ini * target_sz_bias_gl#debug 250113
+        target_sz_ini, target_sz_uniform, area_in_first_frame, kernel, area_mean, large_id, animal_species, large_size = set_ini_value(animal_species, seq.frames, start_point_corr, seq.object_num, bg)#
+        ############################## debug in 250214
+        if animal_species == 3:
+            for i in range(seq.object_num):
+                if i in large_id:
+                    params_0 = self.get_parameters(search_scale_gl, gui_param)
+                    params_0.search_area_scale = 2
+                    tracker[i] = self.create_tracker(params_0)
+
+        ##############################
+        true_bias = target_sz_ini * target_sz_bias_gl#debug in 250113
         debug_print(f'target_sz_bias_gl:{target_sz_bias_gl}')
         debug_print(f'target_sz_ini: {target_sz_ini}')
         debug_print(f'true_bias:{true_bias}' )
@@ -314,10 +318,7 @@ class Tracker:
             for i in range(seq.object_num):
                 # init_info['init_bbox'] = np.array([178.0, 253.0, 35.0, 35.0])
                 init_info['init_bbox'] = seq.init_bbox_all[i]
-                if ((animal_species == 3) & (i == 0)):
-                        seq.init_bbox_all[i][2:] = np.array([55., 55.])
-                else:
-                    seq.init_bbox_all[i][2:] = np.array([target_sz_ini, target_sz_ini])
+                seq.init_bbox_all[i][2:] = np.array([target_sz_ini, target_sz_ini])
                 # aaa = np.asarray(seq.init_bbox_all[i][:2])
                 # target_pos_mul[i].append(aaa)
                 init_info['init_bbox'][2:] = np.array([target_sz_ini, target_sz_ini])
@@ -706,7 +707,7 @@ class Tracker:
                                                                                          animal_species=animal_species,
                                                                                          fine_detection_mode=fine_detection_mode,
                                                                                          area_in_first_frame=area_in_first_frame,
-                                                                                         kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg
+                                                                                         kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg,large_id = large_id,large_size = large_size
                                                                                          )
                                           if continue_cross: # if continue_cross:
                                               debug_print("swap try")
@@ -719,7 +720,7 @@ class Tracker:
                                                                                              animal_species=animal_species,
                                                                                              fine_detection_mode=fine_detection_mode,
                                                                                              area_in_first_frame=area_in_first_frame,
-                                                                                             kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg,
+                                                                                             kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg,large_id = large_id,large_size = large_size,
                                                                                              area_rank=-3)
                                               if swap_time_list[pair_id][0] % 3 == 0:
                                                   if DEBUG_FLAG:
@@ -731,7 +732,7 @@ class Tracker:
                                                                                              animal_species=animal_species,
                                                                                              fine_detection_mode=fine_detection_mode,
                                                                                              area_in_first_frame=area_in_first_frame,
-                                                                                             kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg,
+                                                                                             kernel=kernel,area_mean = area_mean,down_sample_fg=down_sample_fg,large_id = large_id,large_size = large_size,
                                                                                              area_rank=-4)
                                               if swap_time_list[pair_id][0] > 10:
                                                   fine_detection_mode = True #### debug in 1012
@@ -777,7 +778,7 @@ class Tracker:
                                                 print('1:',coincide_pair[0],target_pos_mul[coincide_pair[0]][-1])
                                               target_pos_mul, target_sz_mul,  final_compensate_id = single_compensate(tracker_compensate, compensate_start, target_pos_mul, target_sz_mul, score_map_list, seq, image,reverse_frame_list, frame_num, coincide_pair, out_compensate, animal_species,start_cross_id, data_fps,cross_limit=cross_limit, video_name=seq.name,gui_param = gui_param)
 
-                                              cross_times = cross_times + 1
+                                              ross_times = cross_times + 1
                                               coincide_flag = 0
                                               ######
                                               # if cross_limit == True:
@@ -940,24 +941,24 @@ class Tracker:
 
 
             if search_period:
-                if correct_cross_times > min_correct_time:
+                if correct_cross_times > run_tracker.min_correct_time:
                     if DEBUG_FLAG:
                         print('correct_cross_times', correct_cross_times)
-                        print('min_correct_time', min_correct_time)
+                        print('min_correct_time', run_tracker.min_correct_time)
                         print('stop because of frequent correction')
                     break_flag = True
-                elif correct_cross_times == min_correct_time:
-                    if correct_loss_times > min_loss_time:
+                elif correct_cross_times == run_tracker.min_correct_time:
+                    if correct_loss_times > run_tracker.min_loss_time:
                         if DEBUG_FLAG:
                             print('correct_loss_times', correct_loss_times)
-                            print('min_loss_time', min_loss_time)
+                            print('min_loss_time', run_tracker.min_loss_time)
                             print('stop because of loss time')
                         break_flag = True
                     else:
-                       if miss_target_time_sum >= min_miss_time:
+                       if miss_target_time_sum >= run_tracker.min_miss_time:
                            if DEBUG_FLAG:
                              print('correct_cross_times',correct_cross_times)
-                             print('min_correct_time', min_correct_time)
+                             print('min_correct_time', run_tracker.min_correct_time)
                              print('stop because of frequent correction')
                            break_flag = True
                 else:
@@ -966,10 +967,10 @@ class Tracker:
                     #    print('stop because of frequent correction but Do not stop because of loss not frequent')
                 miss_target_time_per_animal = miss_target_time_sum/seq.object_num
                 if miss_target_time_per_animal > 4:
-                    if miss_target_time_sum > min_miss_time:
+                    if miss_target_time_sum > run_tracker.min_miss_time:
                         if DEBUG_FLAG:
                             print('miss_target_time_sum', miss_target_time_sum)
-                            print('min_miss_time', min_miss_time)
+                            print('min_miss_time', run_tracker.min_miss_time)
                             print('stop because of frequent missing')
                         break_flag = True
             if break_flag:
@@ -978,29 +979,29 @@ class Tracker:
             #     print('\033[1;31mper 199 frame not_found_times/seq.object_num---------->\033[0m', not_found_times/seq.object_num)
             if search_period:
                 if frame_num == test_img_num-1:
-                    if correct_loss_times < min_loss_time:
+                    if correct_loss_times < run_tracker.min_loss_time:
                         if DEBUG_FLAG:
                             print('update min loss times...')
-                            print('min_loss_time before', min_loss_time)
-                        min_loss_time = correct_loss_times
+                            print('min_loss_time before', run_tracker.min_loss_time)
+                        run_tracker.min_loss_time = correct_loss_times
                         if DEBUG_FLAG:
-                            print('min_correct_time after', min_loss_time)
+                            print('min_correct_time after', run_tracker.min_correct_time)
                             print('correct_cross_times', correct_loss_times)
-                    if correct_cross_times < min_correct_time:
+                    if correct_cross_times < run_tracker.min_correct_time:
                         if DEBUG_FLAG:
                             print('update min correct value...')
-                            print('min_correct_time before', min_correct_time)
-                        min_correct_time = correct_cross_times
+                            print('min_correct_time before', run_tracker.min_correct_time)
+                        run_tracker.min_correct_time = correct_cross_times
                         if DEBUG_FLAG:
-                            print('min_correct_time after', min_correct_time)
+                            print('min_correct_time after', run_tracker.min_correct_time)
                             print('correct_cross_times', correct_cross_times)
-                    if miss_target_time_sum < min_miss_time:
+                    if miss_target_time_sum < run_tracker.min_miss_time:
                         if DEBUG_FLAG:
                             print('update min missing value...')
-                            print('min_miss_time before', min_miss_time)
-                        min_miss_time = miss_target_time_sum
+                            print('min_miss_time before', run_tracker.min_miss_time)
+                        run_tracker.min_miss_time = miss_target_time_sum
                         if DEBUG_FLAG:
-                            print('min_miss_time after', min_miss_time)
+                            print('min_miss_time after', run_tracker.min_miss_time)
                             print('miss_target_time_sum', miss_target_time_sum)
             used_time = time.time() - first_start_time
             metric_dict = {
@@ -1180,14 +1181,13 @@ class Tracker:
 
     def _read_image(self, image_file,scale_factor=1):
         im = cv.imread(image_file)
-        # 获取原始图像的高度和宽度
         original_height, original_width = im.shape[:2]
 
-        # 计算新的高度和宽度
+
         new_height = int(original_height * scale_factor)
         new_width = int(original_width * scale_factor)
 
-        # 使用cv2.resize函数调整图像大小
+
         resized_image = cv2.resize(im, (new_width, new_height))
         return cv.cvtColor(resized_image, cv.COLOR_BGR2RGB)
 

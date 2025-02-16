@@ -101,7 +101,7 @@ def run(settings,run_training_params):
     #                                     processing=data_processing_train)
     dataset_train = sampler.DiMPSampler([got10k_train], [1],
                                         samples_per_epoch=5000, max_gap=10, num_test_frames=3, num_train_frames=3,
-                                        processing=data_processing_train,train_num_per_sequence = 2000) # !!5000
+                                        processing=data_processing_train,train_num_per_sequence = 2000) # !!samples_per_epoch 5000
 
     loader_train = LTRLoader('train', dataset_train, training=True, batch_size=settings.batch_size, num_workers=settings.num_workers,
                              shuffle=True, drop_last=True, stack_dim=1)

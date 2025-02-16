@@ -16,7 +16,10 @@ from ..pytracking.evaluation import get_dataset
 from ..pytracking.evaluation.running import run_dataset
 from ..pytracking.evaluation import Tracker,Sequence
 
-
+min_correct_time = 10000
+corresponding_miss_num = 10000
+min_miss_time = 10000
+min_loss_time = 10000
 def read_txt_to_nparray(file_path):
     """
     读取文本文件并存储为 numpy 数组
@@ -91,6 +94,11 @@ def setup_seed(seed):
         torch.backends.cudnn.benchmark = False
         torch.backends.cudnn.deterministic = True
 
+def reset_global_params():
+    global min_correct_time, min_miss_time, min_loss_time
+    min_correct_time = 10000
+    min_miss_time = 10000
+    min_loss_time = 10000
 
 def run_tracking(run_tracking_params):
     parser = argparse.ArgumentParser(description='Run tracker on sequence or dataset.')
@@ -114,6 +122,7 @@ def run_tracking(run_tracking_params):
     print('Loading----->', os.path.normpath(run_tracking_params['model_path']))
     iteration_time = 1
     start_time = time.time()
+    reset_global_params()
     for target_sz_bias in run_tracking_params['target_sz_bias_range']: # -15,0,5
         early_stop_flag_list = []
         for search_scale in run_tracking_params['search_scale_range']:

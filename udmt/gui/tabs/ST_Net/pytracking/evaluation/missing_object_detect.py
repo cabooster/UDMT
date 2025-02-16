@@ -8,11 +8,12 @@ point_size = 3
 thickness = 4
 detect_debug = False
 debug_save = False
+refine_debug_save = False
 refine_print = False
 upper_thresh = 1.2
 down_thresh = 0.5
 
-def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_frame,animal_num,animal_species,fine_detection_mode,area_in_first_frame,kernel,area_mean,down_sample_fg,area_rank=-2):
+def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_frame,animal_num,animal_species,fine_detection_mode,area_in_first_frame,kernel,area_mean,down_sample_fg,large_id,large_size, area_rank=-2):
     erode_flag = True
     # init_rect_mul = []
     point_size = 3
@@ -124,8 +125,8 @@ def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_nam
                 if animal_species != 3:
                     thresh[int(target_pos_mul[i][current_frame][1]-target_sz_mul[i][current_frame][0]/2):int(target_pos_mul[i][current_frame][1]+target_sz_mul[i][current_frame][0]/2),int(target_pos_mul[i][current_frame][0]-target_sz_mul[i][current_frame][0]/2):int(target_pos_mul[i][current_frame][0]+target_sz_mul[i][current_frame][0]/2)] = 0
                 else:
-                    if i == 0:
-                        target_sz = 180
+                    if i in large_id:
+                        target_sz = large_size #180
                         thresh[int(target_pos_mul[i][current_frame][1]-target_sz/2):int(target_pos_mul[i][current_frame][1]+target_sz/2),int(target_pos_mul[i][current_frame][0]-target_sz/2):int(target_pos_mul[i][current_frame][0]+target_sz/2)] = 0
                     else:
                         thresh[int(target_pos_mul[i][current_frame][1]-target_sz_mul[i][current_frame][0]/2):int(target_pos_mul[i][current_frame][1]+target_sz_mul[i][current_frame][0]/2),int(target_pos_mul[i][current_frame][0]-target_sz_mul[i][current_frame][0]/2):int(target_pos_mul[i][current_frame][0]+target_sz_mul[i][current_frame][0]/2)] = 0
@@ -284,7 +285,7 @@ def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_f
         dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(kernel,kernel))
         cv2.erode(thresh, erode_kernel, thresh, iterations=2)
         cv2.dilate(thresh, dilate_kernel, thresh, iterations=2)
-        if debug_save:
+        if refine_debug_save:
             cv2.imwrite(file_name3, thresh)
     num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(thresh, connectivity=8, ltype=None)
     #####################

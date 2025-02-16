@@ -1,7 +1,7 @@
 <center><img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="750" align="middle" /></center>
 <h1 align="center">UDMT: Unsupervised Multi-animal Tracking for Quantitative Ethology</h1>
 
-### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.nature.com/articles/s41587-022-01450-8)
+### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1)
 
 ## Contents
 
@@ -21,7 +21,7 @@ Growing demands in quantitative ethology have motivated concerted efforts to dev
 We demonstrate the state-of-the-art performance of UDMT on five different kinds of model animals, including mice, rats, *Drosophila*, *C. elegans*, and *Betta splendens*. Combined with a head-mounted miniaturized microscope, we recorded the calcium transients synchronized with mouse locomotion to decipher the correlations between animal locomotion and neural activity. 
 
 For more details, please see the companion paper where the method first appeared: 
-["*Unsupervised multi-animal tracking for quantitative ethology*"](https://www.nature.com/articles/s41587-022-01450-8).
+["*Unsupervised multi-animal tracking for quantitative ethology*"](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1).
 
 <img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_schematic.png?raw=true" width="800" align="middle">
 
@@ -52,13 +52,6 @@ For more details, please see the companion paper where the method first appeared
    ```
    $ pip install udmt-pip
    ```
-
-### Download the Source Code
-
-```
-$ git clone https://github.com/cabooster/UDMT
-$ cd UDMT/
-```
 
 ### 2. For Windows
 
@@ -98,8 +91,8 @@ We have released the Python source code and a user-friendly GUI of UDMT to make 
 1. Once you have UDMT installed, start by opening a terminal. Activate the environment and download the codes with:
 
    ```
-   $ source activate git clone https://github.com/cabooster/UDMT
-   $ git clone https://github.com/cabooster/UDMT
+   $ conda activate udmt
+   $ git clone https://github.com/cabooster/UDMT.git
    $ cd UDMT/
    ```
 
@@ -116,7 +109,7 @@ If you would like to try the GUI with a smaller dataset first, we provide **demo
 - When creating a project, you can select the folder containing the demo video to import it.
 - If you want to skip the **Network Training** process, place the downloaded model into the `your_project_path/models` folder before running the **Analyze Video** step.
 
-Below is the tutorial video for the GUI. For detailed instructions on installing and using the GUI, please visit [**our project page**](https://cabooster.github.io/UDMT/Tutorial/).
+Below is the tutorial video for the GUI. For detailed instructions on installing and using the GUI, please visit [**our website**](https://cabooster.github.io/UDMT/Tutorial/).
 
 [![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/GUI-video2.png)](https://youtu.be/7rkpVTawpBU "Video Title")
 
@@ -140,14 +133,15 @@ More demo videos are presented on [our website](https://cabooster.github.io/UDMT
 
 If you use this code, please cite the companion paper where the original method appeared: 
 
-- Xinyang Li, Yixin Li, Yiliang Zhou, et al. Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit. Nat. Biotechnol. (2022). [https://doi.org/10.1038/s41587-022-01450-8](https://www.nature.com/articles/s41587-022-01450-8)
+- Yixin Li, Xinyang Li, Qi Zhang, et al. Unsupervised multi-animal tracking for quantitative ethology. bioRxiv (2025). [https://doi.org/10.1101/2025.01.23.634625](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1)
 
 ```
-@article {li2022realtime,
-  title = {Real-time denoising enables high-sensitivity fluorescence time-lapse imaging beyond the shot-noise limit},
-  author = {Li, Xinyang and Li, Yixin and Zhou, Yiliang and Wu, Jiamin and Zhao, Zhifeng and Fan, Jiaqi and Deng, Fei and Wu, Zhaofa and Xiao, Guihua and He, Jing and Zhang, Yuanlong and Zhang, Guoxun and Hu, Xiaowan and Chen, Xingye and Zhang, Yi and Qiao, Hui and Xie, Hao and Li, Yulong and Wang, Haoqian and Fang, Lu and Dai, Qionghai},
-  journal={Nature Biotechnology},
-  year={2022},
-  publisher={Nature Publishing Group}
+@article {Li2025.01.23.634625,
+ title = {Unsupervised multi-animal tracking for quantitative ethology},
+ author = {Li, Yixin and Li, Xinyang and Zhang, Qi and Zhang, Yuanlong and Fan, Jiaqi and Lu, Zhi and Li, Ziwei and Wu, Jiamin and Dai, Qionghai},
+ journal = {bioRxiv}
+ year = {2025},
+ publisher = {Cold Spring Harbor Laboratory},
+ doi = {10.1101/2025.01.23.634625}
 }
 ```

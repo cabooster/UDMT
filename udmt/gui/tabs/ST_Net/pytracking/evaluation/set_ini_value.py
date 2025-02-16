@@ -1,3 +1,4 @@
+import math
 import os
 import cv2
 import cv2 as cv
@@ -18,6 +19,18 @@ def _read_image(image_file: str):
 
         resized_image = cv2.resize(im, (new_width, new_height))
         return cv.cvtColor(resized_image, cv.COLOR_BGR2RGB)
+
+def find_large_values(area_list, ratio_threshold=3):
+    results = []
+    for i in range(len(area_list)):
+        for j in range(len(area_list)):
+            if i != j:
+                if area_list[i] >= ratio_threshold * area_list[j]:
+                    results.append((i, j))
+                elif area_list[j] >= ratio_threshold * area_list[i]:
+                    results.append((j, i))
+
+    return results
 def set_ini_value(animal_species,img_name_list,start_point_corr,object_num,bg_path):
     n = 0
     point_size = 3
@@ -82,73 +95,51 @@ def set_ini_value(animal_species,img_name_list,start_point_corr,object_num,bg_pa
     # Extract numbers that appear only once
     unique_numbers = [num for num, count in counter.items() if count == 1]
     area_pre_ani_list = [a / b if b != 0 else 'undefined' for a, b in zip(area_list, count_list)]
+    #######################
+    large_values_result = find_large_values(area_pre_ani_list)
+    large_id = None
+    if large_values_result:
+        animal_species = 3
+        # print(f"Found values with 3x difference at indices: {large_values_result}")
+        large_id = {x[0] for x in large_values_result}
+        large_id = list(large_id)
+        # print(large_id)
+
+
     mean_value = statistics.mean(area_pre_ani_list)
     area_sum_list = []
     target_size_list = []
+    large_size = None
     if len(unique_numbers) != 0:
         for id_ in unique_numbers:
-            area_sum_list.append(area_mul[id_])
-            st = stats[id_]
-            cv2.rectangle(im_show, (st[0], st[1]), (st[0]+st[2], st[1]+st[3]), (0, 255, 0), 3)
-            target_size_list.append(st[2])
-            target_size_list.append(st[3])
-    if print_flag:
-        print('area_in_first_frame',mean_value)
+            if animal_species != 3:
+                area_sum_list.append(area_mul[id_])
+                st = stats[id_]
+                cv2.rectangle(im_show, (st[0], st[1]), (st[0]+st[2], st[1]+st[3]), (0, 255, 0), 3)
+                target_size_list.append(st[2])
+                target_size_list.append(st[3])
+            else:
+                if id_ not in [target_class_list[i] for i in large_id]:
+                    area_sum_list.append(area_mul[id_])
+                    st = stats[id_]
+                    cv2.rectangle(im_show, (st[0], st[1]), (st[0] + st[2], st[1] + st[3]), (0, 255, 0), 3)
+                    target_size_list.append(st[2])
+                    target_size_list.append(st[3])
+                else:
+                    st = stats[id_]
+                    large_size = math.sqrt(st[2]**2 + st[3]**2)
+
+
     target_sz_ini = np.mean(target_size_list)
     target_sz_uniform = np.max(target_size_list)
     area_mean = sum(area_sum_list) / len(area_sum_list)
-    # target_sz_ini_ = np.mean(target_size_list_)  # target_sz_ini_
-    # print('target_sz_ini (mean target_size)__', target_sz_ini_)
-    # # print('target_sz_uniform (max target_size)', target_sz_uniform)
-    #
-    # print('area mean__', mean_value, 'or', median_value)
-
-    ###############################################################
-
-
-    # print('area_in_first_frame',np.median(area_mul[1:]))
-    area_in_first_frame = mean_value
-    # area_in_first_frame = np.median(area_mul[1:]) #3220 1874 9846 np.median(area_mul[1:])
-    area_rank = -2
-
-    # if target_class != 0:
-    #     if (area_mul[target_class] < area_in_first_frame * upper_thresh) & (area_mul[target_class] > area_in_first_frame * down_thresh):
-    #         print(area_mul[target_class])
-    #         centroids_refine = centroids[target_class].squeeze()
-    #         cv2.circle(im_show, (int(centroids_refine[0]), int(centroids_refine[1])), point_size, (0, 0, 0), 6)
-    #
-    #         ####### refine
-    #
-    #         print('refine successfully!!')
-    #     else:
-    #         print('cross area cannot refine!!')
-    # else:
-    #     print('warning: target_pos not in any area..')
-    #####################
-    # area_sum = []
-    # sort_area = np.sort(area_mul)
-    # print(sort_area)
-    # target_size_list = []
-    # for i in range(area_mul.shape[0]):
-    #     if (area_mul[i] < area_in_first_frame * upper_thresh) & (area_mul[i] > area_in_first_frame * down_thresh):
-    #         centroids_ = centroids[i].squeeze()
-    #         cv2.circle(im_show, (int(centroids_[0]), int(centroids_[1])), point_size, (255, 0, 255), thickness)
-    #         print('{:.2f},{:.2f},55,55'.format(centroids_[0],centroids_[1]))
-    #         area_sum.append(area_mul[i])
-    #         st = stats[i]
-    #         cv2.rectangle(im_show, (st[0], st[1]), (st[0]+st[2], st[1]+st[3]), (0, 255, 0), 3)
-    #         target_size_list.append(st[2])
-    #         target_size_list.append(st[3])
-    # if len(target_size_list) != 0:
-    #     target_sz_ini = np.mean(target_size_list)
-    #     target_sz_uniform = np.max(target_size_list)
-    #     area_mean = sum(area_sum) / len(area_sum)
-    # else:
-    #     raise ValueError('len(target_size_list) != 0!!!!!!you should set area your self!!')
-    #     area_in_first_frame = 10065
-    #     target_sz_ini = np.sqrt(area_in_first_frame)
-    #     target_sz_uniform = np.sqrt(area_in_first_frame)
-    #     area_mean = area_in_first_frame
+    if animal_species!= 3:
+        area_in_first_frame = mean_value
+    else:
+        filtered_area_list = [area_pre_ani_list[i] for i in range(len(area_pre_ani_list)) if i not in large_id]
+        area_in_first_frame = statistics.mean(filtered_area_list)
+    if print_flag:
+        print('area_in_first_frame', area_in_first_frame)
     if print_flag:
         print('target_sz_ini (mean target_size)', target_sz_ini)
         # print('target_sz_uniform (max target_size)', target_sz_uniform)
@@ -163,7 +154,7 @@ def set_ini_value(animal_species,img_name_list,start_point_corr,object_num,bg_pa
         print('kernel == 0')
         erode_flag = False
     if animal_species == 3:
-        kernel = 12
+        kernel = kernel + 5
     
     if erode_flag == True:
         if print_flag:
@@ -193,4 +184,4 @@ def set_ini_value(animal_species,img_name_list,start_point_corr,object_num,bg_pa
         cv2.imshow("result after process", im_show2)
         cv2.waitKey(0)
     
-    return target_sz_ini, target_sz_uniform, area_in_first_frame, kernel, area_mean
+    return target_sz_ini, target_sz_uniform, area_in_first_frame, kernel, area_mean, large_id, animal_species, large_size

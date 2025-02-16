@@ -739,7 +739,7 @@ class TrDiMP(BaseTracker):
 
         scores_hn = scores
         if self.output_window is not None and self.params.get('perform_hn_without_windowing', False):
-            print('!')
+            # print('!')
             scores_hn = scores.clone()
             scores *= self.output_window
 
@@ -755,10 +755,10 @@ class TrDiMP(BaseTracker):
             # print(self.frame_num,'not_found')
             return translation_vec1, scale_ind, scores_hn, 'not_found'
         if max_score1.item() < self.params.get('uncertain_threshold', -float('inf')):
-            print(self.frame_num,'uncertain1')
+            # print(self.frame_num,'uncertain1')
             return translation_vec1, scale_ind, scores_hn, 'uncertain'
         if max_score1.item() < self.params.get('hard_sample_threshold', -float('inf')):
-            print(self.frame_num,'hard_negative1')
+            # print(self.frame_num,'hard_negative1')
             return translation_vec1, scale_ind, scores_hn, 'hard_negative'
 
         # Mask out target neighborhood
@@ -786,21 +786,21 @@ class TrDiMP(BaseTracker):
             disp_threshold = self.params.dispalcement_scale * math.sqrt(sz[0] * sz[1]) / 2
 
             if disp_norm2 > disp_threshold and disp_norm1 < disp_threshold:
-                print(self.frame_num,'hard_negative2')
+                # print(self.frame_num,'hard_negative2')
                 return translation_vec1, scale_ind, scores_hn, 'hard_negative'
             if disp_norm2 < disp_threshold and disp_norm1 > disp_threshold:
-                print(self.frame_num,'hard_negative2')
+                # print(self.frame_num,'hard_negative2')
                 return translation_vec2, scale_ind, scores_hn, 'hard_negative'
             if disp_norm2 > disp_threshold and disp_norm1 > disp_threshold:
-                print(self.frame_num,'uncertain2')
+                # print(self.frame_num,'uncertain2')
                 return translation_vec1, scale_ind, scores_hn, 'uncertain'
 
             # If also the distractor is close, return with highest score
-            print(self.frame_num,'uncertain3')
+            # print(self.frame_num,'uncertain3')
             return translation_vec1, scale_ind, scores_hn, 'uncertain'
 
         if max_score2 > self.params.hard_negative_threshold * max_score1 and max_score2 > self.params.target_not_found_threshold:
-            print(self.frame_num,'hard_negative3')
+            # print(self.frame_num,'hard_negative3')
             return translation_vec1, scale_ind, scores_hn, 'hard_negative'
 
 
@@ -1233,8 +1233,8 @@ class TrDiMP(BaseTracker):
 
         area_box = output_boxes[:,2] * output_boxes[:,3]
         keep_ind_area = area_box > init_box[2] * init_box[3] * 0.8
-        if False in keep_ind_area:
-            print(self.frame_num,'!!')
+        # if False in keep_ind_area:
+        #     print(self.frame_num,'!!')
         output_boxes = output_boxes[keep_ind_area,:]
         output_iou = output_iou[keep_ind_area]
         ################
