@@ -37,7 +37,7 @@ For more details, please see the companion paper where the method first appeared
 
 #### Environment Configuration 
 
-1. Create a virtual environment and install PyTorch. **In the 3rd step, please select the correct Pytorch version that matches your CUDA version from [https://pytorch.org/get-started/previous-versions/](https://pytorch.org/get-started/previous-versions/).** 
+1. Create a virtual environment and install PyTorch.
 
    ```
    $ conda create -n udmt python=3.8
