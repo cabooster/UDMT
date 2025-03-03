@@ -28,9 +28,9 @@ For more details, please see the companion paper where the method first appeared
 ## Installation
 ### 1. For Linux (Recommended)
 
-#### Our Environment 
+#### Environment 
 
-* Ubuntu 20.04 (or newer)
+* Ubuntu 20.04 + (required)
 * Python 3.8
 * Pytorch 1.7.1
 * NVIDIA GPU (GeForce RTX 3090) + CUDA (11.7)
@@ -55,7 +55,7 @@ For more details, please see the companion paper where the method first appeared
 
 ### 2. For Windows
 
-#### Our Environment 
+#### Environment 
 
 * Windows 10
 * Python 3.8
