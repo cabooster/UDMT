@@ -156,7 +156,7 @@ UDMT
 
    **Max Training Epochs**: The default is 20 epochs. This value doesn't need to be changed unless necessary.
 
-3. Click the **Train Network** button to start the training process.
+3. Click the **Train Network** button to start the training process. Note: Due to thread occupation issues during network training, the training phase output logs will be displayed in the console instead of the GUI log window.
 
 <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-train.png?raw=true"  width="700" align="middle"  style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
