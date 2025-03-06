@@ -10,7 +10,7 @@ import numpy as np
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy
 
 from udmt.gui import BASE_DIR
 from udmt.gui.tabs.ST_Net.pytracking.run_tracker import run_tracking
@@ -27,7 +27,7 @@ from udmt.gui.components import (
     _create_grid_layout,
     _create_label_widget,
     _create_horizontal_layout,
-    _create_vertical_layout,
+    _create_vertical_layout, LogWidget,
 )
 
 import udmt
@@ -172,6 +172,12 @@ class AnalyzeVideos(DefaultTab):
         self.video_selection_widget = VideoSelectionWidget(self.root, self)
         self.main_layout.addWidget(self.video_selection_widget)
         self._set_page()
+        ##############################
+        spacer = QSpacerItem(150, 400, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.main_layout.addItem(spacer)
+        self.log_widget = LogWidget(self.root, self)
+        # self.main_layout.addStretch()
+        self.main_layout.addWidget(self.log_widget)
 
     @property
     def files(self):
@@ -193,6 +199,7 @@ class AnalyzeVideos(DefaultTab):
         self.analyze_videos_btn = QtWidgets.QPushButton("Analyze Videos")
         self.analyze_videos_btn.setMinimumWidth(150)
         self.analyze_videos_btn.clicked.connect(self.analyze_videos)
+        self.analyze_videos_btn.setToolTip("Click to start tracking")
 
         self.main_layout.addWidget(self.analyze_videos_btn, alignment=Qt.AlignRight)
 
@@ -201,6 +208,7 @@ class AnalyzeVideos(DefaultTab):
         self.toggle_videos_btn = QtWidgets.QPushButton("Show Videos")
         self.toggle_videos_btn.setCheckable(True)
         self.toggle_videos_btn.setChecked(False)
+        self.toggle_videos_btn.setToolTip("Click to expand the visualization window.")
 
         self.toggle_videos_btn.setFixedSize(120, 40)
         self.toggle_videos_btn.toggled.connect(self.toggle_video_display)
@@ -251,8 +259,9 @@ class AnalyzeVideos(DefaultTab):
         self.resize_spin.setSingleStep(0.1)
         self.resize_spin.setValue(0.8)
         self.resize_spin.setFixedSize(80, 35)
-
-
+        self.resize_spin.valueChanged.connect(self.log_resize_coefficient)
+        self.resize_spin.setToolTip(
+            "Set the resize coefficient to scale the original video, used to improve processing speed when the resolution is high.")
 
         downsample_label = QtWidgets.QLabel("Downsample factor")
         self.downsample_spin = QtWidgets.QSpinBox()
@@ -261,7 +270,9 @@ class AnalyzeVideos(DefaultTab):
         self.downsample_spin.setSingleStep(1)
         self.downsample_spin.setValue(1)
         self.downsample_spin.setFixedSize(80, 35)
-
+        self.downsample_spin.valueChanged.connect(self.log_downsample_rate)
+        self.downsample_spin.setToolTip(
+            "Set the downsample factor to reduce the frame rate of the original video, used to improve processing speed when the frame rate is high.")
 
         # tmp_layout = _create_horizontal_layout(margins=(0, 0, 0, 0))
 
@@ -271,6 +282,7 @@ class AnalyzeVideos(DefaultTab):
         self.filter_size_spin.setMinimum(2)
         self.filter_size_spin.setMaximum(100)
         self.filter_size_spin.setValue(5)
+        self.filter_size_spin.setToolTip("Set the filter size for trajectory smoothing during post-processing.")
         self.filter_size_spin.valueChanged.connect(self.log_filter_size)
 
         # layout.addWidget(self.test_spin, 0, 1)
@@ -281,6 +293,39 @@ class AnalyzeVideos(DefaultTab):
         layout.addWidget(filter_size_label, 0, 6)
         layout.addWidget(self.filter_size_spin, 0, 7)
 
+
+        self.root.downsample_value_.connect(self.sync_downsample_value)
+        self.root.resize_value_.connect(self.sync_resize_value)
+
+
+        self.downsample_spin.valueChanged.connect(self.emit_downsample_value)
+        self.resize_spin.valueChanged.connect(self.emit_resize_value)
+
+    def emit_downsample_value(self, value):
+        self.root.downsample_value_.emit(value)
+
+    def emit_resize_value(self, value):
+        self.root.resize_value_.emit(value)
+
+    def sync_downsample_value(self, value):
+
+        if self.downsample_spin.value() != value:
+            self.downsample_spin.blockSignals(True)
+            self.downsample_spin.setValue(value)
+            self.downsample_spin.blockSignals(False)
+
+    def sync_resize_value(self, value):
+
+        if self.resize_spin.value() != value:
+            self.resize_spin.blockSignals(True)
+            self.resize_spin.setValue(value)
+            self.resize_spin.blockSignals(False)
+
+    def log_resize_coefficient(self, value):
+        print(f"Resize coefficient adjusted to: {value:.1f}")
+
+    def log_downsample_rate(self, value):
+        print(f"Downsample rate adjusted to: {value:.1f}")
 
     def on_test_spin_changed(self, value):
         """当 QDoubleSpinBox 的值改变时更新共享状态"""
@@ -451,7 +496,7 @@ class AnalyzeVideos(DefaultTab):
         if not cap.isOpened():
             raise ValueError(f"Unable to open video: {video_name}")
         fps = cap.get(cv2.CAP_PROP_FPS)
-        print("The selected video was recorded with ", round(fps, 2), "fps")
+        print(f'The selected video was recorded with {round(fps, 2)} fps')
         success, first_image = cap.read()
         width = int(first_image.shape[1] * scale_percent)
         height = int(first_image.shape[0] * scale_percent)
@@ -508,13 +553,13 @@ class AnalyzeVideos(DefaultTab):
                                        'downsample_factor': self.downsample_spin.value(),#self.downsample_spin.value()
                                        'frame_rate': frame_rate,
                                        'frame_num': 4000,##########
-                                       'search_scale_range': np.arange(1.5, 3, 0.5),
+                                       'search_scale_range': np.arange(1.5, 3, 0.5),# 1.5, 3, 0.5
                                        'target_sz_bias_range': [-0.1, 0, 0.1],  # [-0.2, -0.1, 0, 0.1, 0.2]
                                        'status_flag': 2,  # train_param_iter 1 test_param_iter 2 test 3
                                        'evaluation_metric': [],
                                        'is_concave': self.root.cfg['is_concave']
                                        }
-                print("\033[31mAutomatic parameter tuning begins:\033[0m")
+                print("Automatic parameter tuning begins:")
                 print('run_tracking_params:', run_tracking_params)
                 run_tracking(run_tracking_params)
                 ######################################################## best_param_path_find
@@ -532,7 +577,7 @@ class AnalyzeVideos(DefaultTab):
                 run_tracking_params['target_sz_bias_range'] = [loaded_results_list[-1]['target_sz_bias']]
                 run_tracking_params['status_flag'] = 3
                 run_tracking_params['evaluation_metric'] = []
-                print("\033[31mTracking begins\033[0m")
+                print("Tracking begins:")
                 print(run_tracking_params)
                 ######################################################
                 self.video_display_label1["container"].findChild(QtWidgets.QLabel).setText("Forward Tracking Visualization")

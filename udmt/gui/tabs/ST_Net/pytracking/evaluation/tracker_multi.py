@@ -7,6 +7,7 @@ import json
 import os
 import pickle
 import random
+import sys
 
 import cv2
 import numpy as np
@@ -470,7 +471,8 @@ class Tracker:
             search_period = True
         else:
             search_period = False
-        # for frame_num, frame_path in enumerate(seq.frames[1:test_img_num], start=1):
+
+
         for frame_num, frame_path in enumerate(tqdm(seq.frames[1:test_img_num], desc="Processing Frames"), start=1):
             show_text = str(frame_num)
             # while True:

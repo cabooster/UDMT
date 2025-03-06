@@ -73,7 +73,7 @@ class BaseTrainer:
             os.remove(first_file)
             # print(f"Deleted file: {first_file}")
 
-    def train(self, max_epochs,max_save_snapshots,pretrained_model, load_latest=False, fail_safe=True):
+    def train(self, max_epochs,max_save_snapshots,pretrained_model,logger, load_latest=False, fail_safe=True):
         """Do training for the given number of epochs.
         args:
             max_epochs - Max number of training epochs,
@@ -89,7 +89,8 @@ class BaseTrainer:
                 if load_latest:
                     # print(pretrained_model) 
                     self.load_checkpoint(checkpoint=pretrained_model)
-                    print('Loading pretrained checkpoint:', os.path.normpath(pretrained_model))
+                    logger.info(f'Loading pretrained checkpoint: {os.path.normpath(pretrained_model)}')
+                    # print(f'Loading pretrained checkpoint: {os.path.normpath(pretrained_model)}')
 
                               
                 # for param_id in range(6):
@@ -99,7 +100,7 @@ class BaseTrainer:
                     # print("\033[0;31m", 'epoch={}'.format(epoch), "\033[0m")
                     self.epoch = epoch
 
-                    self.train_epoch()
+                    self.train_epoch(logger)
 
                     if self.lr_scheduler is not None:
                         self.lr_scheduler.step()
@@ -115,16 +116,18 @@ class BaseTrainer:
                     #           "\033[0m")
             except:
                 print('Training crashed at epoch {}'.format(epoch))
+                logger.info('Training crashed at epoch {}'.format(epoch))
                 if fail_safe:
                     self.epoch -= 1
                     load_latest = True
-                    print('Traceback for the error!')
+                    # print('Traceback for the error!')
                     print(traceback.format_exc())
-                    print('Restarting training from last epoch ...')
+                    # print('Restarting training from last epoch ...')
                 else:
                     raise
 
         print('Finished training!')
+        logger.info('Finished training!')
 
 
     def train_epoch(self):
@@ -191,6 +194,7 @@ class BaseTrainer:
                 checkpoint_path = checkpoint_list[-1]
             else:
                 print('No matching checkpoint file found')
+
                 return
         elif isinstance(checkpoint, int):
             # Checkpoint is the epoch number

@@ -128,6 +128,9 @@ def set_ini_value(animal_species,img_name_list,start_point_corr,object_num,bg_pa
                 else:
                     st = stats[id_]
                     large_size = math.sqrt(st[2]**2 + st[3]**2)
+    else:
+        target_size_list = np.sqrt(area_pre_ani_list)
+        area_sum_list = area_pre_ani_list
 
 
     target_sz_ini = np.mean(target_size_list)

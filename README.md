@@ -3,6 +3,16 @@
 
 ### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1)
 
+## Updates
+<details>
+  <summary>:triangular_flag_on_post:2025/03/06: Added a log window and tooltips in the GUI. </summary>
+  
+A log window has been added at the bottom of the GUI to display runtime messages.  
+Tooltips have been added for buttons and the property panel to improve usability.  
+
+  <summary>:triangular_flag_on_post:2025/02/16: Fixed some bugs to improve stability. </summary>
+</details>
+
 ## Contents
 
 - [Overview](#overview)
@@ -28,21 +38,21 @@ For more details, please see the companion paper where the method first appeared
 ## Installation
 ### 1. For Linux (Recommended)
 
-#### Our Environment 
+#### Environment 
 
-* Ubuntu 20.04 (or newer)
+* Ubuntu 20.04 + (required)
 * Python 3.8
 * Pytorch 1.7.1
 * NVIDIA GPU (GeForce RTX 3090) + CUDA (11.7)
 
 #### Environment Configuration 
 
-1. Create a virtual environment and install PyTorch. **In the 3rd step, please select the correct Pytorch version that matches your CUDA version from [https://pytorch.org/get-started/previous-versions/](https://pytorch.org/get-started/previous-versions/).** 
+1. Create a virtual environment and install PyTorch.
 
    ```
    $ conda create -n udmt python=3.8
    $ conda activate udmt
-   $ conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch
+   $ pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
    $ sudo apt-get install ninja-build
    $ sudo apt-get install libturbojpeg
    ```
@@ -55,7 +65,7 @@ For more details, please see the companion paper where the method first appeared
 
 ### 2. For Windows
 
-#### Our Environment 
+#### Environment 
 
 * Windows 10
 * Python 3.8

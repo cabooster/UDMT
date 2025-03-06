@@ -81,14 +81,16 @@ class App(QWidget):
         self.commit_button.clicked.connect(self.on_commit)
 
         self.forward_run_button = QPushButton('Forward Propagate')
+        self.forward_run_button.setToolTip("After selecting the target animal, click for foreground extraction.")
         self.forward_run_button.clicked.connect(self.on_forward_propagation)
-        self.forward_run_button.setMinimumWidth(200)
+        self.forward_run_button.setMinimumWidth(280)
 
-        self.backward_run_button = QPushButton('Backward Propagate')
-        self.backward_run_button.clicked.connect(self.on_backward_propagation)
-        self.backward_run_button.setMinimumWidth(200)
+        # self.backward_run_button = QPushButton('Backward Propagate')
+        # self.backward_run_button.clicked.connect(self.on_backward_propagation)
+        # self.backward_run_button.setMinimumWidth(200)
 
         self.reset_button = QPushButton('Reset Frame')
+        self.reset_button.setToolTip("Clear the selected foreground area of the current frame.")
         self.reset_button.clicked.connect(self.on_reset_mask)
 
         # LCD
@@ -97,7 +99,7 @@ class App(QWidget):
         # self.lcd.setMaximumHeight(28)
         # self.lcd.setMaximumWidth(120)
         self.lcd.setMinimumHeight(28)
-        self.lcd.setMinimumWidth(150)
+        self.lcd.setMinimumWidth(130)
         self.lcd.setText('{: 4d} / {: 4d}'.format(0, self.num_frames-1))
         self.lcd.setAlignment(Qt.AlignCenter)
 
@@ -157,7 +159,7 @@ class App(QWidget):
         self.main_canvas.setSizePolicy(QSizePolicy.Expanding,
                 QSizePolicy.Expanding)
         self.main_canvas.setAlignment(Qt.AlignCenter)
-        self.main_canvas.setMinimumSize(100, 100)
+        self.main_canvas.setMinimumSize(200, 200)#100
 
         self.main_canvas.mousePressEvent = self.on_mouse_press
         self.main_canvas.mouseMoveEvent = self.on_mouse_motion
@@ -247,7 +249,7 @@ class App(QWidget):
         navi.addStretch(1)
         # navi.addWidget(self.commit_button)
         navi.addWidget(self.forward_run_button)
-        navi.addWidget(self.backward_run_button)
+        # navi.addWidget(self.backward_run_button)
 
         # Drawing area, main canvas and minimap
         draw_area = QHBoxLayout()
@@ -266,8 +268,8 @@ class App(QWidget):
         # Minimap zooming
         minimap_ctrl = QHBoxLayout()
         minimap_ctrl.setAlignment(Qt.AlignTop)
-        minimap_ctrl.addWidget(self.zoom_p_button)
-        minimap_ctrl.addWidget(self.zoom_m_button)
+        # minimap_ctrl.addWidget(self.zoom_p_button)
+        # minimap_ctrl.addWidget(self.zoom_m_button)
         ##########################################
 
         minimap_area.addLayout(minimap_ctrl)
@@ -281,7 +283,7 @@ class App(QWidget):
         minimap_area.addLayout(self.long_mem_gauge_layout)
         minimap_area.addLayout(self.gpu_mem_gauge_layout)
         minimap_area.addLayout(self.torch_mem_gauge_layout)
-        minimap_area.addWidget(self.clear_mem_button)
+        # minimap_area.addWidget(self.clear_mem_button)
         minimap_area.addLayout(self.work_mem_min_layout)
         minimap_area.addLayout(self.work_mem_max_layout)
         minimap_area.addLayout(self.long_mem_max_layout)
@@ -367,11 +369,11 @@ class App(QWidget):
         self.load_current_image_mask()
         self.show_current_frame()
         self.show()
-        self.console_push_text('--------------------------------------------------')
+        self.console_push_text('-------------------------------------------------------------')
         self.console_push_text('Welcome to UDMT - Tracking Initialization GUI.')
         self.console_push_text('Step 1: Click the center of each animal you want to track at frame 0.')
         self.console_push_text('Step 2: Press "Forward Propagate" button for foreground extraction.')
-        self.console_push_text('--------------------------------------------------')
+        self.console_push_text('-------------------------------------------------------------')
         self.initialized = True
 
     def resizeEvent(self, event):
@@ -575,7 +577,7 @@ class App(QWidget):
             self.propagating = False
         else:
             self.propagate_fn = self.on_next_frame
-            self.backward_run_button.setEnabled(False)
+            # self.backward_run_button.setEnabled(False)
             self.forward_run_button.setText('Pause Propagation')
             self.on_propagation()
 
@@ -586,16 +588,16 @@ class App(QWidget):
         else:
             self.propagate_fn = self.on_prev_frame
             self.forward_run_button.setEnabled(False)
-            self.backward_run_button.setText('Pause Propagation')
+            # self.backward_run_button.setText('Pause Propagation')
             self.on_propagation()
 
     def on_pause(self):
         self.propagating = False
         self.forward_run_button.setEnabled(True)
-        self.backward_run_button.setEnabled(True)
+        # self.backward_run_button.setEnabled(True)
         self.clear_mem_button.setEnabled(True)
         self.forward_run_button.setText('Forward Propagate')
-        self.backward_run_button.setText('Backward Propagate')
+        # self.backward_run_button.setText('Backward Propagate')
         self.console_push_text('Propagation stopped.')
 
     def on_propagation(self):
@@ -644,7 +646,7 @@ class App(QWidget):
                 "Tracking initialization has been successfully completed!",
                 QMessageBox.Ok
             )
-        print("Tracking initialization has been successfully completed! Move to 'UDMT - Create Training Dataset'.")
+            print("Tracking initialization has been successfully completed! Move to 'UDMT - Create Training Dataset'.")
 
     def pause_propagation(self):
         self.propagating = False

@@ -5,14 +5,14 @@ from pathlib import Path
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy
 
 from udmt.gui.components import (
     DefaultTab,
     ShuffleSpinBox,
     _create_grid_layout,
     _create_label_widget,
-    VideoSelectionWidget
+    VideoSelectionWidget, LogWidget
 )
 from udmt.gui.widgets import ConfigEditor
 
@@ -70,10 +70,18 @@ class TrainNetwork(DefaultTab):
 
         self.ok_button = QtWidgets.QPushButton("Train Network")
         self.ok_button.setMinimumWidth(150)
+        self.ok_button.setToolTip("Click to start training the model.")
         self.ok_button.clicked.connect(self.train_network)
 
         # self.main_layout.addWidget(self.edit_posecfg_btn, alignment=Qt.AlignRight)
         self.main_layout.addWidget(self.ok_button, alignment=Qt.AlignRight)
+
+        ##############################
+        spacer = QSpacerItem(150, 400, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.main_layout.addItem(spacer)
+        self.log_widget = LogWidget(self.root, self)
+        # self.main_layout.addStretch()
+        self.main_layout.addWidget(self.log_widget)
 
 
 
@@ -84,6 +92,8 @@ class TrainNetwork(DefaultTab):
         self.batch_size_spin.setMinimum(2)
         self.batch_size_spin.setMaximum(100)
         self.batch_size_spin.setValue(8)
+        self.batch_size_spin.setToolTip(
+            "Adjust the batch size based on GPU usage. If you encounter a 'CUDA out of memory' error, try reducing the batch size.")
         self.batch_size_spin.valueChanged.connect(self.log_batch_size)
         # num workers
         num_workers_label = QtWidgets.QLabel("Num of workers")
@@ -92,12 +102,16 @@ class TrainNetwork(DefaultTab):
         self.num_workers_spin.setMaximum(100)
         self.num_workers_spin.setValue(0)
         self.num_workers_spin.valueChanged.connect(self.log_batch_size)
+        self.num_workers_spin.setToolTip(
+            "Set the number of workers for parallel processing. On Windows, set to 0; on Linux, set to 4, 8, or higher for faster performance.")
         # Max iterations
         max_epoches_label = QtWidgets.QLabel("Maximum epoches")
         self.max_epoches_spin = QtWidgets.QSpinBox()
         self.max_epoches_spin.setMinimum(1)
         self.max_epoches_spin.setMaximum(100)
         self.max_epoches_spin.setValue(20)
+        self.max_epoches_spin.setToolTip(
+            "Set the maximum number of epochs for training. Typically, 20 epochs are sufficient for convergence to a good result.")
         self.max_epoches_spin.valueChanged.connect(self.log_max_iters)
 
         # Max number snapshots to keep
@@ -157,11 +171,15 @@ class TrainNetwork(DefaultTab):
                                    'epoch_num': self.max_epoches_spin.value(),
                                    'batch_size': self.batch_size_spin.value(),
                                    'max_save_snapshots': 3,
+                                   'logger': self.root.logger
                                    }
-            print('run_training_params:', run_training_params)
+            print(f'run_training_params: {run_training_params}')
+            self.root.logger.info(f'run_training_params: {run_training_params}')
             print('Start training...')
+            self.root.logger.info('Start training...')
             run_training_process(run_training_params)
             print("Move to 'UDMT - Analyze Video' for animal tracking.")
+            self.root.logger.info("Move to 'UDMT - Analyze Video' for animal tracking.")
             ##############################################
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)

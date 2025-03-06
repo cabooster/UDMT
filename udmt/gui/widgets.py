@@ -188,6 +188,22 @@ class StreamWriter:
 
     def flush(self):
         pass
+class StreamWriter_new(QtCore.QObject):
+
+    message_written = QtCore.Signal(str)
+
+    def __init__(self, main_window):
+        super().__init__()
+        self.main_window = main_window
+
+    def write(self, message):
+
+        if message.strip():
+            self.main_window.log_message_.emit(message.strip())
+
+    def flush(self):
+
+        pass
 
 
 class StreamReceiver(QtCore.QThread):

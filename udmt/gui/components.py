@@ -4,8 +4,12 @@ Author: Yixin Li
 https://github.com/cabooster/UDMT
 Licensed under Non-Profit Open Software License 3.0
 """
-from PySide6 import QtWidgets
+import os
+
+from PySide6 import QtWidgets, QtCore, QtGui
 from PySide6.QtCore import Qt
+from tqdm import tqdm
+
 from udmt.gui.udmt_params import UDMTParams
 from udmt.gui.widgets import ConfigEditor
 
@@ -86,8 +90,82 @@ class BodypartListWidget(QtWidgets.QListWidget):
     def update_selected_bodyparts(self):
         self.selected_bodyparts = [item.text() for item in self.selectedItems()]
         self.root.logger.info(f"Selected bodyparts:\n\t{self.selected_bodyparts}")
+############################################
+class LogWidget(QtWidgets.QWidget):
+    def __init__(self, root: QtWidgets.QMainWindow, parent: QtWidgets.QWidget):
+        super(LogWidget, self).__init__(parent)
+
+        self.root = root
+        self.parent = parent
+
+        self._init_layout()
+
+        self.root.log_message_.connect(self.update_log)
+
+    def _init_layout(self):
+        layout = QtWidgets.QVBoxLayout()
+        # layout = _create_horizontal_layout()
+        log_label = QtWidgets.QLabel("Logs")
+        log_label.setStyleSheet("margin-bottom: 0px; padding-bottom: 0px;")
+        layout.addWidget(log_label)
+
+        self.text_log = QtWidgets.QTextEdit()
+        self.text_log.setReadOnly(True)
+        self.text_log.setStyleSheet("background-color: #FFFFFF; color: #000000; margin-top: 0px; padding-top: 0px;")
+        #self.text_log.setFixedHeight(100)
+        # self.text_log.setMinimumHeight(50)
+        # self.text_log.setMinimumWidth(500)
+        self.text_log.setFixedSize(1260, 80)
+        layout.addWidget(self.text_log)
+
+        self.setLayout(layout)
+
+    def update_log(self, message: str):
+
+        self.text_log.append(message)
+
+    def clear_log(self):
+
+        self.text_log.clear()
+        self.root.log("Cleared logs")
+
+class TqdmLogger(QtCore.QObject):
 
 
+    log_signal = QtCore.Signal(str, bool)  # (message, is_tqdm)
+
+    def __init__(self, text_widget):
+        super().__init__()
+        self.text_widget = text_widget
+        self.log_signal.connect(self._update_gui_log)
+        self.last_tqdm_message = ""
+
+    def write(self, message):
+
+        if message.strip():
+            is_tqdm = message.startswith("Processing Frames") or "%" in message
+            self.log_signal.emit(message, is_tqdm)
+
+    def flush(self):
+
+        pass
+
+    def _update_gui_log(self, message, is_tqdm):
+
+        cursor = self.text_widget.textCursor()
+
+        if is_tqdm:
+
+            self.last_tqdm_message = message
+            cursor.movePosition(QtGui.QTextCursor.End)
+            cursor.select(QtGui.QTextCursor.BlockUnderCursor)
+            cursor.removeSelectedText()
+            cursor.insertText(self.last_tqdm_message)
+        else:
+
+            self.text_widget.append(message)
+
+        self.text_widget.setTextCursor(cursor)
 class VideoSelectionWidget(QtWidgets.QWidget):
     def __init__(self, root: QtWidgets.QMainWindow, parent: QtWidgets.QWidget):
         super(VideoSelectionWidget, self).__init__(parent)
@@ -110,6 +188,7 @@ class VideoSelectionWidget(QtWidgets.QWidget):
 
         # Select videos
         self.select_video_button = QtWidgets.QPushButton("Step 1. Select videos")
+        self.select_video_button.setToolTip("Select a video you want to process.")
         self.select_video_button.setMaximumWidth(200)
         self.select_video_button.clicked.connect(self.select_single_video)###241207
         self.root.video_files_.connect(self._update_video_selection)
@@ -147,7 +226,7 @@ class VideoSelectionWidget(QtWidgets.QWidget):
             self.select_video_button.setText("Select videos")
 
     def select_videos(self):
-        cwd = self.root.project_folder
+        cwd = os.path.join(self.root.project_folder, 'videos')
         filenames = QtWidgets.QFileDialog.getOpenFileNames(
             self,
             "Select video(s) to analyze",
@@ -160,7 +239,7 @@ class VideoSelectionWidget(QtWidgets.QWidget):
             self.root.video_files = filenames[0]
 
     def select_single_video(self):
-        cwd = self.root.project_folder
+        cwd = os.path.join(self.root.project_folder, 'videos')
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
             "Select a video to analyze",
@@ -175,6 +254,7 @@ class VideoSelectionWidget(QtWidgets.QWidget):
     def clear_selected_videos(self):
         self.root.video_files = set()
         self.root.logger.info(f"Cleared selected videos")
+
 
 
 class TrainingSetSpinBox(QtWidgets.QSpinBox):

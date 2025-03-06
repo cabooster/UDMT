@@ -92,7 +92,7 @@ def launch_udmt():
     from udmt.gui.window import MainWindow
 
     window = MainWindow(app)
-    window.receiver.start()
+    # window.receiver.start()
     window.show()
     # window.showMaximized()
     splash.finish(window)

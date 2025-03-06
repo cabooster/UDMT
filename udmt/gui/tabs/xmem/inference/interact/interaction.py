@@ -18,12 +18,7 @@ from .interactive_utils import color_map, index_numpy_to_one_hot_torch
 
 
 def save_ndarray_to_txt(file_path, array):
-    """
-    保存 ndarray 到指定的 txt 文件中，覆盖原有内容。
 
-    :param file_path: str, 保存的文件路径
-    :param array: ndarray, 要写入的 NumPy 数组
-    """
     if not isinstance(array, np.ndarray):
         raise ValueError("The input must be a NumPy ndarray.")
 
@@ -243,7 +238,7 @@ class ClickInteraction(Interaction):
 
         # Do the prediction
         pos_clicks_list = np.asarray(self.pos_clicks)
-        print('-------------Selected Points (x, y) in frame ',frame_id,'-------------')
+        print(f'-------------Selected Points (x, y) in frame {frame_id}-------------')
         # print(self.input_label)
         start_pos_array = pos_clicks_list/resize_scale
         #############################

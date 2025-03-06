@@ -41,9 +41,8 @@ class LTRTrainer(BaseTrainer):
             if getattr(self.settings, param, None) is None:
                 setattr(self.settings, param, default_value)
 
-    def cycle_dataset(self, loader):
+    def cycle_dataset(self, loader,logger):
         """Do a cycle of training or validation."""
-
         self.actor.train(loader.training)
         torch.set_grad_enabled(loader.training)
 
@@ -71,13 +70,13 @@ class LTRTrainer(BaseTrainer):
             self._update_stats(stats, batch_size, loader)
 
             # print statistics
-            self._print_stats(i, loader, batch_size)
+            self._print_stats(i, loader, batch_size,logger)
 
-    def train_epoch(self):
+    def train_epoch(self,logger):
         """Do one epoch for each loader."""
         for loader in self.loaders:
             if self.epoch % loader.epoch_interval == 0:
-                self.cycle_dataset(loader)
+                self.cycle_dataset(loader,logger)
 
         self._stats_new_epoch()
         # self._write_tensorboard()
@@ -97,7 +96,7 @@ class LTRTrainer(BaseTrainer):
                 self.stats[loader.name][name] = AverageMeter()
             self.stats[loader.name][name].update(val, batch_size)
 
-    def _print_stats(self, i, loader, batch_size):
+    def _print_stats(self, i, loader, batch_size,logger):
         self.num_frames += batch_size
         current_time = time.time()
         batch_fps = batch_size / (current_time - self.prev_time)
@@ -109,7 +108,8 @@ class LTRTrainer(BaseTrainer):
             for name, val in self.stats[loader.name].items():
                 if (self.settings.print_stats is None or name in self.settings.print_stats) and hasattr(val, 'avg'):
                     print_str += '%s: %.5f  ,  ' % (name, val.avg)
-            print(print_str[:-5])
+            # print(print_str[:-5])
+            logger.info(print_str[:-5])
 
     def _stats_new_epoch(self):
         # Record learning rate

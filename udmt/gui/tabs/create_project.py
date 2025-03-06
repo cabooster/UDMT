@@ -27,6 +27,7 @@ class ProjectCreator(QtWidgets.QDialog):
         self.user_frame = self.lay_out_user_frame()
         self.video_frame = self.lay_out_video_frame()
         self.create_button = QtWidgets.QPushButton("Create")
+        self.create_button.setToolTip("Click to finalize project creation.")
         self.create_button.setDefault(True)
         self.create_button.clicked.connect(self.finalize_project)
         main_layout.addWidget(self.user_frame)
@@ -39,7 +40,9 @@ class ProjectCreator(QtWidgets.QDialog):
         user_frame.setLineWidth(0.5)
 
         proj_label = QtWidgets.QLabel("Project:", user_frame)
+
         self.proj_line = QtWidgets.QLineEdit(self.proj_default, user_frame)
+        self.proj_line.setToolTip("Enter the name of your project.")
         self._default_style = self.proj_line.styleSheet()
         self.proj_line.textEdited.connect(self.update_project_name)
 
@@ -47,8 +50,9 @@ class ProjectCreator(QtWidgets.QDialog):
         # self.exp_line = QtWidgets.QLineEdit(self.exp_default, user_frame)
         # self.exp_line.textEdited.connect(self.update_experimenter_name)
 
-        loc_label =  QtWidgets.QLabel("Location:", user_frame)
+        loc_label = QtWidgets.QLabel("Location:", user_frame)
         self.browse_button = QtWidgets.QPushButton("Browse")
+        self.browse_button.setToolTip("Select a folder to save your project.")
         self.browse_button.clicked.connect(self.on_click)
         self.loc_line = QtWidgets.QLineEdit(self.loc_default, user_frame)
 
@@ -90,6 +94,7 @@ class ProjectCreator(QtWidgets.QDialog):
 
         browse_button = QtWidgets.QPushButton("Browse videos")
         browse_button.clicked.connect(self.browse_videos)
+        browse_button.setToolTip("Select a folder containing the videos you want to process.")
         clear_button = QtWidgets.QPushButton("Clear")
         clear_button.clicked.connect(video_frame.fancy_list.clear)
 

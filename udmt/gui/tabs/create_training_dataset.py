@@ -1,6 +1,7 @@
 
 import json
 import os
+import sys
 from pathlib import Path
 
 import cv2
@@ -8,7 +9,7 @@ import numpy as np
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy
 from tqdm import tqdm
 
 from udmt.gui import BASE_DIR
@@ -20,7 +21,7 @@ from udmt.gui.components import (
     ShuffleSpinBox,
     _create_grid_layout,
     _create_label_widget,
-    VideoSelectionWidget
+    VideoSelectionWidget, LogWidget, TqdmLogger
 )
 # from pytracking.run_tracker import run_tracking
 from udmt.gui.tabs.ST_Net.pytracking.run_tracker import run_tracking
@@ -63,7 +64,6 @@ class CreateTrainingDataset(DefaultTab):
 
         #######################################
         resize_label = _create_label_widget("Resize coefficient")
-        # resize_label = QtWidgets.QLabel("Resize Coefficient")
         horizontal_layout.addWidget(resize_label)
 
         self.resize_spin = QtWidgets.QDoubleSpinBox()
@@ -73,6 +73,8 @@ class CreateTrainingDataset(DefaultTab):
         self.resize_spin.setValue(0.8)
         self.resize_spin.setFixedSize(80, 35)
         self.resize_spin.valueChanged.connect(self.log_resize_coefficient)
+        self.resize_spin.setToolTip(
+            "Set the resize coefficient to scale the original video, used to improve processing speed when the resolution is high.")
         horizontal_layout.addWidget(self.resize_spin)
 
 
@@ -86,15 +88,25 @@ class CreateTrainingDataset(DefaultTab):
         self.downsample_spin.setValue(1)
         self.downsample_spin.setFixedSize(80, 35)
         self.downsample_spin.valueChanged.connect(self.log_downsample_rate)
+        self.downsample_spin.setToolTip(
+            "Set the downsample factor to reduce the frame rate of the original video, used to improve processing speed when the frame rate is high.")
         horizontal_layout.addWidget(self.downsample_spin)
         ##############################
         self.main_layout.addLayout(horizontal_layout)
+
+
+        self.root.downsample_value_.connect(self.sync_downsample_value)
+        self.root.resize_value_.connect(self.sync_resize_value)
+
+        self.downsample_spin.valueChanged.connect(self.emit_downsample_value)
+        self.resize_spin.valueChanged.connect(self.emit_resize_value)
 
 
         # self.model_comparison = False
         self.label_frames_btn = QtWidgets.QPushButton("Step 2. Create Training Dataset")
         self.label_frames_btn.setMinimumWidth(150)
         self.label_frames_btn.clicked.connect(self.create_training_dataset)
+        self.label_frames_btn.setToolTip("Click to start creating the training dataset.")
         self.main_layout.addWidget(self.label_frames_btn, alignment=Qt.AlignRight)
 
 
@@ -104,6 +116,7 @@ class CreateTrainingDataset(DefaultTab):
         # self.toggle_videos_btn.setMaximumWidth(120)
         self.toggle_videos_btn.setFixedSize(120, 40)
         self.toggle_videos_btn.toggled.connect(self.toggle_video_display)
+        self.toggle_videos_btn.setToolTip("Click to expand the visualization window for creating the training dataset.")
 
         self.main_layout.addWidget(self.toggle_videos_btn, alignment=Qt.AlignRight)
 
@@ -122,8 +135,35 @@ class CreateTrainingDataset(DefaultTab):
 
         self.video_container.setVisible(False)
         self.main_layout.addWidget(self.video_container, alignment=Qt.AlignCenter)
+        spacer = QSpacerItem(150, 400, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.main_layout.addItem(spacer)
+        self.log_widget = LogWidget(self.root, self)
+        # self.main_layout.addStretch()
+        self.main_layout.addWidget(self.log_widget)
+        ####################
+        # self.tqdm_logger = TqdmLogger(self.log_widget.text_log)
+        # sys.stdout = self.tqdm_logger
 
+    def emit_downsample_value(self, value):
 
+        self.root.downsample_value_.emit(value)
+
+    def emit_resize_value(self, value):
+
+        self.root.resize_value_.emit(value)
+
+    def sync_downsample_value(self, value):
+
+        if self.downsample_spin.value() != value:
+            self.downsample_spin.blockSignals(True)
+            self.downsample_spin.setValue(value)
+            self.downsample_spin.blockSignals(False)
+
+    def sync_resize_value(self, value):
+        if self.resize_spin.value() != value:
+            self.resize_spin.blockSignals(True)
+            self.resize_spin.setValue(value)
+            self.resize_spin.blockSignals(False)
     def log_resize_coefficient(self, value):
         print(f"Resize coefficient adjusted to: {value:.1f}")
 
@@ -176,7 +216,7 @@ class CreateTrainingDataset(DefaultTab):
         if not cap.isOpened():
             raise ValueError(f"Unable to open video: {video_name}")
         fps = cap.get(cv2.CAP_PROP_FPS)
-        print("The selected video was recorded with ", round(fps, 2), "fps")
+        print(f'The selected video was recorded with {round(fps, 2)} fps')
         success, first_image = cap.read()
         width = int(first_image.shape[1] * scale_percent)
         height = int(first_image.shape[0] * scale_percent)
@@ -184,7 +224,7 @@ class CreateTrainingDataset(DefaultTab):
         print(f"Frames will be resized to {dim[0]}x{dim[1]} (width x height) based on the scale percentage of {scale_percent * 100:.0f}%.")
         frame_count = 0
         saved_count = 0
-        # print('Extracting frames....Please wait...')
+        print('Extracting frames....Please wait...')
         with tqdm(total=2000, desc="Extracting frames", unit="frame") as pbar:
             while saved_count < 2000:
                 ret, frame = cap.read()
@@ -245,8 +285,8 @@ class CreateTrainingDataset(DefaultTab):
                                            'downsample_factor':self.downsample_spin.value(),
                                            'frame_rate': frame_rate,
                                            'frame_num': 2000,
-                                           'search_scale_range': np.arange(1.5, 3, 0.5),
-                                           'target_sz_bias_range': [-0.1, 0, 0.1], #[-0.2, -0.1, 0, 0.1, 0.2]
+                                           'search_scale_range': np.arange(1.5, 3, 0.5),# 1.5, 3, 0.5
+                                           'target_sz_bias_range': [-0.1, 0, 0.1], # [-0.1, 0, 0.1] [-0.2, -0.1, 0, 0.1, 0.2]
                                            'status_flag': 1, # train_param_iter 1 test_param_iter 2 test 3
                                            'evaluation_metric': [],
                                            'is_concave': self.root.cfg['is_concave']
@@ -262,7 +302,7 @@ class CreateTrainingDataset(DefaultTab):
                     # print('best_param_path_find_str', best_param_path_find_str)
                     results_path = run_tracking_params['project_folder'] + '/tmp/' + run_tracking_params['video_name'] + '/train_set_results'
                     best_param_path = results_path + '/' + find_subfolders_with_keyword(results_path,best_param_path_find_str)
-                    print('Converting results in ', best_param_path)
+                    print(f'Converting results in {best_param_path}...')
                     create_train_label(run_tracking_params['video_name'],best_param_path,run_tracking_params['project_folder'] + '/training-datasets/' + run_tracking_params['video_name'] +'/label')
                     ######################
                     msg = QtWidgets.QMessageBox()

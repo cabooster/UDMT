@@ -49,10 +49,8 @@ def run_training_process(run_training_params):
     parser.add_argument('--cudnn_benchmark', type=bool, default=True, help='Set cudnn benchmark on (1) or off (0) (default is on).')
 
     args = parser.parse_args()
-
     run_training(args.train_module, args.train_name, args.cudnn_benchmark,run_training_params)
 
 
 if __name__ == '__main__':
-    multiprocessing.set_start_method('spawn', force=True)
     run_training_process()

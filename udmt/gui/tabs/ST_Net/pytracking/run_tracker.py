@@ -21,22 +21,13 @@ corresponding_miss_num = 10000
 min_miss_time = 10000
 min_loss_time = 10000
 def read_txt_to_nparray(file_path):
-    """
-    读取文本文件并存储为 numpy 数组
-    :param file_path: txt 文件路径
-    :return: numpy 数组
-    """
+
     with open(file_path, 'r', encoding='utf-8') as file:
 
         data = np.loadtxt(file, delimiter=',')
     return data
 def get_sorted_frame_paths(frames_path, extension=".jpg"):
-    """
-    获取指定目录下按数字排序的图像路径列表
-    :param frames_path: 图像文件夹路径
-    :param extension: 图像文件扩展名（默认 ".jpg"）
-    :return: 按排序后的完整图像路径列表
-    """
+
 
     frame_list = [frame for frame in os.listdir(frames_path) if frame.endswith(extension)]
     frame_list.sort(key=lambda f: int(f[:-len(extension)]))
@@ -119,15 +110,18 @@ def run_tracking(run_tracking_params):
     except:
         seq_name = args.sequence
     setup_seed(1024)
-    print('Loading----->', os.path.normpath(run_tracking_params['model_path']))
+    print(f'Loading-----> {os.path.normpath(run_tracking_params["model_path"])}')
     iteration_time = 1
     start_time = time.time()
     reset_global_params()
     for target_sz_bias in run_tracking_params['target_sz_bias_range']: # -15,0,5
         early_stop_flag_list = []
         for search_scale in run_tracking_params['search_scale_range']:
-            print(f'Iterating through No. {iteration_time} set of parameters...')
-            print('target size bias:', target_sz_bias,'search region scale:', search_scale)
+            if run_tracking_params['status_flag'] != 3:
+                print(f'Iterating through No. {iteration_time} set of parameters (target size bias: {target_sz_bias}, search region scale: {search_scale}) ...')
+            else:
+                print(
+                    f'Iteration completed. Using final tracking parameters: target size bias: {target_sz_bias}, search region scale: {search_scale} ...')
             early_stop_flag = run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset_name, seq_name, args.debug,
                             args.threads, {'use_visdom': args.use_visdom, 'server': args.visdom_server, 'port': args.visdom_port}, search_scale = search_scale, target_sz_bias = target_sz_bias, obj_id=0,gui_param = run_tracking_params)
             # print('early_stop_flag:', early_stop_flag)

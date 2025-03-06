@@ -1,13 +1,13 @@
 
 import os
+import sys
 
 import cv2
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QGridLayout, QSpacerItem, QSizePolicy
 # from PyQt5.QtWidgets import QWidget
 from PySide6.QtCore import Qt
 from udmt.gui.tabs.xmem.interactive_demo import mask_seg_winclass
-from udmt.gui.components import DefaultTab
 # from udmt.gui.widgets import launch_napari
 from udmt.gui.widgets import ConfigEditor
 from udmt.gui.components import (
@@ -16,7 +16,7 @@ from udmt.gui.components import (
     VideoSelectionWidget,
     _create_grid_layout,
     _create_horizontal_layout,
-    _create_label_widget,
+    _create_label_widget, LogWidget, TqdmLogger
 )
 
 # def label_frames(config_path):
@@ -85,14 +85,23 @@ class TrackingInitialization(DefaultTab):
         self.mask_seg_btn.setMinimumWidth(150)
         self.mask_seg_btn.clicked.connect(self.mask_seg)
         self.main_layout.addWidget(self.mask_seg_btn, alignment=Qt.AlignRight)
+        ##############################
+        spacer = QSpacerItem(150, 400, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.main_layout.addItem(spacer)
+        self.log_widget = LogWidget(self.root, self)
+        # self.main_layout.addStretch()
+        self.main_layout.addWidget(self.log_widget)
+        # self.tqdm_logger = TqdmLogger(self.log_widget.text_log)
+        # sys.stdout = self.tqdm_logger
 
-        self.new_window = None
+        # self.new_window = None
 
 
-    def log_color_by_option(self, choice):
-        self.root.logger.info(f"Labeled images will by colored by {choice.upper()}")
+    # def log_color_by_option(self, choice):
+    #     self.root.logger.info(f"Labeled images will by colored by {choice.upper()}")
 
     def mask_seg(self):
+
         try:
             video = list(self.files)[0]
             loading_dialog = LoadingDialog()

@@ -76,7 +76,7 @@ def localize_target(data,scores):
     """Run the target localization."""
     scores = scores.unsqueeze(0)
     # scores = scores.squeeze(1)
-    ''' 没有运行到的代码
+    ''' 
     preprocess_method = self.params.get('score_preprocess', 'none')
     if preprocess_method == 'none':
         pass

@@ -157,7 +157,8 @@ def run(settings,run_training_params):
     trainer = LTRTrainer(actor, [loader_train], optimizer, settings, lr_scheduler)
     max_epochs = run_training_params['epoch_num']
     max_save_snapshots = run_training_params['max_save_snapshots']
+    logger =  run_training_params['logger']
     # print('------------------------------------------transformer_dimp.py---------------------------------------------------')
     pretrained_model = BASE_DIR + '/pretrained/trdimp_net_ep.pth.tar'
-    trainer.train(max_epochs,max_save_snapshots, pretrained_model, load_latest=True, fail_safe=True)
+    trainer.train(max_epochs,max_save_snapshots, pretrained_model, logger, load_latest=True, fail_safe=True)
     

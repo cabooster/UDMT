@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy
 
 from udmt.gui.tabs.ST_Net.pytracking.utils.filter_and_save import post_process_results
 from udmt.gui.tabs.analyze_videos import find_latest_folder, has_jpg_files
@@ -15,7 +15,7 @@ from udmt.gui.components import (
     VideoSelectionWidget,
     _create_grid_layout,
     _create_horizontal_layout,
-    _create_label_widget,
+    _create_label_widget, LogWidget,
 )
 
 import udmt
@@ -84,6 +84,13 @@ class RefineTracklets(DefaultTab):
         # self.main_layout.addWidget(self.filter_tracks_button, alignment=Qt.AlignRight)
         # self.main_layout.addWidget(self.merge_button, alignment=Qt.AlignRight)
 
+        ##############################
+        spacer = QSpacerItem(150, 400, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.main_layout.addItem(spacer)
+        self.log_widget = LogWidget(self.root, self)
+        # self.main_layout.addStretch()
+        self.main_layout.addWidget(self.log_widget)
+
     def _generate_layout_attributes(self, layout):
         # Shuffle
         shuffle_text = QtWidgets.QLabel("Shuffle")
@@ -144,6 +151,8 @@ class RefineTracklets(DefaultTab):
         # self.filter_type_widget.setMinimumWidth(150)
         options = ["mean","median"]
         self.filter_type_widget.addItems(options)
+        self.filter_type_widget.setToolTip(
+            "Select the filter type for trajectory smoothing during post-processing. Options are 'mean' or 'median'.")
         self.filter_type_widget.currentTextChanged.connect(self.log_filter_type)
 
 
@@ -151,6 +160,7 @@ class RefineTracklets(DefaultTab):
         window_length_label = QtWidgets.QLabel("Filter size (post-processing)")
         self.window_length_widget = QtWidgets.QSpinBox()
         self.window_length_widget.setValue(10)
+        self.window_length_widget.setToolTip("Set the filter size for trajectory smoothing during post-processing.")
         # self.window_length_widget.setMinimumWidth(150)
         self.window_length_widget.valueChanged.connect(self.log_window_length)
 

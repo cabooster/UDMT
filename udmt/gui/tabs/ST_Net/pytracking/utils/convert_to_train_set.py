@@ -84,7 +84,7 @@ def create_train_label(dataset, trajectories_file_path, train_label_path):
                   #     f.write(','.join(['{:.2f}'.format(i) for i in x]) + ',' +','.join(['{:.2f}'.format(i) for i in x]) + '\n')
                   target_size = target_sz_mul[animal_id][jj][0]
                   f.write(','.join(['{:.2f}'.format(i) for i in target_pos_mul[animal_id][jj]]) + ',' + ','.join(['{:.2f}'.format(i) for i in target_sz_mul[animal_id][jj]]) + '\n')
-        print('Train label is saved in ',train_label_path)
+        print(f'Train label is saved in {train_label_path}')
         print('The training dataset is successfully created.')
     # print(dataset_name)
     # print(trajectories_file_path)

@@ -12,9 +12,10 @@ import qdarkstyle
 # import udmt
 from udmt import auxiliaryfunctions, VERSION
 from udmt.gui import BASE_DIR, components
+from udmt.gui.components import LogWidget, TqdmLogger
 # from udmt.gui import BASE_DIR, components, utils
 from udmt.gui.tabs import *
-from udmt.gui.widgets import StreamReceiver, StreamWriter
+from udmt.gui.widgets import StreamReceiver, StreamWriter, StreamWriter_new
 from PySide6.QtWidgets import QMenu, QWidget, QMainWindow
 from PySide6 import QtCore, QtSvg, QtSvgWidgets
 from PySide6.QtGui import QIcon, QAction
@@ -26,6 +27,9 @@ class MainWindow(QMainWindow):
     config_loaded = QtCore.Signal()
     video_type_ = QtCore.Signal(str)
     video_files_ = QtCore.Signal(set)
+    log_message_ = QtCore.Signal(str)
+    downsample_value_ = QtCore.Signal(int)
+    resize_value_ = QtCore.Signal(float)
 
     def __init__(self, app):
         super(MainWindow, self).__init__()
@@ -58,15 +62,37 @@ class MainWindow(QMainWindow):
         self.create_toolbar()
 
         # Thread-safe Stdout redirector
-        self.writer = StreamWriter()
-        # sys.stdout = self.writer
-        self.receiver = StreamReceiver(self.writer.queue)
-        self.receiver.new_text.connect(self.print_to_status_bar)
+        self.writer = StreamWriter_new(self)
+        sys.stdout = self.writer
+        #############
+
+        # self.receiver = StreamReceiver(self.writer.queue)
+        # self.receiver.new_text.connect(self.print_to_status_bar)
 
         self._progress_bar = QtWidgets.QProgressBar()
         self._progress_bar.setMaximum(0)
         self._progress_bar.hide()
         self.status_bar.addPermanentWidget(self._progress_bar)
+
+        self.logger = self._init_logger()
+
+    def _init_logger(self):
+
+        import logging
+        logger = logging.getLogger("AppLogger")
+        logger.setLevel(logging.INFO)
+
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+
+        logger.addHandler(handler)
+
+        return logger
+
+    def log(self, message: str):
+
+        self.logger.info(message)
+        self.log_message_.emit(message)
 
     def print_to_status_bar(self, text):
         self.status_bar.showMessage(text)
@@ -165,12 +191,13 @@ class MainWindow(QMainWindow):
     def video_files(self, video_files):
         self.files = set(video_files)
         self.video_files_.emit(self.files)
-        self.logger.info(f"Videos selected to analyze:\n{self.files}")
+        print(f"Videos selected to analyze: {self.files}")
+        # self.logger.info(f"Videos selected to analyze:\n{self.files}")
 
     def window_set(self):
         self.setWindowTitle("UDMT")
         # Set the initial size of the window
-        self.resize(1300, 780)
+        self.resize(1300, 780)#780
 
         # Optionally set a minimum and/or maximum size
         self.setMinimumSize(600, 400)
@@ -236,10 +263,12 @@ class MainWindow(QMainWindow):
         self.layout_buttons = QtWidgets.QHBoxLayout()
         self.layout_buttons.setAlignment(Qt.AlignCenter | Qt.AlignCenter)
         self.create_project_button = QtWidgets.QPushButton("Create New Project")
+        self.create_project_button.setToolTip("Create a new project for animal tracking.")
         self.create_project_button.setFixedWidth(200)
         self.create_project_button.clicked.connect(self._create_project)
 
         self.load_project_button = QtWidgets.QPushButton("Load Project")
+        self.load_project_button.setToolTip("Select a project's config file (*.yaml) to load an existing project.")
         self.load_project_button.setFixedWidth(200)
         self.load_project_button.clicked.connect(self._open_project)
 
@@ -464,6 +493,6 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         print("Exiting...")
-        self.receiver.terminate()
+        # self.receiver.terminate()
         event.accept()
         self.save_settings()
