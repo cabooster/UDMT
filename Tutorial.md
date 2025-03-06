@@ -128,7 +128,7 @@ UDMT
 
 4. Click **Forward Propagate** to start the foreground extraction process.
 
-5. Wait until foreground extraction is completed for all frames. Once finished, close the sub-GUI to proceed to the next tab.
+5. Wait until foreground extraction is completed for all frames. After foreground extraction, check whether all animals are marked with a red mask. If many consecutive frames fail to extract an animal (which usually happens with small animals like flies), please increase 'memory frame every' to 10,000. Once finished, close the sub-GUI to proceed to the next tab.
 
 ### 4. Create training dataset
 
