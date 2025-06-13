@@ -4,7 +4,62 @@ title: UDMT tutorial
 ---
 <img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="400" align="right" />
 
+## Installation
+### 1. For Linux (Recommended)
 
+#### Environment 
+
+* Ubuntu 20.04 + (required)
+* Python 3.8
+* Pytorch 1.7.1
+* NVIDIA GPU (GeForce RTX 3090) + CUDA (11.7)
+
+#### Environment Configuration 
+
+1. Create a virtual environment and install PyTorch.
+
+   ```
+   $ conda create -n udmt python=3.8
+   $ conda activate udmt
+   $ pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+   $ sudo apt-get install ninja-build
+   $ sudo apt-get install libturbojpeg
+   ```
+
+2. We made a installable pip release of UDMT [[pypi](https://pypi.org/project/udmt-pip/)]. You can install it by entering the following command:
+
+   ```
+   $ pip install udmt-pip
+   ```
+
+### 2. For Windows
+
+#### Environment 
+
+* Windows 10
+* Python 3.8
+* Pytorch 1.7.1
+* NVIDIA GPU (GeForce RTX 3090) + CUDA (11.0)
+
+#### Environment Configuration 
+
+1. Create a virtual environment and install PyTorch. **In the 3rd step, please select the correct Pytorch version that matches your CUDA version from [https://pytorch.org/get-started/previous-versions/](https://pytorch.org/get-started/previous-versions/).** 
+
+   ```
+   $ conda create -n udmt python=3.8
+   $ conda activate udmt
+   $ pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+   ```
+
+2. We made a installable pip release of UDMT [[pypi](https://pypi.org/project/udmt-pip/)]. You can install it by entering the following command:
+
+   ```
+   $ pip install udmt-pip     
+   ```
+
+3. Install Precise ROI pooling: If your environment is the same as ours, directly copy `<UDMT_install_path>\udmt\env_file\prroi_pool.pyd` to `<Anaconda_install_path>\anaconda3\envs\udmt\Lib\site-packages`.  Otherwise, build `prroi_pool.pyd` file with Visual Studio with the [tutorial](https://github.com/visionml/pytracking/blob/master/INSTALL_win.md#build-precise-roi-pooling-with-visual-studio-optional).
+
+4. Install libjpeg-turbo: You can download installer from the official libjpeg-turbo [Sourceforge](https://sourceforge.net/projects/libjpeg-turbo/files/3.0.1/libjpeg-turbo-3.0.1-vc64.exe/download) repository, install it and copy `<libjpeg-turbo_install_path>\libjpeg-turbo64\bin\turbojpeg.dll` to the directory from the system PATH `C:\Windows\System32`.
 
 ## GUI tutorial
 
