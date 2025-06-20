@@ -123,6 +123,42 @@ Below is the tutorial video for the GUI. For detailed instructions on installing
 
 [![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/GUI-video2.png)](https://youtu.be/7rkpVTawpBU "Video Title")
 
+## Q&A
+
+### Q1: I get the error `ValueError: Unknown CUDA arch (8.9) or GPU not supported` when using an RTX 4090. How can I fix this?
+### Solution: Patch `cpp_extension.py` to support Ada architecture
+
+This error occurs when PyTorch attempts to compile a CUDA extension for Ada Lovelace GPUs (e.g., RTX 4090), which use compute capability `8.9`, but does not recognize this architecture in its internal list.
+You can fix this by **manually patching PyTorch’s CUDA architecture list**.
+
+1. Locate and open the following file in your Python environment:
+
+   ```
+   <your_conda_env>/lib/pythonX.X/site-packages/torch/utils/cpp_extension.py
+   ```
+2. Inside the _get_cuda_arch_flags() function, find the supported_arches list and add '8.9':
+  ```
+  supported_arches = ['3.5', '3.7', '5.0', '5.2', '5.3', '6.0', '6.1', '6.2',
+                      '7.0', '7.2', '7.5', '8.0', '8.6', '8.9']
+  ```
+3. Also add support for the "Ada" name in named_arches:
+  ```
+  named_arches = collections.OrderedDict([
+      ('Kepler+Tesla', '3.7'),
+      ('Kepler', '3.5+PTX'),
+      ('Maxwell+Tegra', '5.3'),
+      ('Maxwell', '5.0;5.2+PTX'),
+      ('Pascal', '6.0;6.1+PTX'),
+      ('Volta', '7.0+PTX'),
+      ('Turing', '7.5+PTX'),
+      ('Ampere', '8.0;8.6+PTX'),
+      ('Ada', '8.9+PTX')  # ← Add this line
+  ])
+  ```
+Save the file and re-run your code. PyTorch will now be able to compile CUDA extensions for compute capability 8.9 (e.g., RTX 4090).
+
+
+
 ## Results
 
 ### 1. Tracking the movement of 10 mice simultaneously with UDMT.
