@@ -1,4 +1,4 @@
-
+import json
 import os
 from pathlib import Path
 from PySide6 import QtWidgets
@@ -244,8 +244,11 @@ class RefineTracklets(DefaultTab):
             track_path = result_save_path
             print(
                 f"Post-processing the files from '{raw_track_dir}' and ready to perform track refinement on the file '{result_save_path}'.")
-
-            viz = TrackletVisualizer(video_frames_path, track_path)
+            json_file_path_time_point = self.root.project_folder + '/tmp/' + video_name + "/cross_timepoints.json"
+            with open(json_file_path_time_point, 'r') as f:
+                loaded_time_point = json.load(f)
+            #print(f"loaded_list: {loaded_list}")
+            viz = TrackletVisualizer(video_frames_path, track_path, loaded_time_point)
             viz.show()
         else:
             QMessageBox.information(

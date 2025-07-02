@@ -246,6 +246,7 @@ def refine_pos_for_loss(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,
         # print('correct loss successfully!!')
         refine_loss_flag = True
 
+
     return target_pos_mul,refine_loss_flag
 
 def refine_pos(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_name,current_frame,animal_num,animal_species,area_in_first_frame,kernel,down_sample_fg,concave_flag):

@@ -249,6 +249,14 @@ class CreateTrainingDataset(DefaultTab):
     def create_training_dataset(self):
         try:
             video_name = list(self.files)[0]
+        except IndexError:
+            msg_box = QtWidgets.QMessageBox(self)
+            msg_box.setIcon(QtWidgets.QMessageBox.Warning)
+            msg_box.setWindowTitle("Error")
+            msg_box.setText("No video selected. Please select a video first.")
+            msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            msg_box.exec()
+        try:
             frame_rate = get_video_fps(video_name)
             file_path = Path(video_name)
             file_name_without_extension = file_path.stem
@@ -265,7 +273,7 @@ class CreateTrainingDataset(DefaultTab):
                 file_count = len(file_list)
 
 
-                if file_count > 2000:
+                if file_count > 2000:#2000
                     extract_output_dir = os.path.join(self.root.project_folder, 'training-datasets',
                                               file_name_without_extension, 'img')
                     if os.path.exists(extract_output_dir):
@@ -327,11 +335,19 @@ class CreateTrainingDataset(DefaultTab):
                         "The number of extracted foreground masks is below 2000, which is insufficient for training the dataset. Please return to 'UDMT - Tracking Initialization' to extract more foreground masks from the selected video!",
                         QMessageBox.Ok
                     )
+        except Exception as e:
+            import traceback
 
-        except IndexError:
+            traceback.print_exc()
+
+
+            tb_str = traceback.format_exc()
+
+
             msg_box = QtWidgets.QMessageBox(self)
-            msg_box.setIcon(QtWidgets.QMessageBox.Warning)
-            msg_box.setWindowTitle("Error")
-            msg_box.setText("No video selected. Please select a video first.")
+            msg_box.setIcon(QtWidgets.QMessageBox.Critical)
+            msg_box.setWindowTitle("Unexpected Error")
+            msg_box.setText("An unexpected error occurred:\n\n" + tb_str)
             msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
             msg_box.exec()
+

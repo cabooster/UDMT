@@ -116,3 +116,14 @@ def mask_seg_winclass(video_name,project_path,divide_num):
         return ex
         # sys.exit(app.exec_())
 
+if __name__ == '__main__':
+    # Example usage
+    video_path = "path/to/your/video.mp4"  # Replace with your video path
+    project_folder = "path/to/project"      # Replace with your project folder
+    divide_num = 1                          # Replace with your desired divide number
+    
+    app = QApplication(sys.argv)
+    mask_seg_window = mask_seg_winclass(video_path, project_folder, divide_num)
+    mask_seg_window.show()
+    sys.exit(app.exec_())
+

@@ -83,6 +83,58 @@ def debug_print(message):
 def save_to_json(file_path, data):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
+def find_last_number_segment_filled_range(nums, margin=10):
+    if not nums:
+        return []
+
+    last_num = nums[-1]
+    segments = []
+    current_segment = [nums[0]]
+
+    for i in range(1, len(nums)):
+        if nums[i] == nums[i-1] + 1:
+            current_segment.append(nums[i])
+        else:
+            segments.append(current_segment)
+            current_segment = [nums[i]]
+    segments.append(current_segment)
+
+
+    target_segment = None
+    for segment in reversed(segments):
+        if last_num in segment:
+            target_segment = segment
+            break
+
+    if target_segment is None:
+        return []
+
+    start_val = target_segment[0]
+    desired_start_val = start_val - margin
+    desired_start_val = max(desired_start_val, 0)
+    return list(range(desired_start_val, last_num + 1))
+
+def interpolate_segment(coords):
+    """
+    Linearly interpolate between first and last (x, y), output as list of ndarray.
+
+    Args:
+        coords (list of np.ndarray): Length n > 1, each element shape (2,)
+
+    Returns:
+        list of np.ndarray: Length n, each element shape (2,)
+    """
+    n = len(coords)
+    if n < 2:
+        raise ValueError("Input must contain at least 2 frames for interpolation.")
+
+    start = coords[0]
+    end = coords[-1]
+
+    factors = np.linspace(0, 1, n).reshape(-1, 1)  # shape (n,1)
+    interpolated = start + (end - start) * factors  # shape (n,2)
+
+    return [interpolated[i] for i in range(n)]
 def trackerlist(name: str, parameter_name: str, run_ids = None, display_name: str = None):
     """Generate list of trackers.
     args:
@@ -361,6 +413,8 @@ class Tracker:
             font_size = 1.5
         swap_time = 0
         correct_cross_times = 0
+        if gui_param['status_flag'] == 3:
+            cross_time_points = []
         correct_loss_times = 0
         not_found_times = 0
         area_left = 0
@@ -616,6 +670,12 @@ class Tracker:
                                  target_pos_mul,refine_loss_flag = refine_pos_for_loss(image,target_pos_mul,target_sz_mul,bg, seq.name,current_frame=frame_num,animal_num=seq.object_num,animal_species=animal_species,area_in_first_frame=area_in_first_frame, target_refine_list=target_refine_list,loss_animal_id=animal_id,kernel=kernel,down_sample_fg=down_sample_fg)
                                  ########################
                                  if refine_loss_flag:
+                                     debug_print(f'current_loss_after_process id :{animal_id} frame: {frame_num}' )
+                                     current_loss_list = find_last_number_segment_filled_range(loss_list_mul[animal_id], margin=data_fps)
+                                     current_loss_start = current_loss_list[0]
+                                     current_loss_to_process = target_pos_mul[animal_id][current_loss_start:]
+                                     target_pos_mul[animal_id][current_loss_start:] = interpolate_segment(current_loss_to_process)
+                                     current_loss_after_process = target_pos_mul[animal_id][current_loss_start:]
                                      del tracker[animal_id]
                                      params = self.get_parameters(search_scale_gl,gui_param)
                                      tracker_new = self.create_tracker(params)
@@ -808,6 +868,8 @@ class Tracker:
                                                   if DEBUG_FLAG:
                                                      print("\033[0;31m", 'swap stop', "\033[0m")
                                                   correct_cross_times  += 1
+                                                  if gui_param['status_flag'] == 3:
+                                                        cross_time_points.append(frame_num)
                                                   correct_frame_flag = True
                                           else:
                                               not_far_list_mul[pair_id].append(frame_num)
@@ -1056,6 +1118,13 @@ class Tracker:
                     save_to_json(json_file_path, gui_param['evaluation_metric'])
                     print(f"Updated JSON file at: {json_file_path}")
                     ###############################
+            else:
+                if frame_num == gui_param['frame_num'] - 1:
+                    if gui_param['status_flag'] == 3:
+                        json_file_path_time_point = gui_param['project_folder'] + '/tmp/' + gui_param[
+                            'video_name'] + "/cross_timepoints.json"
+                        save_to_json(json_file_path_time_point, cross_time_points)
+                        print(f"Updated JSON file at: {json_file_path_time_point}")
 
 
 

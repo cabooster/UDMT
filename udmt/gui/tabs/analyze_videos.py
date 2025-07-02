@@ -554,14 +554,16 @@ class AnalyzeVideos(DefaultTab):
                                        'frame_rate': frame_rate,
                                        'frame_num': 4000,##########
                                        'search_scale_range': np.arange(1.5, 3, 0.5),# 1.5, 3, 0.5
-                                       'target_sz_bias_range': [-0.1, 0, 0.1],  # [-0.2, -0.1, 0, 0.1, 0.2]
+                                       'target_sz_bias_range': [-0.1,0, 0.1],  # [-0.2, -0.1, 0, 0.1, 0.2]
                                        'status_flag': 2,  # train_param_iter 1 test_param_iter 2 test 3
                                        'evaluation_metric': [],
                                        'is_concave': self.root.cfg['is_concave']
                                        }
+
                 print("Automatic parameter tuning begins:")
                 print('run_tracking_params:', run_tracking_params)
                 run_tracking(run_tracking_params)
+                ''''''
                 ######################################################## best_param_path_find
                 param_json_path = run_tracking_params['project_folder'] + '/tmp/' + run_tracking_params[
                     'video_name'] + "/evaluation_metric_for_test.json"
