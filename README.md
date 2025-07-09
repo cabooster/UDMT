@@ -107,7 +107,7 @@ We have released the Python source code and a user-friendly GUI of UDMT to make 
    $ git clone https://github.com/cabooster/UDMT.git
    $ cd UDMT/
    ```
-
+   Causion: To install the library, please git clone the repository instead of downloading the zip file, since source files inside the folder are symbol-linked. Downloading the repository as a zip file will break these symbolic links. 
 2. To launch the GUI, simply enter in the terminal:
 
    ```
