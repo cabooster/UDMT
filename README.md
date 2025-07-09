@@ -18,6 +18,7 @@ Tooltips have been added for buttons and the property panel to improve usability
 - [Overview](#overview)
 - [Installation](#Installation)
 - [GUI Tutorial](#gui-tutorial)
+- [Q&A](#Q&A)
 - [Results](#results)
 - [License](./LICENSE)
 - [Citation](#citation)
@@ -36,6 +37,7 @@ For more details, please see the companion paper where the method first appeared
 <img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_schematic.png?raw=true" width="800" align="middle">
 
 ## Installation
+If you encounter any issues during installation or usage, please refer to the [Q&A section](#Q&A) for common solutions.
 ### 1. For Linux (Recommended)
 
 #### Environment 
