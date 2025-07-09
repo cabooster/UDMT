@@ -129,7 +129,7 @@ Below is the tutorial video for the GUI. For detailed instructions on installing
 ## Q&A
 
 ### Q1: I get the error `ValueError: Unknown CUDA arch (8.9) or GPU not supported` when using an RTX 4090. How can I fix this?
-### Solution: Patch `cpp_extension.py` to support Ada architecture
+### A1:
 
 This error occurs when PyTorch attempts to compile a CUDA extension for Ada Lovelace GPUs (e.g., RTX 4090), which use compute capability `8.9`, but does not recognize this architecture in its internal list.
 You can fix this by **manually patching PyTorch’s CUDA architecture list**.
@@ -160,7 +160,7 @@ You can fix this by **manually patching PyTorch’s CUDA architecture list**.
   ```
 Save the file and re-run your code. PyTorch will now be able to compile CUDA extensions for compute capability 8.9 (e.g., RTX 4090).
 ### Q2: I can't open the GUI when using VSCode or a terminal. What should I do?
-### Solution
+### A2:
 If you're trying to run the GUI from VSCode or a regular SSH terminal and encounter errors like `QXcbConnection: Could not connect to display` or the window simply doesn't appear, it's likely because the Linux server does not have a display environment or your SSH session lacks X11 forwarding.
 
 To resolve this, we recommend using [MobaXterm](https://mobaxterm.mobatek.net/download.html) — a powerful SSH client with built-in X11 server support that allows you to run GUI applications on a remote Linux server seamlessly.
