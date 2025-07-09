@@ -5,6 +5,7 @@ title: UDMT tutorial
 <img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="400" align="right" />
 
 ## Installation
+If you encounter any issues during installation or usage, please refer to the [Q&A](https://github.com/cabooster/UDMT#qa) for common solutions.
 ### 1. For Linux (Recommended)
 
 #### Environment 
