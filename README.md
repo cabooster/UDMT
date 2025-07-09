@@ -111,7 +111,10 @@ We have released the Python source code and a user-friendly GUI of UDMT to make 
    ```
    $ python -m udmt.gui.launch_script
    ```
-
+   If your server has multiple GPUs and you want to control which one is used when launching the GUI, you can use the `CUDA_VISIBLE_DEVICES` environment variable to specify the GPU index. For example, to run the GUI using **GPU 3** (the fourth GPU), use the following command:
+    ```
+    $ CUDA_VISIBLE_DEVICES=3 python -m udmt.gui.launch_script
+    ```
 #### **Quick Start with Demo Data**:
 
 If you would like to try the GUI with a smaller dataset first, we provide **demo videos** ([5-mice video](https://zenodo.org/records/14689184/files/5-mice-1min.mp4?download=1) & [7-mice video](https://zenodo.org/records/14709082/files/7-mice-1min.mp4?download=1)) and pre-trained **models** (model for [5-mice](https://zenodo.org/records/14689184/files/DiMPnet_ep0020.pth.tar?download=1) and [7-mice](https://zenodo.org/records/14709082/files/DiMPnet_ep0020.pth.tar?download=1)).
