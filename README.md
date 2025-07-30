@@ -57,14 +57,14 @@ If you encounter any issues during installation or usage, please refer to the [Q
    $ sudo apt-get install ninja-build
    $ sudo apt-get install libturbojpeg
    ```
-  If your CUDA version is **12.x**, run:
-  ```
-  pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu121
-  ```
-  If your CUDA version is **11.x**, run:
-  ```
-  pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
-  ```
+    If your CUDA version is **12.x**, run:
+    ```
+    pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu121
+    ```
+    If your CUDA version is **11.x**, run:
+    ```
+    pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
+    ```
 2. Install other dependencies.
 
    ```
