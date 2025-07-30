@@ -8,12 +8,12 @@ title: UDMT tutorial
 If you encounter any issues during installation or usage, please refer to the [Q&A](https://github.com/cabooster/UDMT#qa) for common solutions.
 ### 1. For Linux (Recommended)
 
-#### Environment 
+#### Our Environment 
 
 * Ubuntu 20.04 + (required)
 * Python 3.8
-* Pytorch 1.7.1
-* NVIDIA GPU (GeForce RTX 3090) + CUDA (11.7)
+* Pytorch 2.1.1
+* NVIDIA GPU (GeForce RTX 4090) + CUDA (12+)
 
 #### Environment Configuration
 
