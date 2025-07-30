@@ -5,6 +5,7 @@
 
 ## Updates
 <details>
+  <summary>:triangular_flag_on_post:2025/07/30: Optimize the initialization method. </summary>
   <summary>:triangular_flag_on_post:2025/03/06: Added a log window and tooltips in the GUI. </summary>
   
 A log window has been added at the bottom of the GUI to display runtime messages.  
