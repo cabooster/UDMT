@@ -53,18 +53,27 @@ If you encounter any issues during installation or usage, please refer to the [Q
 
 #### Environment Configuration 
 
-1. Create a virtual environment and install PyTorch. **In the 3rd step, please select the correct Pytorch version that matches your CUDA version from [https://pytorch.org/get-started/previous-versions/](https://pytorch.org/get-started/previous-versions/).** 
+1. Create a virtual environment and install PyTorch.
 
    ```
    $ conda create -n udmt python=3.8
    $ conda activate udmt
-   $ pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
    ```
-
-2. We made a installable pip release of UDMT [[pypi](https://pypi.org/project/udmt-pip/)]. You can install it by entering the following command:
+    If your CUDA version is **12.x**, run:
+    ```
+    pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu121
+    ```
+    If your CUDA version is **11.x**, run:
+    ```
+    pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
+    ```
+2. Install other dependencies.
 
    ```
-   $ pip install udmt-pip     
+   $ conda activate udmt
+   $ git clone https://github.com/cabooster/UDMT.git
+   $ cd UDMT/
+   $ pip install -r requirements.txt
    ```
 
 3. Install Precise ROI pooling: If your environment is the same as ours, directly copy `<UDMT_install_path>\udmt\env_file\prroi_pool.pyd` to `<Anaconda_install_path>\anaconda3\envs\udmt\Lib\site-packages`.  Otherwise, build `prroi_pool.pyd` file with Visual Studio with the [tutorial](https://github.com/visionml/pytracking/blob/master/INSTALL_win.md#build-precise-roi-pooling-with-visual-studio-optional).
