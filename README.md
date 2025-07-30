@@ -40,7 +40,7 @@ For more details, please see the companion paper where the method first appeared
 If you encounter any issues during installation or usage, please refer to the [Q&A section](#qa) for common solutions.
 ### 1. For Linux (Recommended)
 
-#### Environment 
+#### Our Environment 
 
 * Ubuntu 20.04 + (required)
 * Python 3.8
