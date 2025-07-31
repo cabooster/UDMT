@@ -106,6 +106,7 @@ If you encounter any issues during installation or usage, please refer to the [Q
    | [trdimp_net_ep.pth.tar](https://zenodo.org/records/14671891/files/trdimp_net_ep.pth.tar?download=1) | `./udmt/gui/pretrained`          |
    | [XMem.pth](https://zenodo.org/records/14671891/files/XMem.pth?download=1) | `./udmt/gui/tabs/xmem/saves`     |
    | [sam_vit_b_01ec64.pth](https://zenodo.org/records/14671891/files/sam_vit_b_01ec64.pth?download=1) | `./udmt/gui/tabs/xmem/sam_model` |
+   | [model_state_dict.pt](https://zenodo.org/records/16625810/files/model_state_dict.pt?download=1) | `./udmt/gui/pretrained`          |
 
 ### 2. Create a new project
 
