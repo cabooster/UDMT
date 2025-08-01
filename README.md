@@ -66,6 +66,7 @@ If you encounter any issues during installation or usage, please refer to the [Q
     ```
     pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
     ```
+    * If you are not sure about your CUDA version, please refer to the [Q&A section](#qa).
 2. Install other dependencies.
 
    ```
@@ -150,8 +151,7 @@ Below is the tutorial video for the GUI. For detailed instructions on installing
 
 ## Q&A
 ### Q1: How can I check which CUDA version is installed on my system?
-### A1: You can try one of the following methods:
-
+### A1: 
 You can list the installed CUDA versions by checking the /usr/local directory:
    ```
    ls /usr/local | grep cuda
