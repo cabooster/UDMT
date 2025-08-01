@@ -149,9 +149,30 @@ Below is the tutorial video for the GUI. For detailed instructions on installing
 [![IMAGE ALT TEXT](https://github.com/cabooster/UDMT/blob/page/images/GUI-video2.png)](https://youtu.be/7rkpVTawpBU "Video Title")
 
 ## Q&A
+### Q1: How can I check which CUDA version is installed on my system?
+### A1: You can try one of the following methods:
 
-### Q1: I get the error `ValueError: Unknown CUDA arch (8.9) or GPU not supported` when using an RTX 4090. How can I fix this?
-### A1:
+You can list the installed CUDA versions by checking the /usr/local directory:
+   ```
+   ls /usr/local | grep cuda
+   ```
+This will show all CUDA-related directories, such as:
+   ```
+   cuda-12
+   cuda-12.4
+   cuda-12.9
+   ```
+To check which version is currently set as default:
+   ```
+   ls -l /usr/local/cuda
+   ```
+   Example output:
+   ```
+   cuda -> /usr/local/cuda-12.1
+   ```
+
+### Q2: I get the error `ValueError: Unknown CUDA arch (8.9) or GPU not supported` when using an RTX 4090. How can I fix this?
+### A2:
 
 This error occurs when PyTorch attempts to compile a CUDA extension for Ada Lovelace GPUs (e.g., RTX 4090), which use compute capability `8.9`, but does not recognize this architecture in its internal list.
 You can fix this by **manually patching PyTorch’s CUDA architecture list**.
@@ -181,8 +202,8 @@ You can fix this by **manually patching PyTorch’s CUDA architecture list**.
   ])
   ```
 Save the file and re-run your code. PyTorch will now be able to compile CUDA extensions for compute capability 8.9 (e.g., RTX 4090).
-### Q2: I can't open the GUI when using VSCode or a terminal. What should I do?
-### A2:
+### Q3: I can't open the GUI when using VSCode or a terminal. What should I do?
+### A3:
 If you're trying to run the GUI from VSCode or a regular SSH terminal and encounter errors like `QXcbConnection: Could not connect to display` or the window simply doesn't appear, it's likely because the Linux server does not have a display environment or your SSH session lacks X11 forwarding.
 
 To resolve this, we recommend using [MobaXterm](https://mobaxterm.mobatek.net/download.html) — a powerful SSH client with built-in X11 server support that allows you to run GUI applications on a remote Linux server seamlessly.
