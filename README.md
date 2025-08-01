@@ -73,6 +73,7 @@ If you encounter any issues during installation or usage, please refer to the [Q
    $ git clone https://github.com/cabooster/UDMT.git
    $ cd UDMT/
    $ pip install -r requirements.txt
+   $ pip install -r requirements_custom.txt
    ```
 
 ### 2. For Windows
