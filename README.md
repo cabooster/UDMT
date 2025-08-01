@@ -66,7 +66,7 @@ If you encounter any issues during installation or usage, please refer to the [Q
     ```
     pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
     ```
-    * If you are not sure about your CUDA version, please refer to the [Q&A section](#qa).
+    **If you are not sure about your CUDA version, please refer to the [Q&A section](#qa).**
 2. Install other dependencies.
 
    ```
