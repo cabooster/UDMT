@@ -33,6 +33,7 @@ If you encounter any issues during installation or usage, please refer to the [Q
     ```
     pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
     ```
+    **If you are not sure about your CUDA version, please refer to the [Q&A](https://github.com/cabooster/UDMT#qa) .**
 2. Install other dependencies.
 
    ```
@@ -40,6 +41,7 @@ If you encounter any issues during installation or usage, please refer to the [Q
    $ git clone https://github.com/cabooster/UDMT.git
    $ cd UDMT/
    $ pip install -r requirements.txt
+   $ pip install -r requirements_custom.txt
    ```
 
 ### 2. For Windows
@@ -197,9 +199,9 @@ UDMT
 
 2. After selecting the video, click the **Launch Tracking Initialization GUI** button to open the sub-GUI.
 
-   <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-ini2.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
+   <center><img src="https://github.com/cabooster/UDMT/blob/page/images/GUI-ini3.png?raw=true" width="700" align="middle" style="box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 8px;"></center>
 
-3. In the sub-GUI, click on the centroids of all the animals you want to track.
+3. In the sub-GUI, the initial positions of all animals in the first video frame will be automatically detected and displayed. If any animals are missing, you can click on the missing ones to add them. If there are detection errors, you can click "reset frame" and then manually click on the centroids of all the animals you want to track. Finally, make sure the number of tracked animals matches the number of initial positions.
 
 4. Click **Forward Propagate** to start the foreground extraction process.
 
@@ -273,3 +275,4 @@ UDMT
 ## GUI demo video
 
 <center><iframe width="800" height="500" src="https://www.youtube.com/embed/7rkpVTawpBU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </center>
+
