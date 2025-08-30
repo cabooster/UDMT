@@ -47,7 +47,7 @@ Recently, unsupervised learning shows great potential to eliminate the reliance 
 
 <h3>2. Comparing UDMT with other latest methods including DeepLabCut, SLEAP, and idtracker.ai.</h3>
 
-<center><img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_result2.png?raw=true" width="1000" align="middle"></center>
+<center><img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_result2-1.png?raw=true" width="1000" align="middle"></center>
 <i>The 5-mouse dataset (33 Hz frame rate, 18,000 frames, N=5) was used in this experiment for quantitative evaluation.</i>
 
 <h3>3.Visualizing the accuracy of animal localization in video snapshots.</h3>
