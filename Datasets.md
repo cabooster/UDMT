@@ -85,7 +85,7 @@ title: Datasets
       <p>94</p>
     </td>
     <td rowspan="5">
-      <p>√</p>
+      <p>&#10003;</p>
     </td>
   </tr>
   <tr>
@@ -236,7 +236,7 @@ title: Datasets
       <p>29</p>
     </td>
     <td>
-      <p>√</p>
+      <p>&#10003;</p>
     </td>
   </tr>
   <tr>
@@ -262,7 +262,7 @@ title: Datasets
       <p>80</p>
     </td>
     <td rowspan="5">
-      <p>√</p>
+      <p>&#10003;</p>
     </td>
   </tr>
   <tr>
@@ -344,7 +344,7 @@ title: Datasets
       <p>98</p>
     </td>
     <td rowspan="2">
-      <p>√</p>
+      <p>&#10003;</p>
     </td>
   </tr>
   <tr>
