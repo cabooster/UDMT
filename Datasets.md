@@ -213,7 +213,7 @@ title: Datasets
       <p>60</p>
     </td>
     <td>
-      <p>√</p>
+      <p>&#10003;</p>
     </td>
   </tr>
   <tr>
