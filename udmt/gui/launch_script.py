@@ -63,6 +63,9 @@ def launch_udmt():
                                                                                                   "sam_vit_b_01ec64.pth"),
         'https://zenodo.org/records/14671891/files/XMem.pth?download=1': os.path.join(BASE_DIR, "tabs", "xmem", "saves",
                                                                                       "XMem.pth"),
+        'https://zenodo.org/records/16625810/files/model_state_dict.pt?download=1': os.path.join(BASE_DIR,
+                                                                                                   "pretrained",
+                                                                                                   "model_state_dict.pt"),                                                                              
     }
 
     # Ensure all directories exist
