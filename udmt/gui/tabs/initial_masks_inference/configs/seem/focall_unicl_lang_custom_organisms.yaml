@@ -1,0 +1,331 @@
+# --------------------------------------------------------
+# SEEM Fine-tuning Configuration for Custom Organisms
+# Fine-tune on mouse, fruit fly, and nematode detection
+# --------------------------------------------------------
+
+# Define Test/Trainer/Saving
+PIPELINE: XDecoderPipeline
+TRAINER: xdecoder
+SAVE_DIR: './finetune_output/custom_organisms_finetune'
+base_path: "./"
+
+# Resume Logistic
+RESUME: false
+WEIGHT: true
+RESUME_FROM: 'seem_focall_v0.pt'  # Using the existing SEEM model
+EVAL_AT_START: False
+
+# Logging and Debug
+WANDB: False
+LOG_EVERY: 50
+FIND_UNUSED_PARAMETERS: false
+
+# Speed up training
+FP16: true
+PORT: '12355'
+
+# misc
+LOADER:
+  JOINT: False
+  KEY_DATASET: 'custom_organisms'
+
+##################
+# Task settings
+##################
+VERBOSE: true
+MODEL:
+  NAME: seem_model_v1
+  HEAD: xdecoder_head
+  MASK_ON: false
+  KEYPOINT_ON: false
+  LOAD_PROPOSALS: false
+  DIM_PROJ: 512
+  TEXT:
+    ARCH: vlpencoder
+    NAME: transformer
+    TOKENIZER: clip
+    CONTEXT_LENGTH: 77
+    WIDTH: 512
+    HEADS: 8
+    LAYERS: 12
+    AUTOGRESSIVE: True
+  BACKBONE:
+    NAME: focal
+    PRETRAINED: ''
+    LOAD_PRETRAINED: false
+    FOCAL:
+      PRETRAIN_IMG_SIZE: 224
+      PATCH_SIZE: 4
+      EMBED_DIM: 192
+      DEPTHS: [2, 2, 18, 2]
+      FOCAL_LEVELS: [4, 4, 4, 4]
+      FOCAL_WINDOWS: [3, 3, 3, 3]
+      DROP_PATH_RATE: 0.3
+      MLP_RATIO: 4.0
+      DROP_RATE: 0.0
+      PATCH_NORM: True
+      USE_CONV_EMBED: True
+      SCALING_MODULATOR: True
+      USE_CHECKPOINT: False
+      USE_POSTLN: true
+      USE_POSTLN_IN_MODULATION: false
+      USE_LAYERSCALE: True
+      OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+      OUT_INDICES: [0, 1, 2, 3]
+  ENCODER:
+    NAME: transformer_encoder_fpn
+    IGNORE_VALUE: 255
+    NUM_CLASSES: 3  # Updated for 3 classes: mouse, fruit_fly, nematode
+    LOSS_WEIGHT: 1.0
+    CONVS_DIM: 512
+    MASK_DIM: 512
+    NORM: "GN"
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    DEFORMABLE_TRANSFORMER_ENCODER_IN_FEATURES: ["res3", "res4", "res5"]
+    COMMON_STRIDE: 4
+    TRANSFORMER_ENC_LAYERS: 6
+  DECODER:
+    NAME: seem_v1
+    TRANSFORMER_IN_FEATURE: "multi_scale_pixel_decoder"
+    MASK:
+      ENABLED: True
+    DETECTION: False
+    SPATIAL:
+      ENABLED: True
+      MAX_ITER: 1
+    GROUNDING:
+      ENABLED: False
+      MAX_LEN: 5
+      TEXT_WEIGHT: 2.0
+      CLASS_WEIGHT: 0.5
+    RETRIEVAL:
+      ENABLED: False
+    LVIS:
+      ENABLED: True
+      THRES: 0.7
+    OPENIMAGE:
+      ENABLED: False
+      NEGATIVE_SAMPLES: 5
+      GROUNDING:
+        ENABLED: False
+        MAX_LEN: 5
+    CAPTION:
+      ENABLED: False
+      PHRASE_PROB: 0.5
+      SIM_THRES: 0.95
+    DEEP_SUPERVISION: True
+    NO_OBJECT_WEIGHT: 0.1
+    GCLASS_WEIGHT: 0.4
+    GMASK_WEIGHT: 1.0
+    GDICE_WEIGHT: 1.0
+    SCLASS_WEIGHT: 0.4
+    SMASK_WEIGHT: 1.0
+    SDICE_WEIGHT: 1.0
+    OCLASS_WEIGHT: 0.4
+    OMASK_WEIGHT: 1.0
+    ODICE_WEIGHT: 1.0
+    CLASS_WEIGHT: 2.0
+    MASK_WEIGHT: 5.0
+    DICE_WEIGHT: 5.0
+    BBOX_WEIGHT: 5.0
+    GIOU_WEIGHT: 2.0
+    CAPTION_WEIGHT: 2.0
+    COST_SPATIAL:
+      CLASS_WEIGHT: 5.0
+      MASK_WEIGHT: 2.0
+      DICE_WEIGHT: 2.0
+    HIDDEN_DIM: 512
+    NUM_OBJECT_QUERIES: 101
+    NHEADS: 8
+    DROPOUT: 0.0
+    DIM_FEEDFORWARD: 2048
+    MAX_SPATIAL_LEN: [512, 512, 512, 512]
+    PRE_NORM: False
+    ENFORCE_INPUT_PROJ: False
+    SIZE_DIVISIBILITY: 32
+    TRAIN_NUM_POINTS: 12544
+    OVERSAMPLE_RATIO: 3.0
+    IMPORTANCE_SAMPLE_RATIO: 0.75
+    DEC_LAYERS: 10
+    TOP_GROUNDING_LAYERS: 10
+    TOP_CAPTION_LAYERS: 10
+    TOP_SPATIAL_LAYERS: 10
+    TOP_OPENIMAGE_LAYERS: 10
+    TEST:
+      SEMANTIC_ON: False
+      INSTANCE_ON: True
+      PANOPTIC_ON: True
+      OVERLAP_THRESHOLD: 0.8
+      OBJECT_MASK_THRESHOLD: 0.8
+      SEM_SEG_POSTPROCESSING_BEFORE_INFERENCE: false
+
+# Spatial sampler
+STROKE_SAMPLER:
+  MAX_CANDIDATE: 1
+  CANDIDATE_PROBS: [0.25, 0.25, 0.25, 0.25]
+  CANDIDATE_NAMES: ["Point", "Polygon", "Scribble", "Circle"]
+  DILATION: 3
+  CIRCLE:
+    NUM_STROKES: 5
+    STROKE_PRESET: ['object_like', 'object_like_middle', 'object_like_small']
+    STROKE_PROB: [0.33, 0.33, 0.33]
+  SCRIBBLE:
+    NUM_STROKES: 5
+    STROKE_PRESET: ['rand_curve', 'rand_curve_small']
+    STROKE_PROB: [0.5, 0.5]
+  POINT:
+    NUM_POINTS: 20
+  POLYGON:
+    MAX_POINTS: 9
+  EVAL:
+    MODE: 'best'
+    NEGATIVE: False
+    MAX_ITER: 20
+    IOU_ITER: 1
+    GROUNDING: False
+
+# Multi-modal Architecture
+ATTENTION_ARCH:
+  VARIABLE:
+    queries: ['object', 'grounding', 'spatial']
+    tokens: ['grounding', 'spatial']
+    memories: ['spatial']
+  SELF_ATTENTION:
+    queries:
+      object: ['queries_object']
+      grounding: ['queries_grounding', 'tokens_grounding']
+      spatial: ['queries_spatial', 'tokens_spatial', 'memories_spatial']
+  CROSS_ATTENTION:
+    queries_object: ['tokens_grounding', 'tokens_spatial']
+    queries_grounding: ['tokens_grounding']
+    queries_spatial: ['tokens_spatial', 'memories_spatial']
+    tokens_grounding: ['queries_grounding']
+    tokens_spatial: ['queries_spatial']
+    memories_spatial: ['queries_spatial']
+  CROSS_ATTENTION:
+    queries:
+      object: True
+      grounding: True
+      spatial: True
+    memories:
+      spatial: True
+    tokens:
+      grounding: False
+      spatial: False
+  MASKING: ['tokens_spatial', 'tokens_grounding']
+  DUPLICATION:
+    queries:
+      grounding: 'queries_object'
+      spatial: 'queries_object'
+  SPATIAL_MEMORIES: 32
+  QUERY_NUMBER: 3
+
+# Dataset Configuration
+DATASETS:
+  TRAIN: ["custom_organisms_train"]
+  TEST: ["custom_organisms_val"]
+  CLASS_CONCAT: false
+  SIZE_DIVISIBILITY: 32
+  PROPOSAL_FILES_TRAIN: []
+
+# Input Configuration
+INPUT:
+  PIXEL_MEAN: [123.675, 116.280, 103.530]
+  PIXEL_STD: [58.395, 57.120, 57.375]
+  MIN_SIZE_TRAIN: 512
+  MAX_SIZE_TRAIN: 1024
+  MIN_SIZE_TRAIN_SAMPLING: 'choice'
+  MIN_SIZE_TEST: 512
+  MAX_SIZE_TEST: 1024
+  IMAGE_SIZE: 1024
+  MIN_SCALE: 0.1
+  MAX_SCALE: 2.0
+  DATASET_MAPPER_NAME: "mask_former_panoptic"
+  IGNORE_VALUE: 255
+  COLOR_AUG_SSD: False
+  SIZE_DIVISIBILITY: 32
+  RANDOM_FLIP: "horizontal"
+  MASK_FORMAT: "polygon"
+  FORMAT: "RGB"
+  CROP:
+    ENABLED: True
+    TYPE: "absolute"
+    SIZE: [640, 640]
+    SINGLE_CATEGORY_MAX_AREA: 1.0
+
+# Training Configuration
+TRAIN:
+  ASPECT_RATIO_GROUPING: true
+  BATCH_SIZE_TOTAL: 8 #debug
+  BATCH_SIZE_PER_GPU: 4
+  SHUFFLE: true
+
+# Test Configuration
+TEST:
+  DETECTIONS_PER_IMAGE: 100
+  NAME: coco_eval
+  IOU_TYPE: ['bbox', 'segm']
+  USE_MULTISCALE: false
+  BATCH_SIZE_TOTAL: 4
+  MODEL_FILE: ''
+  AUG:
+    ENABLED: False
+
+# DataLoader Configuration
+DATALOADER:
+  FILTER_EMPTY_ANNOTATIONS: False
+  NUM_WORKERS: 4
+  LOAD_PROPOSALS: False
+  SAMPLER_TRAIN: "TrainingSampler"
+  ASPECT_RATIO_GROUPING: False
+
+# Custom Organisms Dataset Configuration
+CUSTOM_ORGANISMS:
+  INPUT:
+    PIXEL_MEAN: [123.675, 116.280, 103.530]
+    PIXEL_STD: [58.395, 57.120, 57.375]
+    MIN_SIZE_TRAIN: 512
+    MAX_SIZE_TRAIN: 1024
+    MIN_SIZE_TEST: 512
+    MAX_SIZE_TEST: 1024
+    FORMAT: "RGB"
+    SPATIAL: False
+  DATALOADER:
+    FILTER_EMPTY_ANNOTATIONS: False
+    NUM_WORKERS: 4
+    LOAD_PROPOSALS: False
+    SAMPLER_TRAIN: "TrainingSampler"
+    ASPECT_RATIO_GROUPING: False
+  TRAIN:
+    BATCH_SIZE_TOTAL: 8  # Optimized for single-GPU debug
+    BATCH_SIZE_PER_GPU: 4  # 4 images per GPU
+  TEST:
+    BATCH_SIZE_TOTAL: 4
+
+# Detectron2 training config for optimizer and lr scheduler
+SOLVER:
+  BASE_LR: 0.00001  # Lower learning rate for fine-tuning
+  STEPS: [0.6, 0.8]  # Adjust learning rate schedule
+  MAX_ITER: 1
+  GAMMA: 0.1
+  WARMUP_FACTOR: 1.0
+  WARMUP_ITERS: 5
+  WARMUP_METHOD: "linear"
+  WEIGHT_DECAY: 0.05
+  OPTIMIZER: "ADAMW"
+  LR_SCHEDULER_NAME: "WarmupMultiStepLR"
+  LR_MULTIPLIER:
+    backbone: 0.01  # Very low LR for backbone (frozen)
+    lang_encoder: 0.01  # Very low LR for language encoder (frozen)
+  FIX_PARAM:
+    backbone: True  # Freeze backbone
+    lang_encoder: True  # Freeze language encoder
+    pixel_decoder: False  # Train pixel decoder
+  WEIGHT_DECAY_NORM: 0.0
+  WEIGHT_DECAY_EMBED: 0.0
+  CLIP_GRADIENTS:
+    ENABLED: True
+    CLIP_TYPE: "full_model"
+    CLIP_VALUE: 5.0
+    NORM_TYPE: 2.0
+  MAX_NUM_EPOCHS: 20  # Fewer epochs for fine-tuning 

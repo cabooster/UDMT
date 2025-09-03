@@ -1,0 +1,10 @@
+# Default ignored files
+*.tmp
+*.pt
+*.temp
+*.log
+__pycache__/
+*.pth
+*.tar
+*.pth.tar
+.idea/
