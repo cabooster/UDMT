@@ -1,5 +1,5 @@
 <center><img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="750" align="middle" /></center>
-<h1 align="center">UDMT: Unsupervised Multi-animal Tracking for Quantitative Ethology</h1>
+<h1 align="center">UDMT: Unsupervised transfer learning enables multi-animal tracking without training annotation</h1>
 
 ### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1)
 
@@ -33,7 +33,7 @@ Growing demands in quantitative ethology have motivated concerted efforts to dev
 We demonstrate the state-of-the-art performance of UDMT on five different kinds of model animals, including mice, rats, *Drosophila*, *C. elegans*, and *Betta splendens*. Combined with a head-mounted miniaturized microscope, we recorded the calcium transients synchronized with mouse locomotion to decipher the correlations between animal locomotion and neural activity. 
 
 For more details, please see the companion paper where the method first appeared: 
-["*Unsupervised multi-animal tracking for quantitative ethology*"](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1).
+["*Unsupervised transfer learning enables multi-animal tracking without training annotation*"](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1).
 
 <img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_schematic.png?raw=true" width="800" align="middle">
 
