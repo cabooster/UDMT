@@ -396,6 +396,6 @@ b. The illumination fluctuates to test the robustness of the algorithm.
 
 If you use these datasets, please cite the companion paper: 
 
-- Yixin Li, Xinyang Li, Qi Zhang, et al. Unsupervised multi-animal tracking for quantitative ethology. bioRxiv (2025) [https://doi.org/10.1101/2025.01.23.634625](https://doi.org/10.1101/2025.01.23.634625)
+- Li, Y., Zhang, Q., Zhang, Y. et al. Unsupervised transfer learning enables multi-animal tracking without training annotation. Nat Methods (2026). https://doi.org/10.1038/s41592-026-03051-8
 
 
