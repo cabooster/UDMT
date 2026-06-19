@@ -87,6 +87,7 @@ def find_last_number_segment_filled_range(nums, margin=10):
     if not nums:
         return []
 
+    margin = max(0, int(round(margin)))
     last_num = nums[-1]
     segments = []
     current_segment = [nums[0]]
@@ -501,7 +502,7 @@ class Tracker:
         elif gui_param['frame_rate'] >= 30:
             data_fps = 30
         else:
-            data_fps = gui_param['frame_rate']
+            data_fps = max(1, int(round(gui_param['frame_rate'])))
         if data_fps >= 60:
             down_sample_fg = 2
         else:
@@ -804,6 +805,9 @@ class Tracker:
                                               if DEBUG_FLAG:
                                                 print('swap_time:', swap_time_list[pair_id][0], 'of', pairs[pair_id])
 
+                                          if detect_x is None or detect_y is None:
+                                              print(f"Skip compensation at frame {frame_num} for pair {coincide_pair}: no missing-object candidate found.")
+                                              continue
                                           compensate_start = np.array([detect_x, detect_y])
                                           distance_between_detect_cross_list = []
                                           for mouse_id in coincide_pair:

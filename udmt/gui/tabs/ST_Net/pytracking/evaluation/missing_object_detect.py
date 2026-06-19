@@ -160,6 +160,13 @@ def missing_object_detect(detect_img,target_pos_mul,target_sz_mul,bg_img,seq_nam
     sort_area = np.sort(area_mul)
     # if isinstance(bg_img,str):
     #     sort_area = sort_area[~((sort_area > area_in_first_frame * upper_thresh) | (sort_area < area_in_first_frame * down_thresh))]
+    if abs(area_rank) > sort_area.shape[0]:
+        print(
+            f"missing_object_detect skipped at frame {current_frame}: "
+            f"area_rank {area_rank} requires at least {abs(area_rank)} connected components, "
+            f"but found {sort_area.shape[0]}."
+        )
+        return None, None
     max_area_id = np.where(area_mul == sort_area[area_rank])
     max_area_id = np.array(max_area_id)
     if max_area_id.shape[1] > 1:

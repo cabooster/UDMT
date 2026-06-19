@@ -75,8 +75,53 @@ def IoU(rec1, rec2):
         return (intersect / (sum_area - intersect)) * 1.0
 def optimize_tracklet(target_pos_mul, target_sz_mul,target_pos_compensate, target_sz_compensate,final_compensate_id,compensate_start_id):
 
-    target_pos_mul[final_compensate_id][compensate_start_id:] = target_pos_compensate[0:]
-    target_sz_mul[final_compensate_id][compensate_start_id:] = target_sz_compensate[0:]
+    pos_lengths_before = [len(tracklet) for tracklet in target_pos_mul]
+    sz_lengths_before = [len(tracklet) for tracklet in target_sz_mul]
+
+    original_start_id = compensate_start_id
+    target_length = pos_lengths_before[final_compensate_id]
+    compensate_start_id = max(0, min(compensate_start_id, target_length))
+    replace_length = target_length - compensate_start_id
+
+    target_pos_compensate = list(target_pos_compensate)
+    target_sz_compensate = list(target_sz_compensate)
+    original_pos_compensate_length = len(target_pos_compensate)
+    original_sz_compensate_length = len(target_sz_compensate)
+
+    if len(target_pos_compensate) > replace_length:
+        target_pos_compensate = target_pos_compensate[:replace_length]
+    elif len(target_pos_compensate) < replace_length:
+        target_pos_compensate = target_pos_compensate + target_pos_mul[final_compensate_id][compensate_start_id + len(target_pos_compensate):]
+
+    if len(target_sz_compensate) > replace_length:
+        target_sz_compensate = target_sz_compensate[:replace_length]
+    elif len(target_sz_compensate) < replace_length:
+        target_sz_compensate = target_sz_compensate + target_sz_mul[final_compensate_id][compensate_start_id + len(target_sz_compensate):]
+
+    if (original_start_id != compensate_start_id or
+            original_pos_compensate_length != replace_length or
+            original_sz_compensate_length != replace_length):
+        print(
+            f"Tracklet length correction for id {final_compensate_id}: "
+            f"start {original_start_id}->{compensate_start_id}, "
+            f"expected replacement length {replace_length}, "
+            f"pos replacement {original_pos_compensate_length}->{len(target_pos_compensate)}, "
+            f"size replacement {original_sz_compensate_length}->{len(target_sz_compensate)}, "
+            f"all pos lengths before {pos_lengths_before}, "
+            f"all size lengths before {sz_lengths_before}"
+        )
+
+    target_pos_mul[final_compensate_id][compensate_start_id:] = target_pos_compensate
+    target_sz_mul[final_compensate_id][compensate_start_id:] = target_sz_compensate
+
+    pos_lengths_after = [len(tracklet) for tracklet in target_pos_mul]
+    sz_lengths_after = [len(tracklet) for tracklet in target_sz_mul]
+    if pos_lengths_after != pos_lengths_before or sz_lengths_after != sz_lengths_before:
+        print(
+            f"Warning: tracklet lengths changed after correction for id {final_compensate_id}: "
+            f"pos {pos_lengths_before}->{pos_lengths_after}, "
+            f"size {sz_lengths_before}->{sz_lengths_after}"
+        )
 
     return target_pos_mul, target_sz_mul
 def hankelize(xy):
@@ -181,7 +226,6 @@ def match_compensate_target(target_pos_mul, target_sz_mul,score_map_list,target_
 
     ###############
 
-    target_pos_mul = np.asarray(target_pos_mul)
     compensate_frame_length = target_pos_compensate.shape[0]
     # print('compensate_frame_length:',compensate_frame_length)
     ###### calc_IoU
@@ -522,7 +566,7 @@ def single_compensate(tracker_compensate, compensate_start, target_pos_mul, targ
                     # print('IoU_cross_between_pair[IoU_id] < 0.5')
                     for dd in range(IoU_id, 0, -1):
                         if IoU_cross_between_pair[dd - end_f_bias] > 0.5:
-                            compensate_limit = dd - 5
+                            compensate_limit = max(1, dd - 5)
                             new_flag = True
                             break
                     # if new_flag == False:

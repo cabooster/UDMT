@@ -300,7 +300,6 @@ class CreateTrainingDataset(DefaultTab):
                                            'is_concave': self.root.cfg['is_concave']
                                            }
                     print('run_tracking_params:',run_tracking_params)
-                    # run_training_process()
                     # play_video_widget = [self.video_display_label1["video_label"],self.video_display_label2["video_label"]]
                     run_tracking(run_tracking_params)
                     param_json_path = run_tracking_params['project_folder'] + '/tmp/' + run_tracking_params['video_name'] + "/evaluation_metric_for_train.json"

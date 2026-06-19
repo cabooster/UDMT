@@ -1,6 +1,7 @@
 
 import os
 import logging
+import shutil
 import subprocess
 import sys
 import webbrowser
@@ -13,6 +14,7 @@ import qdarkstyle
 from udmt import auxiliaryfunctions, VERSION
 from udmt.gui import BASE_DIR, components
 from udmt.gui.components import LogWidget, TqdmLogger
+from udmt.gui.udmt_params import UDMTParams
 # from udmt.gui import BASE_DIR, components, utils
 from udmt.gui.tabs import *
 from udmt.gui.widgets import StreamReceiver, StreamWriter, StreamWriter_new
@@ -310,6 +312,10 @@ class MainWindow(QMainWindow):
         self.openAction.setShortcut("Ctrl+O")
         self.openAction.triggered.connect(self._open_project)
         ########################
+        self.addVideoAction = QAction("&Add Video...", self)
+        self.addVideoAction.setShortcut("Ctrl+Shift+V")
+        self.addVideoAction.triggered.connect(self._add_video_to_project)
+
         self.saveAction = QAction("&Save", self)
         self.exitAction = QAction("&Exit", self)
 
@@ -334,6 +340,7 @@ class MainWindow(QMainWindow):
 
         self.file_menu.addAction(self.newAction)
         self.file_menu.addAction(self.openAction)
+        self.file_menu.addAction(self.addVideoAction)
 
         self.recentfiles_menu = self.file_menu.addMenu("Open Recent")
         self.recentfiles_menu.triggered.connect(
@@ -353,6 +360,7 @@ class MainWindow(QMainWindow):
     def update_menu_bar(self):
         self.file_menu.removeAction(self.newAction)
         self.file_menu.removeAction(self.openAction)
+        self.file_menu.removeAction(self.addVideoAction)
 
     def create_toolbar(self):
         self.toolbar.addAction(self.newAction)
@@ -386,6 +394,108 @@ class MainWindow(QMainWindow):
             open_project.config,
             open_project.loaded,
         )
+
+    def _add_video_to_project(self):
+        if not self.loaded or not self.config:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "No project loaded",
+                "Please create or open a project before adding videos.",
+            )
+            return
+
+        cwd = os.path.join(self.project_folder, "videos")
+        filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
+            self,
+            "Select video(s) to add to the project",
+            cwd,
+            f"Videos ({' *.'.join(UDMTParams.VIDEOTYPES)[1:]})",
+        )
+        if not filenames:
+            return
+
+        from udmt.utils.auxfun_videos import VideoReader
+
+        cfg = auxiliaryfunctions.read_config(self.config)
+        project_path = Path(cfg["project_path"])
+        video_path = project_path / "videos"
+        results_path = project_path / "tracking-results"
+        training_datasets_path = project_path / "training-datasets"
+        tmp_path = project_path / "tmp"
+        for folder in [video_path, results_path, training_datasets_path, tmp_path]:
+            folder.mkdir(parents=True, exist_ok=True)
+
+        video_sets = cfg.get("video_sets") or {}
+        added_videos = []
+        skipped_videos = []
+
+        for filename in filenames:
+            src = Path(filename).resolve()
+            dst = video_path / src.name
+            copied_video = False
+
+            if dst.exists():
+                try:
+                    same_file = src.samefile(dst)
+                except OSError:
+                    same_file = False
+                if not same_file:
+                    skipped_videos.append(f"{src} (a different video named {src.name} already exists)")
+                    continue
+            else:
+                shutil.copy(os.fspath(src), os.fspath(dst))
+                copied_video = True
+                print(f"Copied video {src} to {dst}")
+
+            rel_video_path = str(dst.resolve())
+            video_key = f'"{rel_video_path}"' if " " in rel_video_path else rel_video_path
+            if video_key in video_sets:
+                skipped_videos.append(f"{dst} (already in project config)")
+                continue
+
+            try:
+                vid = VideoReader(rel_video_path)
+                crop = ", ".join(map(str, vid.get_bbox()))
+                vid.close()
+            except (IOError, ValueError):
+                skipped_videos.append(f"{dst} (cannot open video)")
+                if copied_video and dst.exists():
+                    dst.unlink()
+                continue
+
+            video_sets[video_key] = {"crop": crop}
+            for folder in [
+                results_path / dst.stem,
+                training_datasets_path / dst.stem,
+                tmp_path / dst.stem,
+            ]:
+                folder.mkdir(parents=True, exist_ok=True)
+                print(f'Created "{folder}"')
+            added_videos.append(str(dst))
+
+        if not added_videos:
+            QtWidgets.QMessageBox.information(
+                self,
+                "No videos added",
+                "No new videos were added to the project.",
+            )
+            for video in skipped_videos:
+                print(f"Skipped video: {video}")
+            return
+
+        cfg["video_sets"] = video_sets
+        auxiliaryfunctions.write_config(self.config, cfg)
+        self.config_loaded.emit()
+        self.video_files = added_videos
+
+        for video in skipped_videos:
+            print(f"Skipped video: {video}")
+        print(f"Added {len(added_videos)} video(s) to project: {added_videos}")
+
+        message = f"Added {len(added_videos)} video(s) to the project."
+        if skipped_videos:
+            message += f"\nSkipped {len(skipped_videos)} video(s); see logs for details."
+        QtWidgets.QMessageBox.information(self, "Videos added", message)
 
     def _open_help_url(self):
 

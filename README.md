@@ -1,10 +1,12 @@
 <center><img src="https://github.com/cabooster/UDMT/blob/page/images/logo_blue_v2.png?raw=true" width="750" align="middle" /></center>
-<h1 align="center">UDMT: Unsupervised Multi-animal Tracking for Quantitative Ethology</h1>
+<h1 align="center">UDMT: Unsupervised transfer learning enables multi-animal tracking without training annotation</h1>
 
-### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1)
+### [Project page](https://cabooster.github.io/UDMT/) | [Paper](https://www.nature.com/articles/s41592-026-03051-8)
 
 ## Updates
 <details>
+  <summary>:triangular_flag_on_post:2026/05/23: We have uploaded the corresponding frame-level manual annotations for the UDMT behavioral recording dataset to Zenodo: https://zenodo.org/records/20355567.<br>
+:triangular_flag_on_post:2026/05/06: Our paper has been published in Nature Methods.</summary>
   <summary>:triangular_flag_on_post:2025/07/30: Optimize the initialization method. </summary>
   <summary>:triangular_flag_on_post:2025/03/06: Added a log window and tooltips in the GUI. </summary>
   
@@ -28,12 +30,12 @@ Tooltips have been added for buttons and the property panel to improve usability
 
 Animal behavior is closely related to their internal state and external environment. **Quantifying animal behavior is a fundamental step in ecology, neuroscience, psychology, and various other fields.** However, there exist enduring challenges impeding multi-animal tracking advancing towards higher accuracy, larger scale, and more complex scenarios, especially the similar appearance and frequent interactions of animals of the same species.
 
-Growing demands in quantitative ethology have motivated concerted efforts to develop high-accuracy and generalized tracking methods. **Here, we present UDMT, the first unsupervised multi-animal tracking method that achieves state-of-the-art performance without requiring any human annotations.** The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. 
+Growing demands in quantitative ethology have motivated concerted efforts to develop high-accuracy and generalized tracking methods. **Here, we present UDMT, an unsupervised multi-animal tracking method that achieves state-of-the-art performance without requiring any human annotations.** The only thing users need to do is to click the animals in the first frame to specify the individuals they want to track. 
 
 We demonstrate the state-of-the-art performance of UDMT on five different kinds of model animals, including mice, rats, *Drosophila*, *C. elegans*, and *Betta splendens*. Combined with a head-mounted miniaturized microscope, we recorded the calcium transients synchronized with mouse locomotion to decipher the correlations between animal locomotion and neural activity. 
 
 For more details, please see the companion paper where the method first appeared: 
-["*Unsupervised multi-animal tracking for quantitative ethology*"](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1).
+["*Unsupervised transfer learning enables multi-animal tracking without training annotation*"](https://www.nature.com/articles/s41592-026-03051-8).
 
 <img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_schematic.png?raw=true" width="800" align="middle">
 
@@ -78,6 +80,11 @@ If you encounter any issues during installation or usage, please refer to the [Q
    ```
 
 ### 2. For Windows
+
+> **Not recommended.**  
+> The Windows installation is provided only as a reference for users who cannot access a Linux machine.  
+> Since UDMT relies on specific PyTorch/CUDA configurations and several system-dependent packages, the Windows environment can be difficult to set up and debug.  
+> For reproducible and stable use, please use the recommended Linux environment above.
 
 #### Environment 
 
@@ -138,6 +145,15 @@ We have released the Python source code and a user-friendly GUI of UDMT to make 
     ```
     $ CUDA_VISIBLE_DEVICES=3 python -m udmt.gui.launch_script
     ```
+3. Pre-trained models will be downloaded automatically before launching the GUI. Alternatively, you can manually download the model and place it in the specified location.
+
+   | Model name                                                   | Location                         |
+   | ------------------------------------------------------------ | -------------------------------- |
+   | [trdimp_net_ep.pth.tar](https://zenodo.org/records/14671891/files/trdimp_net_ep.pth.tar?download=1) | `./udmt/gui/pretrained`          |
+   | [XMem.pth](https://zenodo.org/records/14671891/files/XMem.pth?download=1) | `./udmt/gui/tabs/xmem/saves`     |
+   | [sam_vit_b_01ec64.pth](https://zenodo.org/records/14671891/files/sam_vit_b_01ec64.pth?download=1) | `./udmt/gui/tabs/xmem/sam_model` |
+   | [model_state_dict.pt](https://zenodo.org/records/16625810/files/model_state_dict.pt?download=1) | `./udmt/gui/pretrained`  
+
 #### **Quick Start with Demo Data**:
 
 If you would like to try the GUI with a smaller dataset first, we provide **demo videos** ([5-mice video](https://zenodo.org/records/14689184/files/5-mice-1min.mp4?download=1) & [7-mice video](https://zenodo.org/records/14709082/files/7-mice-1min.mp4?download=1)) and pre-trained **models** (model for [5-mice](https://zenodo.org/records/14689184/files/DiMPnet_ep0020.pth.tar?download=1) and [7-mice](https://zenodo.org/records/14709082/files/DiMPnet_ep0020.pth.tar?download=1)).
@@ -229,15 +245,15 @@ More demo videos are presented on [our website](https://cabooster.github.io/UDMT
 
 If you use this code, please cite the companion paper where the original method appeared: 
 
-- Yixin Li, Xinyang Li, Qi Zhang, et al. Unsupervised multi-animal tracking for quantitative ethology. bioRxiv (2025). [https://doi.org/10.1101/2025.01.23.634625](https://www.biorxiv.org/content/10.1101/2025.01.23.634625v1)
+- Li, Y., Zhang, Q., Zhang, Y. et al. Unsupervised transfer learning enables multi-animal tracking without training annotation. Nat Methods (2026). https://doi.org/10.1038/s41592-026-03051-8
 
 ```
-@article {Li2025.01.23.634625,
- title = {Unsupervised multi-animal tracking for quantitative ethology},
- author = {Li, Yixin and Li, Xinyang and Zhang, Qi and Zhang, Yuanlong and Fan, Jiaqi and Lu, Zhi and Li, Ziwei and Wu, Jiamin and Dai, Qionghai},
- journal = {bioRxiv}
- year = {2025},
- publisher = {Cold Spring Harbor Laboratory},
- doi = {10.1101/2025.01.23.634625}
+@article {Li2026.05.06,
+ title = {Unsupervised transfer learning enables multi-animal tracking without training annotation},
+ author = {Li, Yixin and Zhang, Qi and Zhang, Yuanlong and Fan, Jiaqi and Lu, Zhi and Xu, Xinhong and Li, Xinyang and Li, Ziwei and Wu, Jiamin and Dai, Qionghai},
+ journal = {Nature Methods}
+ year = {2026},
+ publisher = {Springer},
+ doi = {10.1038/s41592-026-03051-8}
 }
 ```
