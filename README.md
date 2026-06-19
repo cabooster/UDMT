@@ -5,7 +5,8 @@
 
 ## Updates
 <details>
-  <summary>:triangular_flag_on_post:2026/05/23: We have uploaded the corresponding frame-level manual annotations for the UDMT behavioral recording dataset to Zenodo: https://zenodo.org/records/20355567.<br>
+  <summary>:triangular_flag_on_post:2026/06/19: Version Update Summary: 1. Added `File > Add Video...` to add new videos to an existing project 2. Improved support for low-frame-rate videos by normalizing FPS values before frame-based tracking operations.<br>
+:triangular_flag_on_post:2026/05/23: We have uploaded the corresponding frame-level manual annotations for the UDMT behavioral recording dataset to Zenodo: https://zenodo.org/records/20355567.<br>
 :triangular_flag_on_post:2026/05/06: Our paper has been published in Nature Methods.</summary>
   <summary>:triangular_flag_on_post:2025/07/30: Optimize the initialization method. </summary>
   <summary>:triangular_flag_on_post:2025/03/06: Added a log window and tooltips in the GUI. </summary>
