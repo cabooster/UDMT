@@ -5,17 +5,15 @@
 
 ## Updates
 <details>
-  <summary>:triangular_flag_on_post:2026/09/08: Version 1.2.0. Replaced SAM ViT-B with SAM3 for first-frame click segmentation and forward propagation. Updated the recommended environment to Python 3.12 + PyTorch 2.7 (CUDA 12.6).<br>
+  <summary>:triangular_flag_on_post:2026/09/08: Version 1.2.0. Replaced SAM ViT-B with SAM3 for first-frame click segmentation and forward propagation. Updated the recommended environment to Python 3.12 + PyTorch 2.7 (CUDA 12.6). Create training datasets can be stopped early and still export labels from the best completed parameters.<br>
 :triangular_flag_on_post:2026/06/19: Version Update Summary: 1. Added `File > Add Video...` to add new videos to an existing project 2. Improved support for low-frame-rate videos by normalizing FPS values before frame-based tracking operations.<br>
 :triangular_flag_on_post:2026/05/23: We have uploaded the corresponding frame-level manual annotations for the UDMT behavioral recording dataset to Zenodo: https://zenodo.org/records/20355567.<br>
 :triangular_flag_on_post:2026/05/06: Our paper has been published in Nature Methods.</summary>
-  <summary>:triangular_flag_on_post:2025/07/30: Optimize the initialization method. </summary>
-  <summary>:triangular_flag_on_post:2025/03/06: Added a log window and tooltips in the GUI. </summary>
-  
-A log window has been added at the bottom of the GUI to display runtime messages.  
-Tooltips have been added for buttons and the property panel to improve usability.  
-
-  <summary>:triangular_flag_on_post:2025/02/16: Fixed some bugs to improve stability. </summary>
+:triangular_flag_on_post:2025/07/30: Optimize the initialization method.<br>
+:triangular_flag_on_post:2025/03/06: Added a log window and tooltips in the GUI.<br>
+&emsp; A log window has been added at the bottom of the GUI to display runtime messages. <br>
+&emsp; Tooltips have been added for buttons and the property panel to improve usability. <br>
+:triangular_flag_on_post:2025/02/16: Fixed some bugs to improve stability.<br>
 </details>
 
 ## Contents
