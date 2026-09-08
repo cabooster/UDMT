@@ -38,7 +38,7 @@ We demonstrate the state-of-the-art performance of UDMT on five different kinds 
 For more details, please see the companion paper where the method first appeared: 
 ["*Unsupervised transfer learning enables multi-animal tracking without training annotation*"](https://www.nature.com/articles/s41592-026-03051-8).
 
-<img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_schematic.png?raw=true" width="800" align="middle">
+<img src="https://github.com/cabooster/UDMT/blob/page/images/udmt_schematic.png?raw=true" width="700" align="middle">
 
 ## Installation
 If you encounter any issues during installation or usage, please refer to the [Q&A section](#qa) for common solutions.
