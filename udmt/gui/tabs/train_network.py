@@ -24,18 +24,15 @@ from udmt.gui.tabs.ST_Net.ltr.run_training import run_training_process
 def is_folder_empty(folder_path):
     """
     Check if a folder contains any files.
-    Returns True if the folder has no files, otherwise False.
+    Returns True if the folder is missing or has no files, otherwise False.
     """
-    # Iterate through items in the folder
+    if not os.path.isdir(folder_path):
+        return True
     for item in os.listdir(folder_path):
-        # Build the full path
         item_path = os.path.join(folder_path, item)
-
-        # Check if the item is a file
         if os.path.isfile(item_path):
-            return False  # Found a file, folder is not empty
-
-    return True  # No files found, folder is empty
+            return False
+    return True
 class TrainNetwork(DefaultTab):
     def __init__(self, root, parent, h1_description):
         super(TrainNetwork, self).__init__(root, parent, h1_description)
@@ -161,7 +158,10 @@ class TrainNetwork(DefaultTab):
             QMessageBox.information(
                 self,
                 "Warning",
-                "Please complete the training dataset creation in 'UDMT - Create Training Dataset' before proceeding!",
+                "Training labels were not found:\n"
+                f"{train_set_path}\n\n"
+                "Please finish 'UDMT - Create Training Dataset' first. "
+                "That step writes this label folder after tracking parameter search completes.",
                 QMessageBox.Ok
             )
         else:

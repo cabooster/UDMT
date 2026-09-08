@@ -129,11 +129,13 @@ class TransformBase:
             return None
         if isinstance(im, (list, tuple)):
             im = im[0]
+        if im is None:
+            raise Exception('Image is None. Check that training images exist and can be loaded.')
         if isinstance(im, np.ndarray):
             return im.shape[:2]
         if torch.is_tensor(im):
             return (im.shape[-2], im.shape[-1])
-        raise Exception('Unknown image type')
+        raise Exception('Unknown image type: {}'.format(type(im)))
 
     def roll(self):
         return None

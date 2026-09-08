@@ -36,18 +36,68 @@ from udmt.utils.auxiliaryfunctions import (
 
 
 def find_subfolders_with_keyword(parent_folder, keyword):
-    # List to store matching subfolder names
     matching_folders = []
-
-    # Iterate through all subfolders in the parent folder
+    if not os.path.isdir(parent_folder):
+        return None
     for folder_name in os.listdir(parent_folder):
-        # Build the full path to the folder
         folder_path = os.path.join(parent_folder, folder_name)
-
-        # Check if it's a directory and contains the keyword
         if os.path.isdir(folder_path) and keyword in folder_name:
             matching_folders.append(folder_name)
+    if not matching_folders:
+        return None
     return matching_folders[0]
+
+
+def _metric_sort_key(metric):
+    # Same preference as parameter search: fewer corrections, then fewer losses, then fewer misses.
+    return (
+        metric.get("correct_number", float("inf")),
+        metric.get("current_correct_loss_number", float("inf")),
+        metric.get("miss_target_time_sum", float("inf")),
+    )
+
+
+def _count_traj_frames(result_folder):
+    txts = [name for name in os.listdir(result_folder) if name.endswith("_new.txt")]
+    if not txts:
+        return 0
+    with open(os.path.join(result_folder, txts[0]), "r") as handle:
+        return sum(1 for line in handle if line.strip())
+
+
+def export_best_train_label(project_folder, video_name, min_frames=2000):
+    param_json_path = os.path.join(project_folder, "tmp", video_name, "evaluation_metric_for_train.json")
+    results_path = os.path.join(project_folder, "tmp", video_name, "train_set_results")
+    train_label_path = os.path.join(project_folder, "training-datasets", video_name, "label")
+
+    if not os.path.isfile(param_json_path):
+        return False, None, "No completed parameter search results were found."
+    with open(param_json_path, "r") as file:
+        loaded_results_list = json.load(file)
+    if not loaded_results_list:
+        return False, None, "No completed parameter search results were found."
+
+    for best in sorted(loaded_results_list, key=_metric_sort_key):
+        keyword = str(best["target_sz"]) + "_" + str(best["search_scale"])
+        folder_name = find_subfolders_with_keyword(results_path, keyword)
+        if not folder_name:
+            continue
+        best_param_path = os.path.join(results_path, folder_name)
+        n_frames = _count_traj_frames(best_param_path)
+        if n_frames < min_frames:
+            print(f"Skip incomplete result {folder_name} ({n_frames} frames).")
+            continue
+        print(
+            f"Using best completed parameters: target_sz={best['target_sz']}, "
+            f"search_scale={best['search_scale']}, correct_number={best.get('correct_number')}, "
+            f"miss_target_time_sum={best.get('miss_target_time_sum')}."
+        )
+        print(f"Converting results in {best_param_path}...")
+        create_train_label(video_name, best_param_path, train_label_path)
+        return True, best, None
+    return False, None, "Completed parameter records were found, but no matching full-length trajectories exist."
+
+
 class CreateTrainingDataset(DefaultTab):
     def __init__(self, root, parent, h1_description):
         super(CreateTrainingDataset, self).__init__(root, parent, h1_description)
@@ -103,11 +153,26 @@ class CreateTrainingDataset(DefaultTab):
 
 
         # self.model_comparison = False
+        self._run_tracking_params = None
+        button_row = QtWidgets.QHBoxLayout()
+        button_row.setAlignment(Qt.AlignRight)
+        button_row.setSpacing(10)
+
+        self.stop_search_btn = QtWidgets.QPushButton("Stop and Use Best")
+        self.stop_search_btn.setMinimumWidth(150)
+        self.stop_search_btn.setEnabled(False)
+        self.stop_search_btn.clicked.connect(self.stop_parameter_search)
+        self.stop_search_btn.setToolTip(
+            "Stop the parameter search and generate training labels using the best completed parameters."
+        )
+
         self.label_frames_btn = QtWidgets.QPushButton("Step 2. Create Training Dataset")
         self.label_frames_btn.setMinimumWidth(150)
         self.label_frames_btn.clicked.connect(self.create_training_dataset)
         self.label_frames_btn.setToolTip("Click to start creating the training dataset.")
-        self.main_layout.addWidget(self.label_frames_btn, alignment=Qt.AlignRight)
+        button_row.addWidget(self.stop_search_btn)
+        button_row.addWidget(self.label_frames_btn)
+        self.main_layout.addLayout(button_row)
 
 
         self.toggle_videos_btn = QtWidgets.QPushButton("Show Videos")
@@ -169,6 +234,37 @@ class CreateTrainingDataset(DefaultTab):
 
     def log_downsample_rate(self, value):
         print(f"Downsample rate adjusted to: {value:.1f}")
+
+    def stop_parameter_search(self):
+        print("Stopping parameter search. Labels will be generated from the best completed parameters...")
+        if self._run_tracking_params is not None:
+            self._run_tracking_params["stop_requested"] = True
+        self.stop_search_btn.setEnabled(False)
+
+    def _show_dataset_ready_dialog(self, interrupted=False, best=None):
+        msg = QtWidgets.QMessageBox(self)
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        if interrupted:
+            msg.setText("Parameter search was stopped. Training labels were generated from the best completed parameters.")
+            if best is not None:
+                msg.setInformativeText(
+                    f"Best parameters so far: target size {best.get('target_sz')}, "
+                    f"search scale {best.get('search_scale')}.\n"
+                    "Move to 'UDMT - Train Network' for training."
+                )
+            else:
+                msg.setInformativeText("Move to 'UDMT - Train Network' for training.")
+        else:
+            msg.setText("The training dataset is now created and ready to train.")
+            msg.setInformativeText("Move 'UDMT - Train Network' for training.")
+        msg.setWindowTitle("Info")
+        msg.setMinimumWidth(900)
+        self.logo_dir = os.path.dirname(os.path.realpath("logo.png")) + os.path.sep
+        self.logo = self.logo_dir + "/assets/logo.png"
+        msg.setWindowIcon(QIcon(self.logo))
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg.exec_()
+
     def create_video_section(self, title):
         title_label = QtWidgets.QLabel(title)
         title_label.setAlignment(Qt.AlignCenter)
@@ -297,35 +393,50 @@ class CreateTrainingDataset(DefaultTab):
                                            'target_sz_bias_range': [-0.1, 0, 0.1], # [-0.1, 0, 0.1] [-0.2, -0.1, 0, 0.1, 0.2]
                                            'status_flag': 1, # train_param_iter 1 test_param_iter 2 test 3
                                            'evaluation_metric': [],
-                                           'is_concave': self.root.cfg['is_concave']
+                                           'is_concave': self.root.cfg['is_concave'],
+                                           'stop_requested': False,
                                            }
                     print('run_tracking_params:',run_tracking_params)
-                    # play_video_widget = [self.video_display_label1["video_label"],self.video_display_label2["video_label"]]
-                    run_tracking(run_tracking_params)
-                    param_json_path = run_tracking_params['project_folder'] + '/tmp/' + run_tracking_params['video_name'] + "/evaluation_metric_for_train.json"
-                    with open(param_json_path, "r") as file:
-                        loaded_results_list = json.load(file)
-                    best_param_path_find_str = loaded_results_list[-1]["target_sz"] + '_' + loaded_results_list[-1]["search_scale"]
-                    # print('best_param_path_find_str', best_param_path_find_str)
-                    results_path = run_tracking_params['project_folder'] + '/tmp/' + run_tracking_params['video_name'] + '/train_set_results'
-                    best_param_path = results_path + '/' + find_subfolders_with_keyword(results_path,best_param_path_find_str)
-                    print(f'Converting results in {best_param_path}...')
-                    create_train_label(run_tracking_params['video_name'],best_param_path,run_tracking_params['project_folder'] + '/training-datasets/' + run_tracking_params['video_name'] +'/label')
-                    ######################
-                    msg = QtWidgets.QMessageBox()
-                    msg.setIcon(QtWidgets.QMessageBox.Information)
-                    msg.setText("The training dataset is now created and ready to train.")
-                    msg.setInformativeText(
-                        "Move 'UDMT - Train Network' for training."
-                    )
+                    interrupted = False
+                    error_tb = None
+                    self._run_tracking_params = run_tracking_params
+                    self.stop_search_btn.setEnabled(True)
+                    try:
+                        run_tracking(run_tracking_params)
+                        interrupted = bool(run_tracking_params.get('stop_requested'))
+                    except KeyboardInterrupt:
+                        interrupted = True
+                        run_tracking_params['stop_requested'] = True
+                        print("Parameter search interrupted. Generating labels from the best completed parameters...")
+                    except Exception:
+                        import traceback
+                        traceback.print_exc()
+                        error_tb = traceback.format_exc()
+                    finally:
+                        self.stop_search_btn.setEnabled(False)
+                        self._run_tracking_params = None
 
-                    msg.setWindowTitle("Info")
-                    msg.setMinimumWidth(900)
-                    self.logo_dir = os.path.dirname(os.path.realpath("logo.png")) + os.path.sep
-                    self.logo = self.logo_dir + "/assets/logo.png"
-                    msg.setWindowIcon(QIcon(self.logo))
-                    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    msg.exec_()
+                    ok, best, fail_reason = export_best_train_label(
+                        run_tracking_params['project_folder'],
+                        run_tracking_params['video_name'],
+                        min_frames=run_tracking_params['frame_num'],
+                    )
+                    if ok:
+                        self._show_dataset_ready_dialog(interrupted=interrupted, best=best)
+                    elif error_tb:
+                        msg_box = QtWidgets.QMessageBox(self)
+                        msg_box.setIcon(QtWidgets.QMessageBox.Critical)
+                        msg_box.setWindowTitle("Unexpected Error")
+                        msg_box.setText("An unexpected error occurred:\n\n" + error_tb)
+                        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                        msg_box.exec()
+                    else:
+                        QMessageBox.information(
+                            self,
+                            "Warning",
+                            fail_reason + " Run parameter search longer so at least one combination finishes all frames.",
+                            QMessageBox.Ok
+                        )
 
                 else:
                     QMessageBox.information(

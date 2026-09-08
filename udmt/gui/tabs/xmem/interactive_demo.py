@@ -12,16 +12,14 @@ from argparse import ArgumentParser
 
 import torch
 
-from .model.network import XMem
 from .inference.interact.s2m_controller import S2MController
 from .inference.interact.fbrs_controller import FBRSController
 from .inference.interact.s2m.s2m_network import deeplabv3plus_resnet50 as S2M
-from .inference.interact.sam_controller import SamController
+from .inference.interact.sam_controller import Sam3PredictorAdapter, SamController
 from PySide6.QtWidgets import QApplication
 from .inference.interact.gui import App
 from .inference.interact.resource_manager import ResourceManager
 from pathlib import Path
-from segment_anything import sam_model_registry, SamPredictor
 from udmt.gui import BASE_DIR
 
 # Import auto initial prediction module
@@ -33,9 +31,11 @@ except ImportError as e:
     AUTO_PREDICTION_AVAILABLE = False
 
 torch.set_grad_enabled(False)
-sam_checkpoint = BASE_DIR + "/tabs/xmem/sam_model/sam_vit_b_01ec64.pth"
+sam_checkpoint = os.environ.get(
+    "UDMT_SAM3_CHECKPOINT",
+    os.path.join(BASE_DIR, "tabs", "xmem", "sam_model", "sam3.pt"),
+)
 XMem_model_path = BASE_DIR +'/tabs/xmem/saves/XMem.pth'
-model_type = "vit_b"
 
 
 
@@ -86,89 +86,88 @@ def mask_seg_winclass(video_name, project_path, divide_num, enable_auto_predicti
     config['enable_long_term'] = True
     config['enable_long_term_count_usage'] = True
 
-    with torch.cuda.amp.autocast(enabled=not args.no_amp):
+    config["propagate_backend"] = "sam3"
+    config["sam3_checkpoint"] = sam_checkpoint
 
-        # Load our checkpoint
-        network = XMem(config, args.model).cuda().eval()
+    # SAM3 click + propagate run in bf16 inside the adapters.
+    network = None
 
-        # Loads the S2M model
-        if args.s2m_model is not None:
-            s2m_saved = torch.load(args.s2m_model)
-            s2m_model = S2M().cuda().eval()
-            s2m_model.load_state_dict(s2m_saved)
-            ####################################
-        else:
-            s2m_model = None
-        ####################################
-        sam_net = sam_model_registry[model_type](checkpoint=sam_checkpoint)
-        sam_net.to(device='cuda:0')
-        ##########
-        sam_predictor = SamPredictor(sam_net)
-        sam_controller = SamController(sam_predictor, args.num_objects, ignore_class=255)
-        ##########
-        # s2m_controller = S2MController(s2m_model, sam_predictor, args.num_objects, ignore_class=255)
-        s2m_controller = None
-        if args.fbrs_model is not None:
-            fbrs_controller = FBRSController(args.fbrs_model)
-        else:
-            fbrs_controller = None
+    # Loads the S2M model
+    if args.s2m_model is not None:
+        s2m_saved = torch.load(args.s2m_model)
+        s2m_model = S2M().cuda().eval()
+        s2m_model.load_state_dict(s2m_saved)
+    else:
+        s2m_model = None
+    if not os.path.isfile(sam_checkpoint):
+        raise FileNotFoundError(
+            f"SAM3 checkpoint not found: {sam_checkpoint}. "
+            "Place sam3.pt in ./udmt/gui/tabs/xmem/sam_model "
+            "or set UDMT_SAM3_CHECKPOINT to the checkpoint path."
+        )
+    sam_predictor = Sam3PredictorAdapter(sam_checkpoint, device="cuda")
+    sam_controller = SamController(sam_predictor, args.num_objects, ignore_class=255)
+    # s2m_controller = S2MController(s2m_model, sam_predictor, args.num_objects, ignore_class=255)
+    s2m_controller = None
+    if args.fbrs_model is not None:
+        fbrs_controller = FBRSController(args.fbrs_model)
+    else:
+        fbrs_controller = None
 
-        # Manages most IO
-        resource_manager = ResourceManager(config,divide_num)
-        
-        # Set up start point save path
-        start_point_save_path = project_path + '/tmp/' + file_name_without_extension + '/extracted-images/'
-        if not os.path.exists(start_point_save_path):
-            os.makedirs(start_point_save_path)
-        
-        # 🤖 Auto initial prediction feature
-        if enable_auto_prediction and AUTO_PREDICTION_AVAILABLE:
-            try:
-                print("🤖 Running auto initial prediction...")
-                
-                # Check if first frame mask already exists
-                first_mask_path = os.path.join(resource_manager.mask_dir, "0000000.png")
-                if not os.path.exists(first_mask_path):
-                    print("📋 First frame mask not found, starting auto prediction...")
-                    
-                    # Check dependencies
-                    if check_dependencies():
-                        # Get resource_manager image dimensions and resize scale
-                        target_size = (resource_manager.h, resource_manager.w)
-                        resize_scale = resource_manager.resize_scale
-                        success, num_instances = run_auto_initial_prediction(
-                            resource_manager.image_dir, 
-                            resource_manager.mask_dir,
-                            target_size=target_size,
-                            start_point_save_path=start_point_save_path,
-                            resize_scale=resize_scale
-                        )
-                        
-                        if success and num_instances > 0:
-                            print(f"✅ Auto prediction successful! Detected {num_instances} instances")
-                            print("💡 Tip: You can check the prediction results and supplement missing animal instances")
-                        elif success and num_instances == 0:
-                            print("⚠️ Auto prediction completed but no animal instances detected")
-                            print("💡 Tip: Please manually click the center of each animal")
-                        else:
-                            print("❌ Auto prediction failed, please initialize manually")
+    # Manages most IO
+    resource_manager = ResourceManager(config,divide_num)
+
+    # Set up start point save path
+    start_point_save_path = project_path + '/tmp/' + file_name_without_extension + '/extracted-images/'
+    if not os.path.exists(start_point_save_path):
+        os.makedirs(start_point_save_path)
+
+    # Auto initial prediction feature
+    if enable_auto_prediction and AUTO_PREDICTION_AVAILABLE:
+        try:
+            print("🤖 Running auto initial prediction...")
+
+            # Check if first frame mask already exists
+            first_mask_path = os.path.join(resource_manager.mask_dir, "0000000.png")
+            if not os.path.exists(first_mask_path):
+                print("📋 First frame mask not found, starting auto prediction...")
+
+                # Check dependencies
+                if check_dependencies():
+                    # Get resource_manager image dimensions and resize scale
+                    target_size = (resource_manager.h, resource_manager.w)
+                    resize_scale = resource_manager.resize_scale
+                    success, num_instances = run_auto_initial_prediction(
+                        resource_manager.image_dir,
+                        resource_manager.mask_dir,
+                        target_size=target_size,
+                        start_point_save_path=start_point_save_path,
+                        resize_scale=resize_scale
+                    )
+
+                    if success and num_instances > 0:
+                        print(f"✅ Auto prediction successful! Detected {num_instances} instances")
+                        print("💡 Tip: You can check the prediction results and supplement missing animal instances")
+                    elif success and num_instances == 0:
+                        print("⚠️ Auto prediction completed but no animal instances detected")
+                        print("💡 Tip: Please manually click the center of each animal")
                     else:
-                        print("⚠️ Auto prediction dependencies check failed, will use manual mode")
+                        print("❌ Auto prediction failed, please initialize manually")
                 else:
-                    print("📋 First frame mask already exists, skipping auto prediction")
-                    
-            except Exception as e:
-                print(f"❌ Error during auto prediction: {e}")
-                print("💡 Will continue with manual mode")
-        
-        # app = QApplication(sys.argv)
-        ex = App(network, resource_manager, s2m_controller, fbrs_controller, sam_controller, config, start_point_save_path)
-        
-        # Pass auto prediction availability info to App
-        ex.auto_prediction_available = AUTO_PREDICTION_AVAILABLE
-        
-        return ex
-        # sys.exit(app.exec_())
+                    print("⚠️ Auto prediction dependencies check failed, will use manual mode")
+            else:
+                print("📋 First frame mask already exists, skipping auto prediction")
+
+        except Exception as e:
+            print(f"❌ Error during auto prediction: {e}")
+            print("💡 Will continue with manual mode")
+
+    ex = App(network, resource_manager, s2m_controller, fbrs_controller, sam_controller, config, start_point_save_path)
+
+    # Pass auto prediction availability info to App
+    ex.auto_prediction_available = AUTO_PREDICTION_AVAILABLE
+
+    return ex
 
 if __name__ == '__main__':
     # Example usage

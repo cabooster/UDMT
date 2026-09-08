@@ -228,18 +228,24 @@ class ScribbleInteraction(Interaction):
 
 
 class ClickInteraction(Interaction):
-    def __init__(self, image, prev_mask, true_size, controller, tar_obj):
+    def __init__(self, image, prev_mask, true_size, controller, tar_obj, hires_image=None):
         """
         prev_mask in a prob. form
+        hires_image - full resolution frame for SAM to segment on, may be None
         """
         super().__init__(image, prev_mask, true_size, controller)
         self.tar_obj = tar_obj
+        self.hires_image = hires_image
 
         # negative/positive for each object
         self.pos_clicks = []
         self.neg_clicks = []
-        self.input_label = np.array([1])
         self.out_prob = self.prev_mask.clone()
+        # Foreground collected so far, (1,1,h,w) with 0 bg / 1 fg. Every click is
+        # prompted to SAM on its own and merged in here: a prompt holding several
+        # points has to return one mask covering all of them, which swallows the
+        # background in between when the animals are small and far apart.
+        self.acc_mask = (self.prev_mask[self.tar_obj] > 0.5).float()[None, None]
 
     """
     neg - Negative interaction or not
@@ -249,43 +255,34 @@ class ClickInteraction(Interaction):
         # Clicks
         if neg:
             self.neg_clicks.append((x, y))
+            removed = self.remove_object_at(x, y)
+            if removed is not None and frame_id == 0:
+                self.drop_start_pos(removed, resize_scale, project_path)
         else:
-            if len(self.pos_clicks) > 0:
-                self.input_label = np.concatenate([self.input_label, [1]], axis=0)
             self.pos_clicks.append((x, y))
 
+            # Do the prediction for this click only, then merge into the union
+            single_click = np.asarray([[x, y]], dtype=np.float32)
+            new_mask = self.controller.interact(self.image, single_click, np.asarray([1]),
+                                                hires_image=self.hires_image)
+            self.acc_mask = torch.maximum(self.acc_mask, new_mask)
 
-        # Do the prediction
-        pos_clicks_list = np.asarray(self.pos_clicks)
+            #############################
+            if frame_id == 0:
+                start_pos_file = project_path + '/start_pos_array.txt'
+                new_point = np.asarray([x, y]) / resize_scale
+                # Check if file exists (from auto prediction or earlier clicks)
+                if os.path.exists(start_pos_file):
+                    append_point_to_txt(start_pos_file, new_point)
+                else:
+                    save_ndarray_to_txt(start_pos_file, new_point.reshape(1, 2))
+            #############################
+
         print(f'-------------Selected Points (x, y) in frame {frame_id}-------------')
-        # print(self.input_label)
-        start_pos_array = pos_clicks_list/resize_scale
-        #############################
-        for idx, row in enumerate(start_pos_array, start=1):
+        for idx, row in enumerate(np.asarray(self.pos_clicks)/resize_scale, start=1):
             formatted_coords = ', '.join(f'({num:.2f})' for num in row)
             print(f"Point {idx}: {formatted_coords}")
-        # for row in start_pos_array:
-        #     print(','.join(f'{num:.2f}' for num in row))
-        if frame_id == 0:
-            start_pos_file = project_path + '/start_pos_array.txt'
-            # Check if file exists (from auto prediction)
-            if os.path.exists(start_pos_file):
-                # File exists, append only the new point
-                new_point = start_pos_array[-1]  # Get the last (newest) point
-                append_point_to_txt(start_pos_file, new_point)
-            else:
-                # File doesn't exist, create new file with all points
-                save_ndarray_to_txt(start_pos_file, start_pos_array)
-        #############################
-        # self.obj_mask = self.controller.interact(self.image.unsqueeze(0), x, y, not neg)
-        self.obj_mask = self.controller.interact(self.image, pos_clicks_list, self.input_label)
-        # self.obj_mask (1,1,h,w) 0 bg 1 fg
-        ###########
-        # aaa = self.obj_mask[0][0].cpu().numpy()
-        # aaa = aaa * 255
-        # aaa = aaa.astype(np.uint8)
-        # io.imsave('save_obj_mask.tif', aaa)
-        ############
+
         # Plot visualization
         if vis is not None:
             vis_map, vis_alpha = vis
@@ -306,19 +303,43 @@ class ClickInteraction(Interaction):
             # Optional vis return
             return vis_map, vis_alpha
 
+    def contains(self, mask, x, y):
+        x, y = int(round(x)), int(round(y))
+        h, w = mask.shape
+        return 0 <= y < h and 0 <= x < w and mask[y, x]
+
+    def remove_object_at(self, x, y):
+        """Right click takes the whole blob under the cursor back out of the union."""
+        mask_np = (self.acc_mask[0, 0].cpu().numpy() > 0.5).astype(np.uint8)
+        if not self.contains(mask_np, x, y):
+            return None
+
+        _, labels = cv2.connectedComponents(mask_np)
+        removed = labels == labels[int(round(y)), int(round(x))]
+        self.acc_mask[0, 0][torch.from_numpy(removed).to(self.acc_mask.device)] = 0
+        self.pos_clicks = [(px, py) for px, py in self.pos_clicks
+                           if not self.contains(removed, px, py)]
+        return removed
+
+    def drop_start_pos(self, removed, resize_scale, project_path):
+        """Keep start_pos_array.txt in sync, including points from auto prediction."""
+        start_pos_file = project_path + '/start_pos_array.txt'
+        if not os.path.exists(start_pos_file):
+            return
+
+        points = np.atleast_2d(np.loadtxt(start_pos_file, delimiter=','))
+        if points.size == 0:
+            return
+        kept = [p for p in points
+                if not self.contains(removed, p[0]*resize_scale, p[1]*resize_scale)]
+        save_ndarray_to_txt(start_pos_file, np.asarray(kept).reshape(-1, 2))
 
     def predict(self):
-        # ori_img = torch_to_image(self.image)
-        # self.controller.sam_predictor.set_image(ori_img)
-
-        ###########
-        aaa = self.prev_mask.cpu().numpy()
-        ############
         self.out_prob = self.prev_mask.clone()
         # a small hack to allow the interacting object to overwrite existing masks
         # without remembering all the object probabilities
         self.out_prob = torch.clamp(self.out_prob, max=0.9)
-        self.out_prob[self.tar_obj] = self.obj_mask
+        self.out_prob[self.tar_obj] = self.acc_mask
         self.out_prob = aggregate_wbg(self.out_prob[1:], keep_bg=True, hard=True)
         return self.out_prob
 

@@ -58,9 +58,6 @@ def launch_udmt():
         'https://zenodo.org/records/14671891/files/trdimp_net_ep.pth.tar?download=1': os.path.join(BASE_DIR,
                                                                                                    "pretrained",
                                                                                                    "trdimp_net_ep.pth.tar"),
-        'https://zenodo.org/records/14671891/files/sam_vit_b_01ec64.pth?download=1': os.path.join(BASE_DIR, "tabs",
-                                                                                                  "xmem", "sam_model",
-                                                                                                  "sam_vit_b_01ec64.pth"),
         'https://zenodo.org/records/14671891/files/XMem.pth?download=1': os.path.join(BASE_DIR, "tabs", "xmem", "saves",
                                                                                       "XMem.pth"),
         'https://zenodo.org/records/16625810/files/model_state_dict.pt?download=1': os.path.join(BASE_DIR,
@@ -78,6 +75,13 @@ def launch_udmt():
             gdown.download(url, save_path, quiet=False,resume=True)
         else:
             print(f"File already exists at {save_path}. Skipping download.")
+    sam3_path = os.path.join(BASE_DIR, "tabs", "xmem", "sam_model", "sam3.pt")
+    os.makedirs(os.path.dirname(sam3_path), exist_ok=True)
+    if not os.path.exists(sam3_path):
+        print(
+            "SAM 3 weights are not auto-downloaded. Place sam3.pt at "
+            f"{sam3_path} (see README: SAM 3 weights)."
+        )
     ######################################################
     PreciseRoIPooling_path = BASE_DIR + '/tabs/ST_Net/ltr'
     adjust_external_folder(PreciseRoIPooling_path)

@@ -43,6 +43,8 @@ class ResourceManager:
         self.size = config['size']
         self.palette = davis_palette
         self.divide_num = divide_num
+        self.video = video
+        self.hires_cache = None
 
         # create temporary workspace if not specified
         if self.workspace is None:
@@ -200,6 +202,33 @@ class ResourceManager:
         image = Image.open(path.join(self.image_dir, self.names[ti]+'.jpg'))
         image = np.array(image)
         return image
+
+    def get_hires_image(self, ti):
+        """
+        Frame ti straight from the source video, at full resolution. Only used to
+        prompt SAM, everything else works on the resized frames in image_dir.
+        Returns None when there is no video to decode from.
+        """
+        assert 0 <= ti < self.length
+
+        if self.video is None or not path.exists(self.video):
+            return None
+        if self.hires_cache is not None and self.hires_cache[0] == ti:
+            return self.hires_cache[1]
+
+        cap = cv2.VideoCapture(self.video)
+        # image_dir only kept every divide_num-th frame of the video
+        cap.set(cv2.CAP_PROP_POS_FRAMES, ti*self.divide_num)
+        success, frame = cap.read()
+        cap.release()
+        if not success:
+            print(f'Could not decode frame {ti*self.divide_num} of the source video, '
+                  'SAM will be prompted on the resized frame instead.')
+            return None
+
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        self.hires_cache = (ti, frame)
+        return frame
 
     def _get_mask_unbuffered(self, ti):
         # returns H*W uint8 array

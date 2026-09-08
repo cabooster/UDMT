@@ -309,8 +309,8 @@ class DefaultTab(QtWidgets.QWidget):
 
         # Add separating line
         self.separator = QtWidgets.QFrame()
-        self.separator.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separator.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.separator.setFrameShape(QtWidgets.QFrame.Shape.HLine)
+        self.separator.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.separator.setLineWidth(0)
         self.separator.setMidLineWidth(1)
         policy = QtWidgets.QSizePolicy()

@@ -5,5 +5,5 @@ https://github.com/cabooster/UDMT
 Licensed under Non-Profit Open Software License 3.0
 """
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 VERSION = __version__

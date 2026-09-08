@@ -1,5 +1,6 @@
 
 import datetime
+import colorsys
 import functools
 import importlib
 import itertools
@@ -77,6 +78,26 @@ global target_sz_bias_gl
 # target_sz_uniform = 125 #fish 78 micro 145 white mice 125
 # area_in_first_frame = 3218 #fish 691 micro 9846 white mice 3218
 ##########################
+def generate_distinct_colors(color_count):
+    """Generate visually distinct BGR colors for OpenCV drawing."""
+    if color_count <= 0:
+        return []
+
+    golden_ratio_conjugate = 0.618033988749895
+    colors = []
+    for color_id in range(color_count):
+        # The golden-ratio step keeps neighboring IDs far apart in hue and
+        # preserves an animal's color when the total animal count changes.
+        hue = (color_id * golden_ratio_conjugate) % 1.0
+        red, green, blue = colorsys.hsv_to_rgb(hue, 0.85, 1.0)
+        colors.append((
+            int(round(blue * 255)),
+            int(round(green * 255)),
+            int(round(red * 255)),
+        ))
+    return colors
+
+
 def debug_print(message):
     if DEBUG_FLAG:
         print(message)
@@ -423,37 +444,9 @@ class Tracker:
         miss_target_time_sum = 0
         fine_detection_mode = False
 
-        # point_color = (0, 0, 255)  # BGR
-        rect_color_mul = []
-        rect_color_mul.append((0, 255, 255))
-        rect_color_mul.append((255, 255, 0))
-        rect_color_mul.append((0, 0, 255))
-        rect_color_mul.append((0, 255, 0))
-        rect_color_mul.append((255, 0, 0))
-
-        rect_color_mul.append((125, 0, 125))
-        rect_color_mul.append((125, 255, 0))
-        rect_color_mul.append((0, 0, 125))
-        rect_color_mul.append((0, 255, 125))
-        rect_color_mul.append((125, 0, 0))
-
-        rect_color_mul.append((0, 125, 125))
-        rect_color_mul.append((0, 125, 0))
-        rect_color_mul.append((125, 125, 0))
-        rect_color_mul.append((255, 125, 0))
-        rect_color_mul.append((125, 125, 125))
-
-        rect_color_mul.append((255, 60, 0))
-        rect_color_mul.append((125, 125, 60))
-        rect_color_mul.append((60, 125, 0))
-        rect_color_mul.append((255, 125, 60))
-        rect_color_mul.append((60, 125, 125))
-        
-        rect_color_mul.append((255, 60, 125))
-        rect_color_mul.append((255, 255, 60))
-        rect_color_mul.append((123, 10, 55))
-        rect_color_mul.append((153, 87, 200))
-        rect_color_mul.append((60, 60, 60))
+        # OpenCV expects BGR tuples. Generate one color for every animal so
+        # visualization does not fail when the object count exceeds 25.
+        rect_color_mul = generate_distinct_colors(seq.object_num)
 
         img_width = image.shape[0]
         img_height = image.shape[1]
@@ -529,6 +522,11 @@ class Tracker:
 
 
         for frame_num, frame_path in enumerate(tqdm(seq.frames[1:test_img_num], desc="Processing Frames"), start=1):
+            QtWidgets.QApplication.processEvents()
+            if gui_param.get('stop_requested'):
+                print('Parameter search stopped. Will use the best completed parameters so far.')
+                break_flag = True
+                break
             show_text = str(frame_num)
             # while True:
             #     if not self.pause_mode:

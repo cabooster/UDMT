@@ -12,6 +12,18 @@ from PySide6.QtWidgets import QMessageBox
 
 plt.rcParams['figure.max_open_warning'] = 0
 
+
+def _legend_handles(legend):
+    # Matplotlib 3.7+ renamed Legend.legendHandles to legend_handles.
+    return getattr(legend, "legend_handles", None) or getattr(legend, "legendHandles")
+
+
+def _as_line_data(value):
+    # Matplotlib 3.10+ requires Line2D.set_xdata / set_ydata to receive a sequence.
+    if np.isscalar(value):
+        return [value]
+    return value
+
 # Set default font settings with fallback
 import matplotlib.font_manager as fm
 
@@ -292,7 +304,7 @@ class TrackletVisualizer:
         self.original_text_colors = [text.get_color() for text in self.legend.get_texts()]
         
         # Make legend lines clickable
-        for legend_line in self.legend.legendHandles:
+        for legend_line in _legend_handles(self.legend):
             legend_line.set_picker(True)
             legend_line.set_pickradius(10)
         
@@ -314,8 +326,8 @@ class TrackletVisualizer:
         self.scat_points.set_color(self.colors)
 
         # Update vertical lines
-        self.vline_x.set_xdata(self.curr_frame)
-        self.vline_y.set_xdata(self.curr_frame)
+        self.vline_x.set_xdata(_as_line_data(self.curr_frame))
+        self.vline_y.set_xdata(_as_line_data(self.curr_frame))
 
         self.fig.canvas.draw_idle()
 
@@ -331,9 +343,9 @@ class TrackletVisualizer:
             if event.key == 'shift':
                 if frame_idx <= self.end_frame:
                     self.start_frame = frame_idx
-                    self.start_line.set_xdata(self.start_frame)
-                    self.vline_start_x.set_xdata(self.start_frame)
-                    self.vline_start_y.set_xdata(self.start_frame)
+                    self.start_line.set_xdata(_as_line_data(self.start_frame))
+                    self.vline_start_x.set_xdata(_as_line_data(self.start_frame))
+                    self.vline_start_y.set_xdata(_as_line_data(self.start_frame))
                     # Update shaded region
                     self.shaded_region_x.set_xy([[self.start_frame, 0], [self.start_frame, 1],
                                                [self.end_frame, 1], [self.end_frame, 0]])
@@ -343,9 +355,9 @@ class TrackletVisualizer:
             elif event.key == 'control':
                 if frame_idx >= self.start_frame:
                     self.end_frame = frame_idx
-                    self.end_line.set_xdata(self.end_frame)
-                    self.vline_end_x.set_xdata(self.end_frame)
-                    self.vline_end_y.set_xdata(self.end_frame)
+                    self.end_line.set_xdata(_as_line_data(self.end_frame))
+                    self.vline_end_x.set_xdata(_as_line_data(self.end_frame))
+                    self.vline_end_y.set_xdata(_as_line_data(self.end_frame))
                     # Update shaded region
                     self.shaded_region_x.set_xy([[self.start_frame, 0], [self.start_frame, 1],
                                                [self.end_frame, 1], [self.end_frame, 0]])
@@ -364,12 +376,13 @@ class TrackletVisualizer:
         self.fig.canvas.draw_idle()
 
     def on_legend_click(self, event):
-        if event.artist in self.legend_lines or event.artist in self.legend.legendHandles:
+        legend_handles = _legend_handles(self.legend)
+        if event.artist in self.legend_lines or event.artist in legend_handles:
             # Get the index of the clicked line
             if event.artist in self.legend_lines:
                 animal_idx = self.legend_lines.index(event.artist)
             else:
-                animal_idx = self.legend.legendHandles.index(event.artist)
+                animal_idx = legend_handles.index(event.artist)
             
             if animal_idx in self.selected_animals:
                 # Deselect

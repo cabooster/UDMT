@@ -16,10 +16,10 @@ from ..pytracking.evaluation import get_dataset
 from ..pytracking.evaluation.running import run_dataset
 from ..pytracking.evaluation import Tracker,Sequence
 
-min_correct_time = 10000
+min_correct_time = float("inf")
 corresponding_miss_num = 10000
-min_miss_time = 10000
-min_loss_time = 10000
+min_miss_time = float("inf")
+min_loss_time = float("inf")
 def read_txt_to_nparray(file_path):
 
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -87,9 +87,9 @@ def setup_seed(seed):
 
 def reset_global_params():
     global min_correct_time, min_miss_time, min_loss_time
-    min_correct_time = 10000
-    min_miss_time = 10000
-    min_loss_time = 10000
+    min_correct_time = float("inf")
+    min_miss_time = float("inf")
+    min_loss_time = float("inf")
 
 def run_tracking(run_tracking_params):
     parser = argparse.ArgumentParser(description='Run tracker on sequence or dataset.')
@@ -114,25 +114,34 @@ def run_tracking(run_tracking_params):
     iteration_time = 1
     start_time = time.time()
     reset_global_params()
-    for target_sz_bias in run_tracking_params['target_sz_bias_range']: # -15,0,5
-        early_stop_flag_list = []
-        for search_scale in run_tracking_params['search_scale_range']:
-            if run_tracking_params['status_flag'] != 3:
-                print(f'Iterating through No. {iteration_time} set of parameters (target size bias: {target_sz_bias}, search region scale: {search_scale}) ...')
-            else:
-                print(
-                    f'Iteration completed. Using final tracking parameters: target size bias: {target_sz_bias}, search region scale: {search_scale} ...')
-            early_stop_flag = run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset_name, seq_name, args.debug,
-                            args.threads, {'use_visdom': args.use_visdom, 'server': args.visdom_server, 'port': args.visdom_port}, search_scale = search_scale, target_sz_bias = target_sz_bias, obj_id=0,gui_param = run_tracking_params)
-            # print('early_stop_flag:', early_stop_flag)
-            early_stop_flag_list.append(early_stop_flag)
-            iteration_time += 1
-        # print('target_sz_bias:', target_sz_bias,'early_stop_flag_list:', early_stop_flag_list)
-        # if early_stop_flag_list.count(False) > 0:
-
-        # print('iteration_time:', iteration_time)
-        # if iteration_time == 3:
-        #     break
+    stopped = False
+    try:
+        for target_sz_bias in run_tracking_params['target_sz_bias_range']: # -15,0,5
+            if stopped:
+                break
+            early_stop_flag_list = []
+            for search_scale in run_tracking_params['search_scale_range']:
+                if run_tracking_params.get('stop_requested'):
+                    print('Parameter search stopped. Remaining parameter combinations will be skipped.')
+                    stopped = True
+                    break
+                if run_tracking_params['status_flag'] != 3:
+                    print(f'Iterating through No. {iteration_time} set of parameters (target size bias: {target_sz_bias}, search region scale: {search_scale}) ...')
+                else:
+                    print(
+                        f'Iteration completed. Using final tracking parameters: target size bias: {target_sz_bias}, search region scale: {search_scale} ...')
+                early_stop_flag = run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset_name, seq_name, args.debug,
+                                args.threads, {'use_visdom': args.use_visdom, 'server': args.visdom_server, 'port': args.visdom_port}, search_scale = search_scale, target_sz_bias = target_sz_bias, obj_id=0,gui_param = run_tracking_params)
+                # print('early_stop_flag:', early_stop_flag)
+                early_stop_flag_list.append(early_stop_flag)
+                iteration_time += 1
+                if run_tracking_params.get('stop_requested'):
+                    print('Parameter search stopped. Remaining parameter combinations will be skipped.')
+                    stopped = True
+                    break
+    except KeyboardInterrupt:
+        run_tracking_params['stop_requested'] = True
+        print('Parameter search interrupted. Remaining parameter combinations will be skipped.')
     used_time = time.time() - start_time
     print(f"Time used: {used_time:.2f} seconds")
     '''

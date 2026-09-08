@@ -112,7 +112,14 @@ class TrackingInitialization(DefaultTab):
                 divide_num = 2
             else:
                 divide_num = 1
+            if getattr(self, "mask_seg_window", None) is not None:
+                try:
+                    self.mask_seg_window.close()
+                except Exception:
+                    pass
+                self.mask_seg_window = None
             self.mask_seg_window = mask_seg_winclass(video, self.root.project_folder, divide_num)
+            self.mask_seg_window.destroyed.connect(lambda *_: setattr(self, "mask_seg_window", None))
             self.mask_seg_window.show()
             loading_dialog.close()
         except IndexError:

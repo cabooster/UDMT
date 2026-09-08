@@ -5,7 +5,8 @@
 
 ## Updates
 <details>
-  <summary>:triangular_flag_on_post:2026/06/19: Version Update Summary: 1. Added `File > Add Video...` to add new videos to an existing project 2. Improved support for low-frame-rate videos by normalizing FPS values before frame-based tracking operations.<br>
+  <summary>:triangular_flag_on_post:2026/09/08: Version 1.2.0. Replaced SAM ViT-B with SAM3 for first-frame click segmentation and forward propagation. Updated the recommended environment to Python 3.12 + PyTorch 2.7 (CUDA 12.6). Create Training Dataset can be stopped early and still export labels from the best completed parameters.<br>
+:triangular_flag_on_post:2026/06/19: Version Update Summary: 1. Added `File > Add Video...` to add new videos to an existing project 2. Improved support for low-frame-rate videos by normalizing FPS values before frame-based tracking operations.<br>
 :triangular_flag_on_post:2026/05/23: We have uploaded the corresponding frame-level manual annotations for the UDMT behavioral recording dataset to Zenodo: https://zenodo.org/records/20355567.<br>
 :triangular_flag_on_post:2026/05/06: Our paper has been published in Nature Methods.</summary>
   <summary>:triangular_flag_on_post:2025/07/30: Optimize the initialization method. </summary>
@@ -21,6 +22,7 @@ Tooltips have been added for buttons and the property panel to improve usability
 
 - [Overview](#overview)
 - [Installation](#Installation)
+- [SAM 3 weights](#sam-3-weights)
 - [GUI Tutorial](#gui-tutorial)
 - [Q&A](#qa)
 - [Results](#results)
@@ -47,27 +49,27 @@ If you encounter any issues during installation or usage, please refer to the [Q
 #### Our Environment 
 
 * Ubuntu 20.04 + (required)
-* Python 3.8
-* Pytorch 2.1.1
-* NVIDIA GPU (GeForce RTX 4090) + CUDA (12+)
+* Python 3.12
+* Pytorch 2.7.0
+* NVIDIA GPU (GeForce RTX 4090) + CUDA (12.6+)
 
 #### Environment Configuration 
 
 1. Create a virtual environment and install PyTorch.
 
    ```
-   $ conda create -n udmt python=3.8
+   $ conda create -n udmt python=3.12
    $ conda activate udmt
    $ sudo apt-get install ninja-build
    $ sudo apt-get install libturbojpeg
    ```
     If your CUDA version is **12.x**, run:
     ```
-    pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu121
+    pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu126
     ```
     If your CUDA version is **11.x**, run:
     ```
-    pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
+    pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu118
     ```
     **If you are not sure about your CUDA version, please refer to the [Q&A section](#qa).**
 2. Install other dependencies.
@@ -78,7 +80,10 @@ If you encounter any issues during installation or usage, please refer to the [Q
    $ cd UDMT/
    $ pip install -r requirements.txt
    $ pip install -r requirements_custom.txt
+   $ conda install -c conda-forge xcb-util-cursor
    ```
+
+3. Download SAM 3 weights (required, **not auto-downloaded**). See [SAM 3 weights](#sam-3-weights) below.
 
 ### 2. For Windows
 
@@ -90,25 +95,25 @@ If you encounter any issues during installation or usage, please refer to the [Q
 #### Environment 
 
 * Windows 10
-* Python 3.8
-* Pytorch 1.7.1
-* NVIDIA GPU (GeForce RTX 3090) + CUDA (11.0)
+* Python 3.12
+* Pytorch 2.7.0
+* NVIDIA GPU (GeForce RTX 3090) + CUDA (12.6+)
 
 #### Environment Configuration 
 
 1. Create a virtual environment and install PyTorch.
 
    ```
-   $ conda create -n udmt python=3.8
+   $ conda create -n udmt python=3.12
    $ conda activate udmt
    ```
     If your CUDA version is **12.x**, run:
     ```
-    pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu121
+    pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu126
     ```
     If your CUDA version is **11.x**, run:
     ```
-    pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
+    pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu118
     ```
 2. Install other dependencies.
 
@@ -122,6 +127,36 @@ If you encounter any issues during installation or usage, please refer to the [Q
 3. Install Precise ROI pooling: If your environment is the same as ours, directly copy `<UDMT_install_path>\udmt\env_file\prroi_pool.pyd` to `<Anaconda_install_path>\anaconda3\envs\udmt\Lib\site-packages`.  Otherwise, build `prroi_pool.pyd` file with Visual Studio with the [tutorial](https://github.com/visionml/pytracking/blob/master/INSTALL_win.md#build-precise-roi-pooling-with-visual-studio-optional).
 
 4. Install libjpeg-turbo: You can download installer from the official libjpeg-turbo [Sourceforge](https://sourceforge.net/projects/libjpeg-turbo/files/3.0.1/libjpeg-turbo-3.0.1-vc64.exe/download) repository, install it and copy `<libjpeg-turbo_install_path>\libjpeg-turbo64\bin\turbojpeg.dll` to the directory from the system PATH `C:\Windows\System32`.
+
+5. Download SAM 3 weights (required, **not auto-downloaded**). See [SAM 3 weights](#sam-3-weights) below.
+
+### SAM 3 weights
+
+SAM 3 is already integrated in UDMT for first-frame click segmentation and forward propagation. **SAM 3 weights are not auto-downloaded.** You must download `sam3.pt` yourself from the official SAM 3 repository and place it at:
+
+```
+./udmt/gui/tabs/xmem/sam_model/sam3.pt
+```
+
+Download steps (from [facebookresearch/sam3](https://github.com/facebookresearch/sam3)):
+
+1. Request access to the checkpoints on the [SAM 3 Hugging Face repo](https://huggingface.co/facebook/sam3) and wait until you are approved.
+2. Authenticate with a Hugging Face access token ([create a token](https://huggingface.co/settings/tokens) if you do not have one):
+
+   ```
+   $ hf auth login
+   ```
+
+3. Download `sam3.pt` into the UDMT folder above:
+
+   ```
+   $ cd UDMT/
+   $ hf download facebook/sam3 sam3.pt --local-dir ./udmt/gui/tabs/xmem/sam_model
+   ```
+
+   You can also open https://huggingface.co/facebook/sam3/tree/main in a browser, download `sam3.pt`, and copy it to that directory.
+
+4. Optional: if the checkpoint is stored elsewhere, set `UDMT_SAM3_CHECKPOINT=/path/to/sam3.pt` before launching the GUI.
 
 ## GUI Tutorial
 
@@ -146,14 +181,24 @@ We have released the Python source code and a user-friendly GUI of UDMT to make 
     ```
     $ CUDA_VISIBLE_DEVICES=3 python -m udmt.gui.launch_script
     ```
-3. Pre-trained models will be downloaded automatically before launching the GUI. Alternatively, you can manually download the model and place it in the specified location.
+3. Other pre-trained models (not SAM 3) will be downloaded automatically before launching the GUI. Alternatively, you can manually download them and place them in the specified location.
+
+   **SAM 3 weights are not auto-downloaded.** Follow [SAM 3 weights](#sam-3-weights) to obtain `sam3.pt` from the official SAM 3 repository before using Tracking Initialization.
 
    | Model name                                                   | Location                         |
    | ------------------------------------------------------------ | -------------------------------- |
    | [trdimp_net_ep.pth.tar](https://zenodo.org/records/14671891/files/trdimp_net_ep.pth.tar?download=1) | `./udmt/gui/pretrained`          |
    | [XMem.pth](https://zenodo.org/records/14671891/files/XMem.pth?download=1) | `./udmt/gui/tabs/xmem/saves`     |
-   | [sam_vit_b_01ec64.pth](https://zenodo.org/records/14671891/files/sam_vit_b_01ec64.pth?download=1) | `./udmt/gui/tabs/xmem/sam_model` |
-   | [model_state_dict.pt](https://zenodo.org/records/16625810/files/model_state_dict.pt?download=1) | `./udmt/gui/pretrained`  
+   | [model_state_dict.pt](https://zenodo.org/records/16625810/files/model_state_dict.pt?download=1) | `./udmt/gui/pretrained`   |
+
+4. After **Forward Propagate** in Tracking Initialization, scrub through the video and check that every animal still has a mask. Crowded scenes can lose one or two masks later in the clip.
+
+   If some masks are missing:
+   - Pause on the **last frame that still has a complete set of masks**.
+   - Click the missing animals to restore their masks.
+   - Click **Forward Propagate** again from that frame.
+
+   These recovery clicks are **not** written to `start_pos_array.txt`. Only clicks on the **first frame** (frame 0) are saved as start points. Do not go back to frame 0 to re-click, or those extra points will be recorded and can mislead later tracking.
 
 #### **Quick Start with Demo Data**:
 
@@ -224,6 +269,10 @@ Save the file and re-run your code. PyTorch will now be able to compile CUDA ext
 If you're trying to run the GUI from VSCode or a regular SSH terminal and encounter errors like `QXcbConnection: Could not connect to display` or the window simply doesn't appear, it's likely because the Linux server does not have a display environment or your SSH session lacks X11 forwarding.
 
 To resolve this, we recommend using [MobaXterm](https://mobaxterm.mobatek.net/download.html) — a powerful SSH client with built-in X11 server support that allows you to run GUI applications on a remote Linux server seamlessly.
+
+### Q4: The GUI says `SAM3 checkpoint not found: .../sam3.pt`. What should I do?
+### A4:
+SAM 3 is already integrated in the code, but **SAM 3 weights are not auto-downloaded**. Download `sam3.pt` from the official SAM 3 repository and place it at `./udmt/gui/tabs/xmem/sam_model/sam3.pt`. See [SAM 3 weights](#sam-3-weights).
 
 
 ## Results

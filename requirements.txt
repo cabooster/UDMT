@@ -1,46 +1,53 @@
 # UDMT: Unsupervised Multi-animal Tracking for Quantitative Ethology
 # Requirements file for pip installation
 # Use: pip install -r requirements.txt
+# Matches the udmt-sam3 environment (Python 3.12 + PyTorch 2.7).
 
 # Cython==0.29.34  # Currently commented out in setup.py
+Cython
+setuptools<81
+psutil
 dlclibrary
 filterpy>=1.4.4
 ruamel.yaml>=0.15.0
-imgaug>=0.4.0
+# imgaug>=0.4.0  # unused; pulling it reinstalls opencv-python and breaks PySide6
 imageio-ffmpeg
 numba>=0.54
 matplotlib
 networkx>=2.6
-numpy>=1.18.5
+numpy==1.26.0
 pandas
-opencv-python
+opencv-python-headless==4.11.0.86
 scikit-image>=0.17
 scikit-learn>=1.0
-scipy>=1.4
+scipy==1.14.1
 statsmodels>=0.11
 tables>=3.7.0
-tensorpack>=0.11
-tf_slim>=1.1.0
+# tensorpack>=0.11  # unused DeepLabCut leftover
+# tf_slim>=1.1.0  # unused DeepLabCut leftover
 tqdm
 pyyaml
-pillow==9.4.0
+pillow>=10.0.0
 visdom
 similaritymeasures
 torchsummary
-jpeg4py
+# jpeg4py is optional; training/tracking fall back to OpenCV if it is not installed
 progressbar2
 gdown
 pycocotools
-pyside6<6.3.2
-qdarkstyle==3.1
+pyside6>=6.8,<6.9
+qtpy
+qdarkstyle
 qt-material
 segment-anything==1.0
 
 # Additional packages
-timm==0.4.12
+timm>=1.0.17
 nltk
 ninja
 # git+https://github.com/MaureenZOU/detectron2-xyz.git
 einops
 transformers
-kornia==0.7.0 
+kornia>=0.7.0
+tifffile==2024.9.20
+git+https://github.com/facebookresearch/sam3.git

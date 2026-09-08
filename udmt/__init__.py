@@ -8,6 +8,11 @@ Licensed under Non-Profit Open Software License 3.0
 
 import os
 
+# PyTorch 2.6 changed torch.load() to weights_only=True by default. UDMT's
+# trusted local checkpoints include constructor metadata, so retain the legacy
+# loading behavior. Older PyTorch versions simply ignore this environment
+# variable, keeping the existing udmt environment compatible.
+os.environ.setdefault("TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD", "1")
 
 ###############
 DEBUG = True and "DEBUG" in os.environ and os.environ["DEBUG"]

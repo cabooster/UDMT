@@ -26,6 +26,10 @@ class InferenceCore:
             self.last_deep_update_ti = -self.deep_update_every
         self.memory = MemoryManager(config=self.config)
 
+    def release(self):
+        self.clear_memory()
+        self.network = None
+
     def update_config(self, config):
         self.mem_every = config['mem_every']
         self.deep_update_every = config['deep_update_every']

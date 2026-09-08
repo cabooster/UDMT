@@ -1,10 +1,75 @@
-# Default ignored files
-*.tmp
-*.pt
-*.temp
-*.log
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.o
+*.a
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Weights and checkpoints (download separately; SAM 3 is not shipped)
+*.pt
 *.pth
 *.tar
 *.pth.tar
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+
+# Compiled CUDA / Precise RoI pooling
+**/_prroi_pooling/
+**/*.cu.o
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+*.swp
+*~
+
+# IDE / OS
 .idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Environments
+.venv/
+venv/
+.env
+.env.*
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+
+# Runtime and user project leftovers (do not publish)
+**/tmp/
+**/extracted-images/
+**/masks/
+start_pos_array.txt
+**/start_pos_array.txt
+
+# Videos and tracking outputs
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.npy
+*.npz
+
+# Experiment / vis tools
+wandb/
+runs/
+outputs/
+checkpoints/
+visdom/

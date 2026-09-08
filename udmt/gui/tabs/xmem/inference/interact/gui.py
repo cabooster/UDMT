@@ -14,6 +14,7 @@ but with XMem as the backbone and is more memory (for both CPU and GPU) friendly
 
 import functools
 
+import gc
 import os
 import cv2
 # fix conflicts between qt5 and cv2
@@ -37,6 +38,7 @@ from PySide6.QtCore import Qt
 from ...model.network import XMem
 
 from ...inference.inference_core import InferenceCore
+from ...inference.sam3_inference_core import Sam3InferenceCore
 from .s2m_controller import S2MController
 from .fbrs_controller import FBRSController
 from .sam_controller import SamController
@@ -64,6 +66,7 @@ class App(QWidget):
                  config,
                  project_path):
         super().__init__()
+        self.setAttribute(Qt.WA_DeleteOnClose, True)
         self.project_path = project_path
         self.initialized = False
         self.num_objects = config['num_objects']
@@ -71,7 +74,14 @@ class App(QWidget):
         self.fbrs_controller = fbrs_ctrl
         self.sam_controller = sam_ctrl
         self.config = config
-        self.processor = InferenceCore(net, config)
+        if config.get("propagate_backend") == "sam3":
+            self.processor = Sam3InferenceCore(
+                image_dir=resource_manager.image_dir,
+                checkpoint_path=config["sam3_checkpoint"],
+                config=config,
+            )
+        else:
+            self.processor = InferenceCore(net, config)
         self.processor.set_all_labels(list(range(1, self.num_objects+1)))
         self.res_man = resource_manager
 
@@ -90,7 +100,7 @@ class App(QWidget):
         self.commit_button.clicked.connect(self.on_commit)
 
         self.forward_run_button = QPushButton('Forward Propagate')
-        self.forward_run_button.setToolTip("After selecting the target animal, click for foreground extraction.")
+        self.forward_run_button.setToolTip("After selecting the target animal, propagate the first-frame mask with SAM3.")
         self.forward_run_button.clicked.connect(self.on_forward_propagation)
         self.forward_run_button.setMinimumWidth(280)
 
@@ -661,33 +671,43 @@ class App(QWidget):
         self.load_current_torch_image_mask()
         self.show_current_frame(fast=True)
 
-        self.console_push_text('Propagation started.')
-        self.current_prob = self.processor.step(self.current_image_torch, self.current_prob[1:])
-        self.current_mask = torch_prob_to_numpy_mask(self.current_prob)
-        # clear
-        self.interacted_prob = None
-        self.reset_this_interaction()
-        
-        self.propagating = True
-        self.clear_mem_button.setEnabled(False)
-        # propagate till the end
-        while self.propagating:
-            self.propagate_fn()
-
-            self.load_current_image_mask(no_mask=True)
-            self.load_current_torch_image_mask(no_mask=True)
-
-            self.current_prob = self.processor.step(self.current_image_torch)
+        self.console_push_text('SAM3 mask propagation started.')
+        if self.sam_controller is not None:
+            self.sam_controller.unload_image_model()
+            self.console_push_text('Unloaded SAM3 click model to free GPU memory.')
+        try:
+            self.current_prob = self.processor.step(
+                self.current_image_torch, self.current_prob[1:], frame_idx=self.cursur
+            )
             self.current_mask = torch_prob_to_numpy_mask(self.current_prob)
+            # clear
+            self.interacted_prob = None
+            self.reset_this_interaction()
 
-            self.save_current_mask()
-            self.show_current_frame(fast=True)
+            self.propagating = True
+            self.clear_mem_button.setEnabled(False)
+            # propagate till the end
+            while self.propagating:
+                self.propagate_fn()
 
-            self.update_memory_size()
-            QApplication.processEvents()
+                self.load_current_image_mask(no_mask=True)
+                self.load_current_torch_image_mask(no_mask=True)
 
-            if self.cursur == 0 or self.cursur == self.num_frames-1:
-                break
+                self.current_prob = self.processor.step(self.current_image_torch)
+                self.current_mask = torch_prob_to_numpy_mask(self.current_prob)
+
+                self.save_current_mask()
+                self.show_current_frame(fast=True)
+
+                self.update_memory_size()
+                QApplication.processEvents()
+
+                if self.cursur == 0 or self.cursur == self.num_frames-1:
+                    break
+        finally:
+            if self.sam_controller is not None:
+                self.sam_controller.ensure_image_model()
+                self.console_push_text('Reloaded SAM3 click model.')
 
         self.propagating = False
         self.curr_frame_dirty = False
@@ -1060,11 +1080,11 @@ class App(QWidget):
                 self.complete_interaction()
                 if self.fbrs_controller is not None:
                     self.fbrs_controller.unanchor()
-                aaa = self.current_prob.cpu().numpy()
                 # new_interaction = ClickInteraction(image, self.current_prob, (h, w),
                 #             self.fbrs_controller, self.current_object)
                 new_interaction = ClickInteraction(image, self.current_prob, (h, w),
-                            self.sam_controller, self.current_object)
+                            self.sam_controller, self.current_object,
+                            hires_image=self.res_man.get_hires_image(self.cursur))
 
         if new_interaction is not None:
             self.interaction = new_interaction
@@ -1301,3 +1321,38 @@ class App(QWidget):
 
     def on_save_visualization_toggle(self):
         self.save_visualization = self.save_visualization_checkbox.isChecked()
+
+    def release_cuda(self):
+        """Drop GPU tensors so closing this window can actually free VRAM."""
+        self.propagating = False
+        if getattr(self, "gpu_timer", None) is not None:
+            self.gpu_timer.stop()
+        if getattr(self, "timer", None) is not None:
+            self.timer.stop()
+
+        self.current_image_torch = None
+        self.current_image_torch_no_norm = None
+        self.current_prob = None
+        self.interacted_prob = None
+        self.overlay_layer_torch = None
+        self.interaction = None
+
+        if getattr(self, "processor", None) is not None:
+            if hasattr(self.processor, "release"):
+                self.processor.release()
+            self.processor = None
+        if getattr(self, "sam_controller", None) is not None:
+            if hasattr(self.sam_controller, "release"):
+                self.sam_controller.release()
+            self.sam_controller = None
+        if getattr(self.res_man, "hires_cache", None) is not None:
+            self.res_man.hires_cache = None
+
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        print("Released Tracking Initialization GPU memory.")
+
+    def closeEvent(self, event):
+        self.release_cuda()
+        event.accept()

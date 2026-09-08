@@ -27,7 +27,7 @@ class OpenProject(QtWidgets.QDialog):
 
     def layout_open(self):
         self.open_frame = QtWidgets.QFrame(self)
-        self.open_frame.setFrameShape(self.open_frame.StyledPanel)
+        self.open_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.open_frame.setLineWidth(0.5)
         self.open_frame.setMinimumWidth(600)
 

@@ -1,4 +1,7 @@
-import jpeg4py
+try:
+    import jpeg4py
+except ImportError:
+    jpeg4py = None
 import cv2 as cv
 from PIL import Image
 import numpy as np
@@ -10,6 +13,9 @@ davis_palette[:22, :] = [[0, 0, 0], [128, 0, 0], [0, 128, 0], [128, 128, 0],
                          [64, 0, 128], [191, 0, 128], [64, 128, 128], [191, 128, 128],
                          [0, 64, 0], [128, 64, 0], [0, 191, 0], [128, 191, 0],
                          [0, 64, 128], [128, 64, 128]]
+
+
+_JPEG4PY_FALLBACK_WARNED = False
 
 
 def default_image_loader(path):
@@ -33,19 +39,26 @@ default_image_loader.use_jpeg4py = None
 
 def jpeg4py_loader(path):
     """ Image reading using jpeg4py https://github.com/ajkxyz/jpeg4py"""
+    global _JPEG4PY_FALLBACK_WARNED
+    if jpeg4py is None:
+        if not _JPEG4PY_FALLBACK_WARNED:
+            print('jpeg4py is not installed. Falling back to OpenCV for image loading.')
+            _JPEG4PY_FALLBACK_WARNED = True
+        return opencv_loader(path)
     try:
         return jpeg4py.JPEG(path).decode()
     except Exception as e:
-        print('ERROR: Could not read image "{}"'.format(path))
+        print('ERROR: Could not read image "{}" with jpeg4py, falling back to OpenCV.'.format(path))
         print(e)
-        return None
+        return opencv_loader(path)
 
 
 def opencv_loader(path):
     """ Read image using opencv's imread function and returns it in rgb format"""
     try:
         im = cv.imread(path, cv.IMREAD_COLOR)
-
+        if im is None:
+            raise ValueError('cv.imread returned None')
         # convert to rgb and return
         return cv.cvtColor(im, cv.COLOR_BGR2RGB)
     except Exception as e:
@@ -56,18 +69,7 @@ def opencv_loader(path):
 
 def jpeg4py_loader_w_failsafe(path):
     """ Image reading using jpeg4py https://github.com/ajkxyz/jpeg4py"""
-    try:
-        return jpeg4py.JPEG(path).decode()
-    except:
-        try:
-            im = cv.imread(path, cv.IMREAD_COLOR)
-
-            # convert to rgb and return
-            return cv.cvtColor(im, cv.COLOR_BGR2RGB)
-        except Exception as e:
-            print('ERROR: Could not read image "{}"'.format(path))
-            print(e)
-            return None
+    return jpeg4py_loader(path)
 
 
 def opencv_seg_loader(path):
